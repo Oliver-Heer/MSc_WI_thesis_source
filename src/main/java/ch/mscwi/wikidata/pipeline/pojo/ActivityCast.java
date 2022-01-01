@@ -1,21 +1,21 @@
-package ch.mscwi.wikidata.pojo;
+package ch.mscwi.wikidata.pipeline.pojo;
 
 import java.util.List;
 import java.util.StringJoiner;
 
-public class Genres { 
-	public List<Genre> Genre;
+public class ActivityCast { 
+	public List<Cast> Cast;
 	
 	@Override
 	public String toString() {
 		StringJoiner joiner = new StringJoiner(System.getProperty("line.separator"));
 		
-		if(Genre == null) {
+		if(Cast == null) {
 			return "";
 		}
 		
-		Genre.stream().forEach(genre -> {
-			joiner.add(String.valueOf(genre));
+		Cast.stream().forEach(cast -> {
+			joiner.add(String.valueOf(cast));
 		});
 		
 		return joiner.toString();

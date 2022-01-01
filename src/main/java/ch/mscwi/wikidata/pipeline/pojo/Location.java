@@ -1,29 +1,25 @@
-package ch.mscwi.wikidata.pojo;
+package ch.mscwi.wikidata.pipeline.pojo;
 
 import java.util.StringJoiner;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class Genre {
+public class Location {
 	
 	@XmlAttribute
-	public int originId;
+	public int id;
 	
 	@XmlAttribute
 	public String name;
-	
-	@XmlAttribute
-	public int branchId;
 	
 	@Override
 	public String toString() {
 		StringJoiner joiner = new StringJoiner(System.getProperty("line.separator"));
 		
-		joiner.add("---Genre---");
-		joiner.add("originId: " + originId);
-		joiner.add("name: " + name);
-		joiner.add("branchId: " + branchId);
-		
+		joiner.add("---Location---");
+		joiner.add("Id: " + id);
+		joiner.add("Name: " + name);
+
 		return joiner.toString();
 	}
 }

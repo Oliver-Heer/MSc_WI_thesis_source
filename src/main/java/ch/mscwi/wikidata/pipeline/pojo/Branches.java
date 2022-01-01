@@ -1,21 +1,21 @@
-package ch.mscwi.wikidata.pojo;
+package ch.mscwi.wikidata.pipeline.pojo;
 
 import java.util.List;
 import java.util.StringJoiner;
 
-public class Images { 
-	public List<Image> Image;
+public class Branches { 
+	public List<Branch> Branch;
 	
 	@Override
 	public String toString() {
 		StringJoiner joiner = new StringJoiner(System.getProperty("line.separator"));
 		
-		if(Image == null) {
+		if(Branch == null) {
 			return "";
 		}
 		
-		Image.stream().forEach(image -> {
-			joiner.add(String.valueOf(image));
+		Branch.stream().forEach(branch -> {
+			joiner.add(String.valueOf(branch));
 		});
 		
 		return joiner.toString();

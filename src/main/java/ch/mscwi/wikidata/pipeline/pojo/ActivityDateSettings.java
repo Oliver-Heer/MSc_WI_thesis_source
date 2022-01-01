@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pojo;
+package ch.mscwi.wikidata.pipeline.pojo;
 
 public class ActivityDateSettings { 
 	public Classifications Classifications;

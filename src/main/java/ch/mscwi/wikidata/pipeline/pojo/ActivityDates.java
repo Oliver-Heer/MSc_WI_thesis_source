@@ -1,21 +1,21 @@
-package ch.mscwi.wikidata.pojo;
+package ch.mscwi.wikidata.pipeline.pojo;
 
 import java.util.List;
 import java.util.StringJoiner;
 
-public class ActivityCast { 
-	public List<Cast> Cast;
+public class ActivityDates { 
+	public List<ActivityDate> ActivityDate;
 	
 	@Override
 	public String toString() {
 		StringJoiner joiner = new StringJoiner(System.getProperty("line.separator"));
 		
-		if(Cast == null) {
+		if(ActivityDate == null) {
 			return "";
 		}
 		
-		Cast.stream().forEach(cast -> {
-			joiner.add(String.valueOf(cast));
+		ActivityDate.stream().forEach(date -> {
+			joiner.add(String.valueOf(date));
 		});
 		
 		return joiner.toString();

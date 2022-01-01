@@ -11,7 +11,7 @@ import org.apache.beam.sdk.values.PCollection;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import ch.mscwi.wikidata.pojo.Activity;
+import ch.mscwi.wikidata.pipeline.pojo.Activity;
 import ch.mscwi.wikidata.util.XmlUtil;
 
 public class XmlProcurer {

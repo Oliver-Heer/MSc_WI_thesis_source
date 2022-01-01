@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pojo;
+package ch.mscwi.wikidata.pipeline.pojo;
 
 import java.util.Date;
 import java.util.StringJoiner;

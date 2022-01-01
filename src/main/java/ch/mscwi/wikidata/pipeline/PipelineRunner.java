@@ -9,7 +9,7 @@ import org.apache.beam.sdk.values.PCollection;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import ch.mscwi.wikidata.pojo.Activity;
+import ch.mscwi.wikidata.pipeline.pojo.Activity;
 import ch.mscwi.wikidata.util.PipelineUtil;
 
 @SpringBootApplication

@@ -4,7 +4,7 @@ import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.transforms.ParDo.SingleOutput;
 
-import ch.mscwi.wikidata.pojo.Activity;
+import ch.mscwi.wikidata.pipeline.pojo.Activity;
 
 public class PipelineUtil {
 	

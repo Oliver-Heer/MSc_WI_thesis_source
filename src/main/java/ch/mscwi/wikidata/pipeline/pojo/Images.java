@@ -1,21 +1,21 @@
-package ch.mscwi.wikidata.pojo;
+package ch.mscwi.wikidata.pipeline.pojo;
 
 import java.util.List;
 import java.util.StringJoiner;
 
-public class ActivityDates { 
-	public List<ActivityDate> ActivityDate;
+public class Images { 
+	public List<Image> Image;
 	
 	@Override
 	public String toString() {
 		StringJoiner joiner = new StringJoiner(System.getProperty("line.separator"));
 		
-		if(ActivityDate == null) {
+		if(Image == null) {
 			return "";
 		}
 		
-		ActivityDate.stream().forEach(date -> {
-			joiner.add(String.valueOf(date));
+		Image.stream().forEach(image -> {
+			joiner.add(String.valueOf(image));
 		});
 		
 		return joiner.toString();
