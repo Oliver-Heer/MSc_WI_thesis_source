@@ -10,29 +10,31 @@ import ch.mscwi.wikidata.pipeline.PipelineRunner;
 
 @Route(value = "")
 @PageTitle("Pipeline | Kulturzüri")
-public class HomeView extends VerticalLayout {
+public class ProcureView extends VerticalLayout {
 
 
-	public HomeView() {
-		addClassName("homeView");
-		setSizeFull();
-		
-		Button runButton = new Button("Run");
-		TextArea logTextArea = new TextArea();
-		
-		runButton.addClickListener(click -> {
-			logTextArea.setValue(runPipeline());
-		});
-		
-		add(runButton, logTextArea);
-	}
-	
-	public String runPipeline() {
-		try {
-			return PipelineRunner.run();
-		} catch (Exception e) {
-			// TODO
-			return e.getMessage();
-		}
-	}
+  public ProcureView() {
+    addClassName("procureView");
+    setSizeFull();
+
+    Button runButton = new Button("Run");
+    TextArea logTextArea = new TextArea();
+    logTextArea.setSizeFull();
+    logTextArea.setReadOnly(true);
+
+    runButton.addClickListener(click -> {
+      logTextArea.setValue(runPipeline());
+    });
+
+    add(runButton, logTextArea);
+  }
+
+  public String runPipeline() {
+    try {
+      return PipelineRunner.run();
+    } catch (Exception e) {
+      // TODO
+      return e.getMessage();
+    }
+  }
 }

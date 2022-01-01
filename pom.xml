@@ -17,8 +17,8 @@
 
   <properties>
     <java.version>11</java.version>
-    <apache-beam-version>2.34.0</apache-beam-version>
     <vaadin.version>14.8.1</vaadin.version>
+    <jaxb.version>3.0.2</jaxb.version>
   </properties>
 
   <dependencies>
@@ -33,23 +33,6 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- APACHE BEAM -->
-    <dependency>
-      <groupId>org.apache.beam</groupId>
-      <artifactId>beam-sdks-java-core</artifactId>
-      <version>${apache-beam-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.beam</groupId>
-      <artifactId>beam-runners-direct-java</artifactId>
-      <version>${apache-beam-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.beam</groupId>
-      <artifactId>beam-sdks-java-io-xml</artifactId>
-      <version>${apache-beam-version}</version>
-    </dependency>
-    
     <!-- VAADIN -->
     <dependency>
       <groupId>com.vaadin</groupId>
@@ -61,6 +44,12 @@
        <groupId>org.springframework.boot</groupId>
        <artifactId>spring-boot-devtools</artifactId>
        <optional>true</optional>
+    </dependency>
+
+    <!-- JAXB -->
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
     </dependency>
   </dependencies>
 
