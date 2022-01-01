@@ -21,37 +21,6 @@
     <vaadin.version>14.8.1</vaadin.version>
   </properties>
 
-  <repositories>
-	  <!-- MAVEN CENTRAL -->
-    <repository>
-      <id>central</id>
-      <url>https://repo.maven.apache.org/maven2</url>
-      <snapshots>
-         <enabled>false</enabled>
-      </snapshots>
-    </repository>
-
-    <!-- VAADIN add-ons -->
-    <repository>
-      <id>Vaadin Directory</id>
-      <url>https://maven.vaadin.com/vaadin-addons</url>
-      <snapshots>
-         <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <!-- MAVEN CENTRAL -->
-    <pluginRepository>
-      <id>central</id>
-      <url>https://repo.maven.apache.org/maven2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
-
   <dependencies>
     <!-- SPRING BOOT -->
     <dependency>
@@ -86,6 +55,12 @@
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-spring-boot-starter</artifactId>
       <version>${vaadin.version}</version>
+    </dependency>
+    <!-- Live reload -->
+    <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-devtools</artifactId>
+       <optional>true</optional>
     </dependency>
   </dependencies>
 
