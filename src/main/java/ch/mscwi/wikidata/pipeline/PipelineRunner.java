@@ -15,9 +15,11 @@ import ch.mscwi.wikidata.util.PipelineUtil;
 @SpringBootApplication
 public class PipelineRunner {
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		SpringApplication.run(PipelineRunner.class, args);
-		
+    }
+	
+	public static String run() throws Exception {
 		PipelineOptions options = PipelineOptionsFactory.create();
 		options.setRunner(DirectRunner.class);
 		options.setJobName("Opernhaus_Zürich_Pipeline");
@@ -28,7 +30,7 @@ public class PipelineRunner {
 		data.apply(PipelineUtil.printActivities());
     	
     	PipelineResult result = pipeline.run();
-    	System.out.println(result.getState());
-    }
+    	return String.valueOf(result.getState());
+	}
 
 }

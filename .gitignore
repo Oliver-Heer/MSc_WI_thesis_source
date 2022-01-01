@@ -25,3 +25,9 @@ hs_err_pid*
 /.classpath
 /.project
 /.settings
+
+node_modules/
+pnpmfile.js
+webpack.generated.js
+
+
