@@ -32,9 +32,5 @@ public class ActivityDate {
 
   @XmlElementWrapper(name="ActivityCast")
   @XmlElement(name="Cast")
-  List<Cast> activityCast;
-
-  public int getOriginId() {
-    return originId;
-  }
+  public List<Cast> activityCast;
 }

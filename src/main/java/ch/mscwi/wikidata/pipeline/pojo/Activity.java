@@ -19,7 +19,7 @@ public class Activity {
 
   @XmlElementWrapper(name="ActivityDates")
   @XmlElement(name="ActivityDate")
-  List<ActivityDate> activityDates;
+  public List<ActivityDate> activityDates;
 
   @XmlElement(name="ActivityDetail")
   public ActivityDetail activityDetail;
@@ -32,16 +32,4 @@ public class Activity {
 
   @XmlElement(name="ActivitySettings")
   public ActivitySettings activitySettings;
-
-  public int getOriginId() {
-    return originId;
-  }
-
-  public String getOriginLastUpdatedAt() {
-    return originLastUpdatedAt;
-  }
-
-  public ActivityDetail getActivityDetail() {
-    return activityDetail;
-  }
 }

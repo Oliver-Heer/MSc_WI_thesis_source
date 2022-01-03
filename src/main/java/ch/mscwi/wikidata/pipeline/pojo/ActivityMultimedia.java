@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 public class ActivityMultimedia {
   @XmlElementWrapper(name="Videos")
   @XmlElement(name="Video")
-  List<Video> videos;
+  public List<Video> videos;
 
   @XmlElementWrapper(name="Images")
   @XmlElement(name="Image")
-  List<Image> images;
+  public List<Image> images;
 }

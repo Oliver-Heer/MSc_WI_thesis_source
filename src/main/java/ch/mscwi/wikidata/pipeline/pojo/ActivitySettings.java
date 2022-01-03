@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 public class ActivitySettings {
   @XmlElementWrapper(name="Branches")
   @XmlElement(name="Branch")
-  List<Branch> branches;
+  public List<Branch> branches;
 
   @XmlElementWrapper(name="Genres")
   @XmlElement(name="Genre")
-  List<Genre> genres;
+  public List<Genre> genres;
 }

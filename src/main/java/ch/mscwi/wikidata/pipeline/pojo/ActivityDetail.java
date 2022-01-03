@@ -28,20 +28,4 @@ public class ActivityDetail {
 
   @XmlElement(name="CastInformation")
   public Object castInformation;
-
-  public String getLanguageCode() {
-    return languageCode;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public String getSubTitle() {
-    return subTitle;
-  }
-
-  public String getOriginURL() {
-    return originURL;
-  }
 }

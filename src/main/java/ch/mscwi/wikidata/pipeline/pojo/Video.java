@@ -6,5 +6,4 @@ public class Video {
 
   @XmlAttribute
   public String url;
-
 }
