@@ -1,39 +1,47 @@
 package ch.mscwi.wikidata.pipeline.pojo;
 
-import java.util.StringJoiner;
-
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 public class ActivityDetail {
 
   @XmlAttribute
   public String languageCode;
 
-  public String Title;
-  public String SubTitle;
-  public String ShortDescription;
-  public String LongDescription;
-  public String OriginURL;
-  public String text;
+  @XmlElement(name="Title")
+  public String title;
 
-  public Location Location;
-  public Object CastInformation;
+  @XmlElement(name="SubTitle")
+  public String subTitle;
 
-  @Override
-  public String toString() {
-    StringJoiner joiner = new StringJoiner(System.getProperty("line.separator"));
+  @XmlElement(name="ShortDescription")
+  public String shortDescription;
 
-    joiner.add("---ActivityDetail---");
-    joiner.add("LanguageCode: " + languageCode);
-    joiner.add("Title: " + Title);
-    joiner.add("SubTitle: " + SubTitle);
-    joiner.add("ShortDescription: " + ShortDescription);
-    joiner.add("LongDescription: " + LongDescription);
-    joiner.add("OriginURL: " + OriginURL);
-    joiner.add("text: " + text);
-    joiner.add(String.valueOf(Location));
-    joiner.add(String.valueOf(CastInformation));
+  @XmlElement(name="LongDescription")
+  public String longDescription;
 
-    return joiner.toString();
+  @XmlElement(name="OriginURL")
+  public String originURL;
+
+  @XmlElement(name="Location")
+  public Location location;
+
+  @XmlElement(name="CastInformation")
+  public Object castInformation;
+
+  public String getLanguageCode() {
+    return languageCode;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public String getSubTitle() {
+    return subTitle;
+  }
+
+  public String getOriginURL() {
+    return originURL;
   }
 }

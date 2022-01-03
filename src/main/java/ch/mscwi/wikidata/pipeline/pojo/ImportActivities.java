@@ -1,31 +1,28 @@
 package ch.mscwi.wikidata.pipeline.pojo;
 
 import java.util.Date;
-import java.util.StringJoiner;
+import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "importActivities", namespace="https://www.opernhaus.ch")
 public class ImportActivities {
-  public Date ImportFileLastUpdate;
-  public Date StartExportDate;
-  public Date EndExportDate;
-  public String text;
-  public Source Source;
-  public Activities Activities;
 
-  @Override
-  public String toString() {
-    StringJoiner joiner = new StringJoiner(System.getProperty("line.separator"));
+  @XmlElement(name="ImportFileLastUpdate")
+  public Date importFileLastUpdate;
 
-    joiner.add("---ImportActivities---");
-    joiner.add("ImportFileLastUpdate: " + ImportFileLastUpdate);
-    joiner.add("StartExportDate: " + StartExportDate);
-    joiner.add("EndExportDate: " + EndExportDate);
-    joiner.add("text: " + text);
-    joiner.add(String.valueOf(Source));
-    joiner.add(String.valueOf(Activities));
+  @XmlElement(name="StartExportDate")
+  public Date startExportDate;
 
-    return joiner.toString();
-  }
+  @XmlElement(name="EndExportDate")
+  public Date endExportDate;
+
+  @XmlElement(name="Source")
+  public Source source;
+
+  @XmlElementWrapper(name="Activities")
+  @XmlElement(name="Activity")
+  public List<Activity> activities;
 }

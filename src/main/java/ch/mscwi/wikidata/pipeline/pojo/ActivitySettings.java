@@ -1,18 +1,16 @@
 package ch.mscwi.wikidata.pipeline.pojo;
 
-import java.util.StringJoiner;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 public class ActivitySettings {
-  public Branches Branches;
-  public Genres Genres;
+  @XmlElementWrapper(name="Branches")
+  @XmlElement(name="Branch")
+  List<Branch> branches;
 
-  @Override
-  public String toString() {
-    StringJoiner joiner = new StringJoiner(System.getProperty("line.separator"));
-
-    joiner.add(String.valueOf(Branches));
-    joiner.add(String.valueOf(Genres));
-
-    return joiner.toString();
-  }
+  @XmlElementWrapper(name="Genres")
+  @XmlElement(name="Genre")
+  List<Genre> genres;
 }

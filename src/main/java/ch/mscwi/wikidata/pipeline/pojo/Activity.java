@@ -1,8 +1,10 @@
 package ch.mscwi.wikidata.pipeline.pojo;
 
-import java.util.StringJoiner;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 public class Activity {
 
@@ -15,28 +17,31 @@ public class Activity {
   @XmlAttribute
   public String originLastUpdatedAt;
 
-  public ActivityDetail ActivityDetail;
-  public ActivityDetailEnglish ActivityDetailEnglish;
-  public ActivityDates ActivityDates;
-  public ActivityMultimedia ActivityMultimedia;
-  public ActivitySettings ActivitySettings;
-  public String text;
+  @XmlElementWrapper(name="ActivityDates")
+  @XmlElement(name="ActivityDate")
+  List<ActivityDate> activityDates;
 
-  @Override
-  public String toString() {
-    StringJoiner joiner = new StringJoiner(System.getProperty("line.separator"));
+  @XmlElement(name="ActivityDetail")
+  public ActivityDetail activityDetail;
 
-    joiner.add("###Activity###");
-    joiner.add("ownerId: " + ownerId);
-    joiner.add("originId: " + originId);
-    joiner.add("originLastUpdatedAt: " + originLastUpdatedAt);
-    joiner.add("text: " + text);
-    joiner.add(String.valueOf(ActivityDetail));
-    joiner.add(String.valueOf(ActivityDetailEnglish));
-    joiner.add(String.valueOf(ActivityDates));
-    joiner.add(String.valueOf(ActivityMultimedia));
-    joiner.add(String.valueOf(ActivitySettings));
+  @XmlElement(name="ActivityDetailEnglish")
+  public ActivityDetailEnglish activityDetailEnglish;
 
-    return joiner.toString();
+  @XmlElement(name="ActivityMultimedia")
+  public ActivityMultimedia activityMultimedia;
+
+  @XmlElement(name="ActivitySettings")
+  public ActivitySettings activitySettings;
+
+  public int getOriginId() {
+    return originId;
+  }
+
+  public String getOriginLastUpdatedAt() {
+    return originLastUpdatedAt;
+  }
+
+  public ActivityDetail getActivityDetail() {
+    return activityDetail;
   }
 }

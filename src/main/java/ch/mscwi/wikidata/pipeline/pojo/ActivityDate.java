@@ -1,9 +1,11 @@
 package ch.mscwi.wikidata.pipeline.pojo;
 
 import java.util.Date;
-import java.util.StringJoiner;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 public class ActivityDate {
 
@@ -22,28 +24,17 @@ public class ActivityDate {
   @XmlAttribute
   public String originLastUpdatedAt;
 
-  public String text;
-  public String Price;
-  public String TicketURL;
-  public ActivityCast ActivityCast;
-  public ActivityDateSettings ActivityDateSettings;
+  @XmlElement(name="Price")
+  public String price;
+  
+  @XmlElement(name="TicketURL")
+  public String ticketURL;
 
-  @Override
-  public String toString() {
-    StringJoiner joiner = new StringJoiner(System.getProperty("line.separator"));
+  @XmlElementWrapper(name="ActivityCast")
+  @XmlElement(name="Cast")
+  List<Cast> activityCast;
 
-    joiner.add("---ActivityDate---");
-    joiner.add("originId: " + originId);
-    joiner.add("Date: " + startDate);
-    joiner.add("startTime: " + startTime);
-    joiner.add("endTime: " + endTime);
-    joiner.add("originLastUpdatedAt: " + originLastUpdatedAt);
-    joiner.add("text: " + text);
-    joiner.add("Price: " + Price);
-    joiner.add("TicketURL: " + TicketURL);
-    joiner.add(String.valueOf(ActivityCast));
-    joiner.add(String.valueOf(ActivityDateSettings));
-
-    return joiner.toString();
+  public int getOriginId() {
+    return originId;
   }
 }
