@@ -30,4 +30,7 @@ node_modules/
 pnpmfile.js
 webpack.generated.js
 
+frontend/*
 
+
+/.npmrc

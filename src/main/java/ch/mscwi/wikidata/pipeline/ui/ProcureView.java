@@ -10,8 +10,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.material.Material;
 
 import ch.mscwi.wikidata.pipeline.XmlProcurer;
 import ch.mscwi.wikidata.pipeline.pojo.Activity;
@@ -25,7 +23,6 @@ import ch.mscwi.wikidata.pipeline.pojo.ImportActivities;
 import ch.mscwi.wikidata.pipeline.pojo.Video;
 
 @Route(value = "")
-@Theme(value = Material.class, variant = Material.DARK)
 @PageTitle("Pipeline | Kulturzüri")
 public class ProcureView extends VerticalLayout {
 
@@ -35,11 +32,11 @@ public class ProcureView extends VerticalLayout {
 
     Button procureButton = new Button("Procure");
     Grid<Activity> activityGrid = activityGrid();
+    activityGrid.setItemDetailsRenderer(new ComponentRenderer<>(activity -> detailView(activity)));
 
     procureButton.addClickListener(click -> {
       ImportActivities procurement = procure();
       activityGrid.setItems(procurement.activities);
-      activityGrid.setItemDetailsRenderer(new ComponentRenderer<>(activity -> detailView(activity)));
     });
 
     add(procureButton, new Label("Activities"), activityGrid);
