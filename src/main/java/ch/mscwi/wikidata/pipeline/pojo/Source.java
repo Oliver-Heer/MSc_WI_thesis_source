@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Source {
 
   @XmlAttribute
-  public int Id;
+  public long Id;
 
   @XmlAttribute
   public String url;

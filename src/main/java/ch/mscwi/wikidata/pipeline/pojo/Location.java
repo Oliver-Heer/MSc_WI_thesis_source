@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Location {
 
   @XmlAttribute
-  public int id;
+  public long id;
 
   @XmlAttribute
   public String name;

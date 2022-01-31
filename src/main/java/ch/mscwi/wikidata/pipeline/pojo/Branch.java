@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Branch {
 
   @XmlAttribute
-  public int originId;
+  public long originId;
 
   @XmlAttribute
   public String name;

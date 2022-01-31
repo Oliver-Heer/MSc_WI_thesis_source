@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Cast {
 
   @XmlAttribute
-  public int originId;
+  public long originId;
 
   @XmlAttribute
   public String name;
@@ -17,8 +17,8 @@ public class Cast {
   public String roleCategory;
 
   @XmlAttribute
-  public int IsStarRole;
+  public long IsStarRole;
 
   @XmlAttribute
-  public int sort;
+  public long sort;
 }

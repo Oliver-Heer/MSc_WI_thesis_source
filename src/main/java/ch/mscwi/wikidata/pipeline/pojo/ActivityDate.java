@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 public class ActivityDate {
 
   @XmlAttribute
-  public int originId;
+  public long originId;
 
   @XmlAttribute
   public Date startDate;

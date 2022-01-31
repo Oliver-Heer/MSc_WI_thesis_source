@@ -5,11 +5,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Genre {
 
   @XmlAttribute
-  public int originId;
+  public long originId;
 
   @XmlAttribute
   public String name;
 
   @XmlAttribute
-  public int branchId;
+  public long branchId;
 }

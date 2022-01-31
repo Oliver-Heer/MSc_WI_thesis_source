@@ -9,10 +9,10 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 public class Activity {
 
   @XmlAttribute
-  public int ownerId;
+  public long ownerId;
 
   @XmlAttribute
-  public int originId;
+  public long originId;
 
   @XmlAttribute
   public String originLastUpdatedAt;
