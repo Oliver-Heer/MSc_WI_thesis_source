@@ -3,13 +3,12 @@ package ch.mscwi.wikidata.pipeline.ui;
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 
 import ch.mscwi.wikidata.pipeline.XmlProcurer;
 import ch.mscwi.wikidata.pipeline.pojo.Activity;
@@ -22,15 +21,15 @@ import ch.mscwi.wikidata.pipeline.pojo.Image;
 import ch.mscwi.wikidata.pipeline.pojo.ImportActivities;
 import ch.mscwi.wikidata.pipeline.pojo.Video;
 
-@Route(value = "")
-@PageTitle("Pipeline | Kulturzüri")
-public class ProcureView extends VerticalLayout {
+public class ProcurementView extends VerticalLayout {
 
-  public ProcureView() {
+  public ProcurementView() {
     addClassName("procureView");
     setSizeFull();
 
     Button procureButton = new Button("Procure");
+    procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+
     Grid<Activity> activityGrid = activityGrid();
     activityGrid.setItemDetailsRenderer(new ComponentRenderer<>(activity -> detailView(activity)));
 
