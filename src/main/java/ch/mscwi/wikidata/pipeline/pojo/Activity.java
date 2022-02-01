@@ -25,7 +25,7 @@ public class Activity {
   public ActivityDetail activityDetail;
 
   @XmlElement(name="ActivityDetailEnglish")
-  public ActivityDetailEnglish activityDetailEnglish;
+  public ActivityDetail activityDetailEnglish;
 
   @XmlElement(name="ActivityMultimedia")
   public ActivityMultimedia activityMultimedia;
