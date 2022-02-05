@@ -5,7 +5,6 @@ import java.util.List;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -99,7 +98,7 @@ public class ProcurementView extends VerticalLayout {
         grid.addColumn(act -> act.activityDetail.location.name).setHeader("Location#Name");
       }
     }
-    streamlineColumns(grid.getColumns());
+    UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
 
@@ -118,7 +117,7 @@ public class ProcurementView extends VerticalLayout {
 
       grid.setItemDetailsRenderer(new ComponentRenderer<>(activityDate -> activityDateDetails(activityDate)));
     }
-    streamlineColumns(grid.getColumns());
+    UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
 
@@ -139,7 +138,7 @@ public class ProcurementView extends VerticalLayout {
       grid.addColumn(date -> date.IsStarRole).setHeader("IsStarRole");
       grid.addColumn(date -> date.sort).setHeader("Sort");
     }
-    streamlineColumns(grid.getColumns());
+    UiUtils.streamlineColumns(grid.getColumns());
     layout.add(grid);
     return layout;
   }
@@ -158,7 +157,7 @@ public class ProcurementView extends VerticalLayout {
         grid.addColumn(image -> image.credits).setHeader("Credits");
       }
     }
-    streamlineColumns(grid.getColumns());
+    UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
 
@@ -174,7 +173,7 @@ public class ProcurementView extends VerticalLayout {
         grid.addColumn(video -> video.url).setHeader("Url");
       }
     }
-    streamlineColumns(grid.getColumns());
+    UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
 
@@ -191,7 +190,7 @@ public class ProcurementView extends VerticalLayout {
         grid.addColumn(branch -> branch.name).setHeader("Name");
       }
     }
-    streamlineColumns(grid.getColumns());
+    UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
 
@@ -209,12 +208,7 @@ public class ProcurementView extends VerticalLayout {
         grid.addColumn(genre -> genre.branchId).setHeader("BranchId");
       }
     }
-    streamlineColumns(grid.getColumns());
+    UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
-
-  private <T> void streamlineColumns(List<Column<T>> columns) {
-    columns.stream().forEach(column -> column.setAutoWidth(true));
-  }
-
 }
