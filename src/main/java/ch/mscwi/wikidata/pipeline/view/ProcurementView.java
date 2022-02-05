@@ -12,7 +12,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
-import ch.mscwi.wikidata.pipeline.controller.XmlProcurer;
+import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.Activity;
 import ch.mscwi.wikidata.pipeline.model.ActivityDate;
 import ch.mscwi.wikidata.pipeline.model.ActivityDetail;
@@ -22,10 +22,11 @@ import ch.mscwi.wikidata.pipeline.model.Branch;
 import ch.mscwi.wikidata.pipeline.model.Cast;
 import ch.mscwi.wikidata.pipeline.model.Genre;
 import ch.mscwi.wikidata.pipeline.model.Image;
-import ch.mscwi.wikidata.pipeline.model.ImportActivities;
 import ch.mscwi.wikidata.pipeline.model.Video;
 
 public class ProcurementView extends VerticalLayout {
+
+  private Reactor reactor = Reactor.getReactor();
 
   public ProcurementView() {
     addClassName("procureView");
@@ -47,10 +48,8 @@ public class ProcurementView extends VerticalLayout {
     activityGrid.setItemDetailsRenderer(new ComponentRenderer<>(activity -> detailView(activity)));
 
     procureButton.addClickListener(click -> {
-      ImportActivities procurement = procure(procureUrl.getValue());
-      if (procurement != null) {
-        activityGrid.setItems(procurement.activities);
-      }
+      reactor.procure(procureUrl.getValue());
+      activityGrid.setItems(reactor.activities);
     });
 
     add(actionLayout, new Label("Activities"), activityGrid);
@@ -216,16 +215,6 @@ public class ProcurementView extends VerticalLayout {
 
   private <T> void streamlineColumns(List<Column<T>> columns) {
     columns.stream().forEach(column -> column.setAutoWidth(true));
-  }
-
-  private ImportActivities procure(String url) {
-    try {
-      return XmlProcurer.procure(url);
-    } catch (Exception e) {
-      // TODO
-      e.printStackTrace();
-    }
-    return null;
   }
 
 }
