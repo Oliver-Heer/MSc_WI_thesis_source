@@ -1,11 +1,11 @@
-package ch.mscwi.wikidata.pipeline.pojo;
+package ch.mscwi.wikidata.pipeline.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class Location {
+public class Branch {
 
   @XmlAttribute
-  public long id;
+  public long originId;
 
   @XmlAttribute
   public String name;

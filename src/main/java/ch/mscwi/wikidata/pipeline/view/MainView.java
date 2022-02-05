@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.ui;
+package ch.mscwi.wikidata.pipeline.view;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

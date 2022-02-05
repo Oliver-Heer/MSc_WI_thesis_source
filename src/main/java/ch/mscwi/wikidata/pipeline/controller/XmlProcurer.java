@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline;
+package ch.mscwi.wikidata.pipeline.controller;
 
 import java.net.URL;
 
@@ -9,7 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 
-import ch.mscwi.wikidata.pipeline.pojo.ImportActivities;
+import ch.mscwi.wikidata.pipeline.model.ImportActivities;
 
 public class XmlProcurer {
 

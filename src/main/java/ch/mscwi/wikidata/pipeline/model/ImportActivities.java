@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.pojo;
+package ch.mscwi.wikidata.pipeline.model;
 
 import java.util.Date;
 import java.util.List;

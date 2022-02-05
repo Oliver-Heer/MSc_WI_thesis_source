@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.pojo;
+package ch.mscwi.wikidata.pipeline.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -25,7 +25,4 @@ public class ActivityDetail {
 
   @XmlElement(name="Location")
   public Location location;
-
-  @XmlElement(name="CastInformation")
-  public Object castInformation;
 }

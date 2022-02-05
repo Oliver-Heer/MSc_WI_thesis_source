@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.ui;
+package ch.mscwi.wikidata.pipeline.view;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;

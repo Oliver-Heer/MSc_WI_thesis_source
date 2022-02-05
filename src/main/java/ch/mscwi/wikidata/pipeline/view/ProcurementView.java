@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.ui;
+package ch.mscwi.wikidata.pipeline.view;
 
 import java.util.List;
 
@@ -12,18 +12,18 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
-import ch.mscwi.wikidata.pipeline.XmlProcurer;
-import ch.mscwi.wikidata.pipeline.pojo.Activity;
-import ch.mscwi.wikidata.pipeline.pojo.ActivityDate;
-import ch.mscwi.wikidata.pipeline.pojo.ActivityDetail;
-import ch.mscwi.wikidata.pipeline.pojo.ActivityMultimedia;
-import ch.mscwi.wikidata.pipeline.pojo.ActivitySettings;
-import ch.mscwi.wikidata.pipeline.pojo.Branch;
-import ch.mscwi.wikidata.pipeline.pojo.Cast;
-import ch.mscwi.wikidata.pipeline.pojo.Genre;
-import ch.mscwi.wikidata.pipeline.pojo.Image;
-import ch.mscwi.wikidata.pipeline.pojo.ImportActivities;
-import ch.mscwi.wikidata.pipeline.pojo.Video;
+import ch.mscwi.wikidata.pipeline.controller.XmlProcurer;
+import ch.mscwi.wikidata.pipeline.model.Activity;
+import ch.mscwi.wikidata.pipeline.model.ActivityDate;
+import ch.mscwi.wikidata.pipeline.model.ActivityDetail;
+import ch.mscwi.wikidata.pipeline.model.ActivityMultimedia;
+import ch.mscwi.wikidata.pipeline.model.ActivitySettings;
+import ch.mscwi.wikidata.pipeline.model.Branch;
+import ch.mscwi.wikidata.pipeline.model.Cast;
+import ch.mscwi.wikidata.pipeline.model.Genre;
+import ch.mscwi.wikidata.pipeline.model.Image;
+import ch.mscwi.wikidata.pipeline.model.ImportActivities;
+import ch.mscwi.wikidata.pipeline.model.Video;
 
 public class ProcurementView extends VerticalLayout {
 
