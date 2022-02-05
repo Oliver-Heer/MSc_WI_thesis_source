@@ -7,15 +7,19 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 import ch.mscwi.wikidata.pipeline.XmlProcurer;
 import ch.mscwi.wikidata.pipeline.pojo.Activity;
 import ch.mscwi.wikidata.pipeline.pojo.ActivityDate;
+import ch.mscwi.wikidata.pipeline.pojo.ActivityDetail;
 import ch.mscwi.wikidata.pipeline.pojo.ActivityMultimedia;
 import ch.mscwi.wikidata.pipeline.pojo.ActivitySettings;
 import ch.mscwi.wikidata.pipeline.pojo.Branch;
+import ch.mscwi.wikidata.pipeline.pojo.Cast;
 import ch.mscwi.wikidata.pipeline.pojo.Genre;
 import ch.mscwi.wikidata.pipeline.pojo.Image;
 import ch.mscwi.wikidata.pipeline.pojo.ImportActivities;
@@ -27,18 +31,29 @@ public class ProcurementView extends VerticalLayout {
     addClassName("procureView");
     setSizeFull();
 
+    TextField procureUrl = new TextField();
+    procureUrl.setClearButtonVisible(true);
+    procureUrl.setValue("https://www.opernhaus.ch/xmlexport/kzexport.xml");
+    procureUrl.setWidth("25%");
+
     Button procureButton = new Button("Procure");
     procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+
+    HorizontalLayout actionLayout = new HorizontalLayout();
+    actionLayout.setWidthFull();
+    actionLayout.add(procureUrl, procureButton);
 
     Grid<Activity> activityGrid = activityGrid();
     activityGrid.setItemDetailsRenderer(new ComponentRenderer<>(activity -> detailView(activity)));
 
     procureButton.addClickListener(click -> {
-      ImportActivities procurement = procure();
-      activityGrid.setItems(procurement.activities);
+      ImportActivities procurement = procure(procureUrl.getValue());
+      if (procurement != null) {
+        activityGrid.setItems(procurement.activities);
+      }
     });
 
-    add(procureButton, new Label("Activities"), activityGrid);
+    add(actionLayout, new Label("Activities"), activityGrid);
   }
 
   private Grid<Activity> activityGrid() {
@@ -74,12 +89,13 @@ public class ProcurementView extends VerticalLayout {
     grid.setAllRowsVisible(true);
     grid.setItems(activity);
 
-    if (activity.activityDetail != null) {
+    ActivityDetail activityDetail = activity.activityDetail;
+    if (activityDetail != null) {
       grid.addColumn(act -> act.activityDetail.title).setHeader("Title");
       grid.addColumn(act -> act.activityDetail.subTitle).setHeader("SubTitle");
       grid.addColumn(act -> act.activityDetail.originURL).setHeader("OriginURL");
 
-      if (activity.activityDetail.location != null) {
+      if (activityDetail.location != null) {
         grid.addColumn(act -> act.activityDetail.location.id).setHeader("Location#Id");
         grid.addColumn(act -> act.activityDetail.location.name).setHeader("Location#Name");
       }
@@ -92,16 +108,41 @@ public class ProcurementView extends VerticalLayout {
     Grid<ActivityDate> grid = new Grid<>();
     grid.setAllRowsVisible(true);
 
-    if (activity.activityDates != null) {
-      grid.setItems(activity.activityDates);
+    List<ActivityDate> activityDates = activity.activityDates;
+    if (activityDates != null) {
+      grid.setItems(activityDates);
       grid.addColumn(date -> date.originId).setHeader("OriginId");
       grid.addColumn(date -> date.originLastUpdatedAt).setHeader("OriginLastUpdatedAt");
       grid.addColumn(date -> date.startDate).setHeader("StartDate");
       grid.addColumn(date -> date.startTime).setHeader("StartTime");
       grid.addColumn(date -> date.endTime).setHeader("EndTime");
+
+      grid.setItemDetailsRenderer(new ComponentRenderer<>(activityDate -> activityDateDetails(activityDate)));
     }
     streamlineColumns(grid.getColumns());
     return grid;
+  }
+
+  private VerticalLayout activityDateDetails(ActivityDate activityDate) {
+    VerticalLayout layout = new VerticalLayout();
+    layout.add(new Label("ActivityCast"));
+    
+    Grid<Cast> grid = new Grid<>();
+    grid.setAllRowsVisible(true);
+
+    List<Cast> activityCast = activityDate.activityCast;
+    if (activityCast != null) {
+      grid.setItems(activityCast);
+      grid.addColumn(date -> date.originId).setHeader("OriginId");
+      grid.addColumn(date -> date.name).setHeader("Name");
+      grid.addColumn(date -> date.role).setHeader("Role");
+      grid.addColumn(date -> date.roleCategory).setHeader("RoleCategory");
+      grid.addColumn(date -> date.IsStarRole).setHeader("IsStarRole");
+      grid.addColumn(date -> date.sort).setHeader("Sort");
+    }
+    streamlineColumns(grid.getColumns());
+    layout.add(grid);
+    return layout;
   }
 
   private Grid<Image> activityMultimediaImageGrid(Activity activity) {
@@ -177,9 +218,9 @@ public class ProcurementView extends VerticalLayout {
     columns.stream().forEach(column -> column.setAutoWidth(true));
   }
 
-  private ImportActivities procure() {
+  private ImportActivities procure(String url) {
     try {
-      return XmlProcurer.procure("https://www.opernhaus.ch/xmlexport/kzexport.xml");
+      return XmlProcurer.procure(url);
     } catch (Exception e) {
       // TODO
       e.printStackTrace();
