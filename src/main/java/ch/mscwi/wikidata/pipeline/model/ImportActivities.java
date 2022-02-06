@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "importActivities", namespace="https://www.opernhaus.ch")
+@XmlRootElement(name = "kdz:importActivities")
 public class ImportActivities {
 
   @XmlElement(name="ImportFileLastUpdate")

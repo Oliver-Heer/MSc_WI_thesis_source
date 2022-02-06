@@ -20,7 +20,7 @@ public class XmlProcurer {
 
     private static Document fetchXml(String url) throws Exception {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-      factory.setNamespaceAware(true);
+      factory.setNamespaceAware(false);
       return factory.newDocumentBuilder().parse(new URL(url).openStream());
     }
 
