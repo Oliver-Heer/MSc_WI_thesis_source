@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.mscwi.wikidata.pipeline.model.Activity;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 public class ProcurementController {
 
   private static Reactor reactor = Reactor.getReactor();
