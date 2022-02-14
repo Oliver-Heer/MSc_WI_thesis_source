@@ -19,7 +19,7 @@ public class Reactor {
     return reactor;
   }
 
-  public void procure(String url) {
+  public List<Activity> procure(String url) {
     try {
       ImportActivities procurement = XmlProcurer.procure(url);
 
@@ -34,6 +34,7 @@ public class Reactor {
       // TODO
       e.printStackTrace();
     }
+    return activities;
   }
 
   public boolean hasBeenProcured(final long originId){
