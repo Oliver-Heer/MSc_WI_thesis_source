@@ -36,3 +36,4 @@ src/main/resources/static
 src/main/resources/frontend/angular-app/node
 
 /.npmrc
+src/main/resources/frontend/angular-app/.angular/
