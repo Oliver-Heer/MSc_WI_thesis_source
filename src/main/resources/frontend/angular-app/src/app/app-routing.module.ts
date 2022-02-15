@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ProcurementComponent } from './procurement/procurement.component';
+import { MainViewComponent } from './main-view/main-view.component';
 
 const routes: Routes = [
-  { path: '', component: ProcurementComponent },
-  { path: 'procurement', component: ProcurementComponent },
+  { path: '', component: MainViewComponent }
 ];
 
 @NgModule({

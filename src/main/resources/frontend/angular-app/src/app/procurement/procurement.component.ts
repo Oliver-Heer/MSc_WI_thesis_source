@@ -10,6 +10,8 @@ import { environment } from '../../environments/environment';
 })
 export class ProcurementComponent {
 
+  public activities;
+
   constructor(private httpClient: HttpClient) { }
 
   procure() {
@@ -18,7 +20,8 @@ export class ProcurementComponent {
   
     this.httpClient.get(environment.backendUrl + "/procure", {params})
       .subscribe(response => {
-        console.log(response);
+        console.log(response)
+        this.activities = response;
       });
   }
 }

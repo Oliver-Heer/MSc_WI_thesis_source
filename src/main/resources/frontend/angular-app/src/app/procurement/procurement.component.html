@@ -1,1 +1,38 @@
-<button mat-stroked-button color="accent" (click)="procure()">Procure</button>
+<mat-card>
+  <button mat-stroked-button color="accent" (click)="procure()">Procure</button>
+ 
+  <mat-accordion class="accordion-headers-align" multi>
+    <mat-expansion-panel *ngFor="let activity of activities">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{activity.originId}}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{activity.originLastUpdatedAt}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+    
+      <div *ngIf="activity.activityDetail">
+        <table>
+          <tr>
+            <th>Title</th>
+            <td>{{activity.activityDetail.title}}</td>
+            <th>OriginURL</th>
+          </tr>
+          <tr>
+            <th>SubTitle</th>
+            <td>{{activity.activityDetail.subTitle}}</td>
+          </tr>
+          <tr>
+            <th>OriginURL</th>
+            <td>{{activity.activityDetail.originURL}}</td>
+          </tr>
+        </table>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+  
+
+
+</mat-card>
