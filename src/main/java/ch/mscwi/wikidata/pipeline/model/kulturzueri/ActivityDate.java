@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.model;
+package ch.mscwi.wikidata.pipeline.model.kulturzueri;
 
 import java.util.Date;
 import java.util.List;
@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
-public class ActivityDate {
+public class ActivityDate implements IKulturZueriObject {
 
   @XmlAttribute
   public long originId;

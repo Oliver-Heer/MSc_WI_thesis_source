@@ -1,8 +1,8 @@
-package ch.mscwi.wikidata.pipeline.model;
+package ch.mscwi.wikidata.pipeline.model.kulturzueri;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class Image {
+public class Image implements IKulturZueriObject {
 
   @XmlAttribute
   public String name;

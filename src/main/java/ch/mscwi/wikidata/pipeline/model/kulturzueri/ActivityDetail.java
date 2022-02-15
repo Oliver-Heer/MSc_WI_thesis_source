@@ -1,9 +1,9 @@
-package ch.mscwi.wikidata.pipeline.model;
+package ch.mscwi.wikidata.pipeline.model.kulturzueri;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-public class ActivityDetail {
+public class ActivityDetail implements IKulturZueriObject {
 
   @XmlAttribute
   public String languageCode;

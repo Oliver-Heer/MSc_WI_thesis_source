@@ -1,8 +1,8 @@
-package ch.mscwi.wikidata.pipeline.model;
+package ch.mscwi.wikidata.pipeline.model.kulturzueri;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class Cast {
+public class Cast implements IKulturZueriObject {
 
   @XmlAttribute
   public long originId;

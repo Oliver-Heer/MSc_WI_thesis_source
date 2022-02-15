@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.model;
+package ch.mscwi.wikidata.pipeline.model.kulturzueri;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
-public class Activity {
+public class Activity implements IKulturZueriObject {
 
   @XmlAttribute
   public long ownerId;
