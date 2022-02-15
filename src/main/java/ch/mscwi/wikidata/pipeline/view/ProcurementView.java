@@ -12,16 +12,15 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
-import ch.mscwi.wikidata.pipeline.model.Activity;
-import ch.mscwi.wikidata.pipeline.model.ActivityDate;
-import ch.mscwi.wikidata.pipeline.model.ActivityDetail;
-import ch.mscwi.wikidata.pipeline.model.ActivityMultimedia;
-import ch.mscwi.wikidata.pipeline.model.ActivitySettings;
-import ch.mscwi.wikidata.pipeline.model.Branch;
-import ch.mscwi.wikidata.pipeline.model.Cast;
-import ch.mscwi.wikidata.pipeline.model.Genre;
-import ch.mscwi.wikidata.pipeline.model.Image;
-import ch.mscwi.wikidata.pipeline.model.Video;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.ActivityDate;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.ActivityMultimedia;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.ActivitySettings;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.Branch;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.Cast;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.Genre;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.Image;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.Video;
 
 public class ProcurementView extends VerticalLayout {
 
@@ -87,17 +86,13 @@ public class ProcurementView extends VerticalLayout {
     grid.setAllRowsVisible(true);
     grid.setItems(activity);
 
-    ActivityDetail activityDetail = activity.activityDetail;
-    if (activityDetail != null) {
-      grid.addColumn(act -> act.activityDetail.title).setHeader("Title");
-      grid.addColumn(act -> act.activityDetail.subTitle).setHeader("SubTitle");
-      grid.addColumn(act -> act.activityDetail.originURL).setHeader("OriginURL");
+    grid.addColumn(act -> act.activityDetail.title).setHeader("Title");
+    grid.addColumn(act -> act.activityDetail.subTitle).setHeader("SubTitle");
+    grid.addColumn(act -> act.activityDetail.originURL).setHeader("OriginURL");
 
-      if (activityDetail.location != null) {
-        grid.addColumn(act -> act.activityDetail.location.id).setHeader("Location#Id");
-        grid.addColumn(act -> act.activityDetail.location.name).setHeader("Location#Name");
-      }
-    }
+    grid.addColumn(act -> act.activityDetail.location.id).setHeader("Location#Id");
+    grid.addColumn(act -> act.activityDetail.location.name).setHeader("Location#Name");
+
     UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
@@ -107,16 +102,14 @@ public class ProcurementView extends VerticalLayout {
     grid.setAllRowsVisible(true);
 
     List<ActivityDate> activityDates = activity.activityDates;
-    if (activityDates != null) {
-      grid.setItems(activityDates);
-      grid.addColumn(date -> date.originId).setHeader("OriginId");
-      grid.addColumn(date -> date.originLastUpdatedAt).setHeader("OriginLastUpdatedAt");
-      grid.addColumn(date -> date.startDate).setHeader("StartDate");
-      grid.addColumn(date -> date.startTime).setHeader("StartTime");
-      grid.addColumn(date -> date.endTime).setHeader("EndTime");
+    grid.setItems(activityDates);
+    grid.addColumn(date -> date.originId).setHeader("OriginId");
+    grid.addColumn(date -> date.originLastUpdatedAt).setHeader("OriginLastUpdatedAt");
+    grid.addColumn(date -> date.startDate).setHeader("StartDate");
+    grid.addColumn(date -> date.startTime).setHeader("StartTime");
+    grid.addColumn(date -> date.endTime).setHeader("EndTime");
+    grid.setItemDetailsRenderer(new ComponentRenderer<>(activityDate -> activityDateDetails(activityDate)));
 
-      grid.setItemDetailsRenderer(new ComponentRenderer<>(activityDate -> activityDateDetails(activityDate)));
-    }
     UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
@@ -129,15 +122,14 @@ public class ProcurementView extends VerticalLayout {
     grid.setAllRowsVisible(true);
 
     List<Cast> activityCast = activityDate.activityCast;
-    if (activityCast != null) {
-      grid.setItems(activityCast);
-      grid.addColumn(date -> date.originId).setHeader("OriginId");
-      grid.addColumn(date -> date.name).setHeader("Name");
-      grid.addColumn(date -> date.role).setHeader("Role");
-      grid.addColumn(date -> date.roleCategory).setHeader("RoleCategory");
-      grid.addColumn(date -> date.IsStarRole).setHeader("IsStarRole");
-      grid.addColumn(date -> date.sort).setHeader("Sort");
-    }
+    grid.setItems(activityCast);
+    grid.addColumn(date -> date.originId).setHeader("OriginId");
+    grid.addColumn(date -> date.name).setHeader("Name");
+    grid.addColumn(date -> date.role).setHeader("Role");
+    grid.addColumn(date -> date.roleCategory).setHeader("RoleCategory");
+    grid.addColumn(date -> date.IsStarRole).setHeader("IsStarRole");
+    grid.addColumn(date -> date.sort).setHeader("Sort");
+
     UiUtils.streamlineColumns(grid.getColumns());
     layout.add(grid);
     return layout;
@@ -148,15 +140,12 @@ public class ProcurementView extends VerticalLayout {
     grid.setAllRowsVisible(true);
 
     ActivityMultimedia activityMultimedia = activity.activityMultimedia;
-    if (activityMultimedia != null) {
-      List<Image> images = activityMultimedia.images;
-      if (images != null) {
-        grid.setItems(images);
-        grid.addColumn(image -> image.url).setHeader("Url");
-        grid.addColumn(image -> image.name).setHeader("Name");
-        grid.addColumn(image -> image.credits).setHeader("Credits");
-      }
-    }
+    List<Image> images = activityMultimedia.images;
+    grid.setItems(images);
+    grid.addColumn(image -> image.url).setHeader("Url");
+    grid.addColumn(image -> image.name).setHeader("Name");
+    grid.addColumn(image -> image.credits).setHeader("Credits");
+
     UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
@@ -166,13 +155,10 @@ public class ProcurementView extends VerticalLayout {
     grid.setAllRowsVisible(true);
 
     ActivityMultimedia activityMultimedia = activity.activityMultimedia;
-    if (activityMultimedia != null) {
-      List<Video> videos = activityMultimedia.videos;
-      if (videos != null) {
-        grid.setItems(videos);
-        grid.addColumn(video -> video.url).setHeader("Url");
-      }
-    }
+    List<Video> videos = activityMultimedia.videos;
+    grid.setItems(videos);
+    grid.addColumn(video -> video.url).setHeader("Url");
+
     UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
@@ -182,14 +168,11 @@ public class ProcurementView extends VerticalLayout {
     grid.setAllRowsVisible(true);
 
     ActivitySettings activitySettings = activity.activitySettings;
-    if (activitySettings != null) {
-      List<Branch> branches = activitySettings.branches;
-      if (branches != null) {
-        grid.setItems(branches);
-        grid.addColumn(branch -> branch.originId).setHeader("OriginId");
-        grid.addColumn(branch -> branch.name).setHeader("Name");
-      }
-    }
+    List<Branch> branches = activitySettings.branches;
+    grid.setItems(branches);
+    grid.addColumn(branch -> branch.originId).setHeader("OriginId");
+    grid.addColumn(branch -> branch.name).setHeader("Name");
+
     UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
@@ -199,15 +182,12 @@ public class ProcurementView extends VerticalLayout {
     grid.setAllRowsVisible(true);
 
     ActivitySettings activitySettings = activity.activitySettings;
-    if (activitySettings != null) {
-      List<Genre> genres = activitySettings.genres;
-      if (genres != null) {
-        grid.setItems(genres);
-        grid.addColumn(genre -> genre.originId).setHeader("OriginId");
-        grid.addColumn(genre -> genre.name).setHeader("Name");
-        grid.addColumn(genre -> genre.branchId).setHeader("BranchId");
-      }
-    }
+    List<Genre> genres = activitySettings.genres;
+    grid.setItems(genres);
+    grid.addColumn(genre -> genre.originId).setHeader("OriginId");
+    grid.addColumn(genre -> genre.name).setHeader("Name");
+    grid.addColumn(genre -> genre.branchId).setHeader("BranchId");
+
     UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
