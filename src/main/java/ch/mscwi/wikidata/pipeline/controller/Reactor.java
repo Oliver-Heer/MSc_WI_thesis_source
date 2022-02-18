@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ch.mscwi.wikidata.pipeline.model.Activity;
-import ch.mscwi.wikidata.pipeline.model.ImportActivities;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
+import ch.mscwi.wikidata.pipeline.model.wikidata.PerformanceWork;
 
 public class Reactor {
 
   public List<Activity> activities = new ArrayList<>();
+  public List<PerformanceWork> performanceWorks = new ArrayList<>();
 
   private static final Reactor reactor = new Reactor();
 
@@ -36,8 +38,14 @@ public class Reactor {
     }
   }
 
-  public boolean hasBeenProcured(final long originId){
+  private boolean hasBeenProcured(final long originId){
     return activities.stream().anyMatch(activity -> activity.originId == originId);
+  }
+
+  public void prepare() {
+    activities.forEach(activity -> {
+      performanceWorks.add(DataPreparer.performanceWork(activity));
+    });
   }
 
 }

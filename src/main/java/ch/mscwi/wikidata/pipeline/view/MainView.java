@@ -40,7 +40,7 @@ public class MainView extends VerticalLayout {
 
   private Tabs createTabs() {
     tabComponentMap.put(new Tab("Procurement"), new ProcurementView());
-    tabComponentMap.put(new Tab("Preparation"), new H3("Preparation content"));
+    tabComponentMap.put(new Tab("Preparation"), new PreparationView());
     tabComponentMap.put(new Tab("Reconciliation"), new ReconciliationView());
     tabComponentMap.put(new Tab("Publication"), new H3("Publication content"));
     return new Tabs(tabComponentMap.keySet().toArray(new Tab[]{}));

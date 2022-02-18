@@ -9,7 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 
-import ch.mscwi.wikidata.pipeline.model.ImportActivities;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
 
 public class XmlProcurer {
 
