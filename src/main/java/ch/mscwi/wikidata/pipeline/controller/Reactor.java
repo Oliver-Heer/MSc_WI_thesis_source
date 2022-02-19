@@ -30,6 +30,8 @@ public class Reactor {
             .filter(activity -> !hasBeenProcured(activity.originId))
             .collect(Collectors.toList());
         activities.addAll(newActivities);
+
+        prepare();
       }
 
     } catch (Exception e) {
@@ -43,9 +45,12 @@ public class Reactor {
   }
 
   public void prepare() {
-    activities.forEach(activity -> {
-      performanceWorks.add(DataPreparer.performanceWork(activity));
-    });
+    activities.stream()
+        .filter(activity -> !activity.inPreparationStep)
+        .forEach(activity -> {
+          performanceWorks.add(DataPreparer.toPerformanceWork(activity));
+          activity.inPreparationStep = true;
+        });
   }
 
 }

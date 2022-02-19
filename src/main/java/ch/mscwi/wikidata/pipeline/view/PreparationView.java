@@ -22,25 +22,17 @@ public class PreparationView extends VerticalLayout {
     addClassName("preparationView");
     setSizeFull();
 
-    Button prepareButton = new Button("Prepare");
-    prepareButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
-
     Grid<PerformanceWork> performanceWorkGrid = performanceWorkGrid();
-    performanceWorkGrid.setItemDetailsRenderer(new ComponentRenderer<>(performanceWork -> performanceWorkDetailView(performanceWork)));
 
-    prepareButton.addClickListener(click -> {
-      reactor.prepare();
-      performanceWorkGrid.setItems(reactor.performanceWorks);
-    });
-
-    add(prepareButton, new Label("Performance Work"), performanceWorkGrid);
+    add(new Label("Performance Work"), performanceWorkGrid);
   }
 
   private Grid<PerformanceWork> performanceWorkGrid() {
     Grid<PerformanceWork> grid = new Grid<>();
     grid.setAllRowsVisible(true);
-
     grid.addColumn(performanceWork -> performanceWork.title);
+    grid.setItemDetailsRenderer(new ComponentRenderer<>(performanceWork -> performanceWorkDetailView(performanceWork)));
+    grid.setItems(reactor.performanceWorks);
     return grid;
   }
 

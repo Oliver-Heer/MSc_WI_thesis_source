@@ -32,4 +32,6 @@ public class Activity implements IKulturZueriObject {
 
   @XmlElement(name="ActivitySettings")
   public ActivitySettings activitySettings;
+
+  public boolean inPreparationStep;
 }

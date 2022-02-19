@@ -10,7 +10,7 @@ import ch.mscwi.wikidata.pipeline.model.wikidata.PerformingArtsProduction;
 
 public class DataPreparer {
 
-  public static PerformanceWork performanceWork(Activity activity) {
+  public static PerformanceWork toPerformanceWork(Activity activity) {
     if (activity == null) {
       return null;
     }
