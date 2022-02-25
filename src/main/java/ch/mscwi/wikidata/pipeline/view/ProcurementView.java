@@ -43,11 +43,12 @@ public class ProcurementView extends VerticalLayout {
     actionLayout.add(procureUrl, procureButton);
 
     Grid<Activity> activityGrid = activityGrid();
+    activityGrid.setItems(reactor.activities);
     activityGrid.setItemDetailsRenderer(new ComponentRenderer<>(activity -> detailView(activity)));
 
     procureButton.addClickListener(click -> {
       reactor.procure(procureUrl.getValue());
-      activityGrid.setItems(reactor.activities);
+      activityGrid.getDataProvider().refreshAll();
     });
 
     add(actionLayout, new Label("Activities"), activityGrid);

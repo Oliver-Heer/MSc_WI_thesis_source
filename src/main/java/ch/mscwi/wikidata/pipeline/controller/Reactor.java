@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
-import ch.mscwi.wikidata.pipeline.model.wikidata.PerformanceWork;
+import ch.mscwi.wikidata.pipeline.model.wikidata.IWikidataObject;
 
 public class Reactor {
 
   public List<Activity> activities = new ArrayList<>();
-  public List<PerformanceWork> performanceWorks = new ArrayList<>();
+  public List<IWikidataObject> works = new ArrayList<>();
 
   private static final Reactor reactor = new Reactor();
 
@@ -48,8 +48,15 @@ public class Reactor {
     activities.stream()
         .filter(activity -> !activity.inPreparationStep)
         .forEach(activity -> {
-          performanceWorks.add(DataPreparer.toPerformanceWork(activity));
+          works.add(DataPreparer.toWork(activity));
           activity.inPreparationStep = true;
+        });
+  }
+
+  public void reconcile() {
+    works.stream()
+        .forEach(performanceWork -> {
+          DataReconciliator.reconcile(performanceWork);
         });
   }
 
