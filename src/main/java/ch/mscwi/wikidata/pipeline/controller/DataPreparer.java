@@ -1,37 +1,63 @@
 package ch.mscwi.wikidata.pipeline.controller;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.StringJoiner;
 
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
-import ch.mscwi.wikidata.pipeline.model.wikidata.IWikidataObject;
-import ch.mscwi.wikidata.pipeline.model.wikidata.WikidataObject;
-import ch.mscwi.wikidata.pipeline.model.wikidata.WikidataObject.WikidataObjectBuilder;
+import ch.mscwi.wikidata.pipeline.model.kulturzueri.Genre;
 
 public class DataPreparer {
 
-  public static IWikidataObject toWork(Activity activity) {
-    if (activity == null) {
-      return null;
+  private static final String ZURICH_OPERA = "Zurich Opera";
+
+  public static File prepare(List<Activity> activities) {
+    Path tempFilePath = FileHandler.createTempFile();
+
+    try (BufferedWriter writer = Files.newBufferedWriter(tempFilePath, Charset.forName("UTF-8"))) {
+
+      writeHeader(writer, "Title, Description, Genre, Location, Organizer");
+
+      for (Activity activity : activities) {
+        writeActivity(writer, activity);
+      }
+
+    } catch (IOException e) {
+      // TODO
+      e.printStackTrace();
     }
 
-    StringJoiner genreJoiner = new StringJoiner(";");
-    activity.activitySettings.genres.forEach(genre -> genreJoiner.add(genre.name));
+    return tempFilePath.toFile();
+  }
 
-    WikidataObject performingArtsProduction = new WikidataObjectBuilder("Q43099500")
-        .withRDFSLabel(activity.activityDetail.title, activity.activityDetail.languageCode)
-        .withSchemaDescription(activity.activityDetail.shortDescription, activity.activityDetail.languageCode)
-        .withProperty("P664", "organizer", "Opernhaus Zürich")
-        .withProperty("P276", "location", activity.activityDetail.location.name)
-        .withProperty("P136", "genre", genreJoiner.toString())
-        .build();
+  private static void writeHeader(BufferedWriter writer, String header) throws IOException {
+    writer.write(header);
+    writer.write(System.lineSeparator());
+  }
 
-    WikidataObject work = new WikidataObjectBuilder("Q386724")
-        .withRDFSLabel(activity.activityDetail.title, activity.activityDetail.languageCode)
-        .withProperty("wdt:P31/wdt:P279*", "instance of/subclass of", "wd:Q17538722")
-        .withChild(performingArtsProduction)
-        .build();
+  private static void writeActivity(BufferedWriter writer, Activity activity) throws IOException {
+    StringJoiner stringJoiner = new StringJoiner(",");
+    stringJoiner.add(activity.activityDetail.title); // Title
+    stringJoiner.add(activity.activityDetail.subTitle); // Description
+    stringJoiner.add(getGenre(activity)); // Genre
+    stringJoiner.add(activity.activityDetail.location.name); // Location
+    stringJoiner.add(ZURICH_OPERA); // Organizer
 
-    return work;
+    writer.write(stringJoiner.toString());
+    writer.write(System.lineSeparator());
+  }
+
+  private static String getGenre(Activity activity) {
+    List<Genre> genres = activity.activitySettings.genres;
+    if(genres.isEmpty()) {
+      return "";
+    }
+    return genres.get(0).name;
   }
 
 }

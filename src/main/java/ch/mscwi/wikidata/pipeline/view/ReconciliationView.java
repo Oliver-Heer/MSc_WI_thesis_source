@@ -1,5 +1,7 @@
 package ch.mscwi.wikidata.pipeline.view;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -13,7 +15,14 @@ public class ReconciliationView extends VerticalLayout {
     addClassName("reconciliationView");
     setSizeFull();
 
-    add(new Label("Reconciliation"));
+    Button reconcileButton = new Button("Reconcile");
+    reconcileButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+
+    reconcileButton.addClickListener(click -> {
+      reactor.reconcile();
+    });
+
+    add(new Label("Reconciliation"), reconcileButton);
   }
 
 }

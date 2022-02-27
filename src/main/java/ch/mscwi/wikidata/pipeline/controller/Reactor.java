@@ -48,16 +48,18 @@ public class Reactor {
     activities.stream()
         .filter(activity -> !activity.inPreparationStep)
         .forEach(activity -> {
-          works.add(DataPreparer.toWork(activity));
+          works.add(DataPreparerX.toWork(activity));
           activity.inPreparationStep = true;
         });
   }
 
   public void reconcile() {
-    works.stream()
-        .forEach(performanceWork -> {
-          DataReconciliator.reconcile(performanceWork);
-        });
+    try {
+      DataReconciliator.reconcile(activities);
+    } catch (Exception e) {
+      // TODO
+      e.printStackTrace();
+    }
   }
 
 }
