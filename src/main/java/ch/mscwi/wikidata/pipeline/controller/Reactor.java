@@ -1,5 +1,6 @@
 package ch.mscwi.wikidata.pipeline.controller;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ public class Reactor {
 
   public List<Activity> activities = new ArrayList<>();
   public List<IWikidataObject> works = new ArrayList<>();
+  public List<URL> openRefineURLs = new ArrayList<>();
 
   private static final Reactor reactor = new Reactor();
 
@@ -55,7 +57,8 @@ public class Reactor {
 
   public void reconcile() {
     try {
-      DataReconciliator.reconcile(activities);
+      URL openRefineURL = DataReconciliator.reconcile(activities);
+      this.openRefineURLs.add(openRefineURL);
     } catch (Exception e) {
       // TODO
       e.printStackTrace();
