@@ -27,7 +27,7 @@ public class DataPreparer {
 
       String headerLine = new LineBuilder()
           .withTitle("Title")
-          .withDescription("Description")
+          .withDescription("SubTitle")
           .withGenre("Genre")
           .withLocation("Location")
           .withOrganizer("Organizer")
