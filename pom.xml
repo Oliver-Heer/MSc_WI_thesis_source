@@ -31,6 +31,7 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+
     <!-- Repository used by many Vaadin add-ons -->
     <repository>
       <id>Vaadin Directory</id>
@@ -38,6 +39,15 @@
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
+    </repository>
+
+    <!-- OPEN REFINE -->
+    <!-- Workaround -->
+    <!-- Needed version 0.2.4 has not yet been released to maven central -->
+    <repository>
+      <id>gmbh.dtap</id>
+      <name>refine-java</name>
+      <url>file:${project.basedir}/lib</url>
     </repository>
   </repositories>
 
