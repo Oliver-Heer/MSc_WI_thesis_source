@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import org.apache.commons.lang.StringUtils;
+
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ActivityDate;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Cast;
@@ -107,6 +109,8 @@ public class DataPreparer {
     private String castMemberRole = "";
     private String castMemberRoleCategory = "";
 
+    private boolean cleanseDelimiter = true;
+
     public LineBuilder() {}
 
     public LineBuilder withTitle(String title) {
@@ -149,16 +153,28 @@ public class DataPreparer {
       return this;
     }
 
+    public LineBuilder cleanseDelimiter(boolean cleanse) {
+      this.cleanseDelimiter = cleanse;
+      return this;
+    }
+
+    private String cleanseDelimiter(String text) {
+      if (cleanseDelimiter) {
+        return StringUtils.remove(text, DELIMITER);
+      }
+      return text;
+    }
+
     public String build() {
       StringJoiner stringJoiner = new StringJoiner(DELIMITER);
-      stringJoiner.add(title);
-      stringJoiner.add(description);
-      stringJoiner.add(genre);
-      stringJoiner.add(location);
-      stringJoiner.add(organizer);
-      stringJoiner.add(castMember);
-      stringJoiner.add(castMemberRole);
-      stringJoiner.add(castMemberRoleCategory);
+      stringJoiner.add(cleanseDelimiter(title));
+      stringJoiner.add(cleanseDelimiter(description));
+      stringJoiner.add(cleanseDelimiter(genre));
+      stringJoiner.add(cleanseDelimiter(location));
+      stringJoiner.add(cleanseDelimiter(organizer));
+      stringJoiner.add(cleanseDelimiter(castMember));
+      stringJoiner.add(cleanseDelimiter(castMemberRole));
+      stringJoiner.add(cleanseDelimiter(castMemberRoleCategory));
       return stringJoiner.toString();
     }
 
