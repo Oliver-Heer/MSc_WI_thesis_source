@@ -110,6 +110,7 @@ public class DataPreparer {
     private String castMemberRoleCategory = "";
 
     private boolean cleanseDelimiter = true;
+    private boolean cleanseLinebreaks = true;
 
     public LineBuilder() {}
 
@@ -158,23 +159,34 @@ public class DataPreparer {
       return this;
     }
 
-    private String cleanseDelimiter(String text) {
+    public LineBuilder cleanseLinebreaks(boolean cleanse) {
+      this.cleanseLinebreaks = cleanse;
+      return this;
+    }
+
+    private String cleanse(String text) {
+      String cleansedText = text;
       if (cleanseDelimiter) {
-        return StringUtils.remove(text, DELIMITER);
+        cleansedText = StringUtils.remove(cleansedText, DELIMITER);
       }
-      return text;
+
+      if(cleanseLinebreaks) {
+        cleansedText = StringUtils.remove(cleansedText, "\r\n");
+        cleansedText = StringUtils.remove(cleansedText, "\n");
+      }
+      return cleansedText;
     }
 
     public String build() {
       StringJoiner stringJoiner = new StringJoiner(DELIMITER);
-      stringJoiner.add(cleanseDelimiter(title));
-      stringJoiner.add(cleanseDelimiter(description));
-      stringJoiner.add(cleanseDelimiter(genre));
-      stringJoiner.add(cleanseDelimiter(location));
-      stringJoiner.add(cleanseDelimiter(organizer));
-      stringJoiner.add(cleanseDelimiter(castMember));
-      stringJoiner.add(cleanseDelimiter(castMemberRole));
-      stringJoiner.add(cleanseDelimiter(castMemberRoleCategory));
+      stringJoiner.add(cleanse(title));
+      stringJoiner.add(cleanse(description));
+      stringJoiner.add(cleanse(genre));
+      stringJoiner.add(cleanse(location));
+      stringJoiner.add(cleanse(organizer));
+      stringJoiner.add(cleanse(castMember));
+      stringJoiner.add(cleanse(castMemberRole));
+      stringJoiner.add(cleanse(castMemberRoleCategory));
       return stringJoiner.toString();
     }
 
