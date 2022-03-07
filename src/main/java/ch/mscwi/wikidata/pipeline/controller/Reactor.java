@@ -11,14 +11,12 @@ import org.springframework.stereotype.Service;
 
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
-import ch.mscwi.wikidata.pipeline.model.wikidata.IWikidataObject;
 
 @Service
 @Scope("singleton")
 public class Reactor {
 
   public List<Activity> activities = new ArrayList<>();
-  public List<IWikidataObject> works = new ArrayList<>();
   public List<URL> openRefineURLs = new ArrayList<>();
 
   private Reactor() { /* Singleton */ }
