@@ -39,7 +39,6 @@ public class ProcurementView extends VerticalLayout {
     procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
 
     Button refreshButton = new Button("Refresh");
-    procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
 
     HorizontalLayout actionLayout = new HorizontalLayout();
     actionLayout.setWidthFull();

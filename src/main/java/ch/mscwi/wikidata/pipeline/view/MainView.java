@@ -6,7 +6,6 @@ import java.util.Map;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -40,9 +39,7 @@ public class MainView extends VerticalLayout {
 
   private Tabs createTabs() {
     tabComponentMap.put(new Tab("Procurement"), new ProcurementView());
-    tabComponentMap.put(new Tab("Preparation"), new PreparationView());
     tabComponentMap.put(new Tab("Reconciliation"), new ReconciliationView());
-    tabComponentMap.put(new Tab("Publication"), new H3("Publication content"));
     return new Tabs(tabComponentMap.keySet().toArray(new Tab[]{}));
   }
 
