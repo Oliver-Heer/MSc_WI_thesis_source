@@ -24,5 +24,5 @@ public class ActivityDetail implements IKulturZueriObject {
   public String originURL;
 
   @XmlElement(name="Location")
-  public Location location;
+  public Location location = new Location();
 }

@@ -1,5 +1,6 @@
 package ch.mscwi.wikidata.pipeline.model.kulturzueri;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,5 +33,5 @@ public class ActivityDate implements IKulturZueriObject {
 
   @XmlElementWrapper(name="ActivityCast")
   @XmlElement(name="Cast")
-  public List<Cast> activityCast;
+  public List<Cast> activityCast = new ArrayList<>();
 }
