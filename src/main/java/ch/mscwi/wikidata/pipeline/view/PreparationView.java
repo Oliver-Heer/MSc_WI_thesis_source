@@ -13,7 +13,7 @@ import ch.mscwi.wikidata.pipeline.model.wikidata.Property;
 
 public class PreparationView extends VerticalLayout {
 
-  private Reactor reactor = Reactor.getReactor();
+  private Reactor reactor = UiUtils.getReactor();
 
   public PreparationView() {
     addClassName("preparationView");

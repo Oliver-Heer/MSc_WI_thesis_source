@@ -24,7 +24,7 @@ import ch.mscwi.wikidata.pipeline.model.kulturzueri.Video;
 
 public class ProcurementView extends VerticalLayout {
 
-  private Reactor reactor = Reactor.getReactor();
+  private Reactor reactor = UiUtils.getReactor();
 
   public ProcurementView() {
     addClassName("procureView");
@@ -38,9 +38,12 @@ public class ProcurementView extends VerticalLayout {
     Button procureButton = new Button("Procure");
     procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
 
+    Button refreshButton = new Button("Refresh");
+    procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+
     HorizontalLayout actionLayout = new HorizontalLayout();
     actionLayout.setWidthFull();
-    actionLayout.add(procureUrl, procureButton);
+    actionLayout.add(procureUrl, procureButton, refreshButton);
 
     Grid<Activity> activityGrid = activityGrid();
     activityGrid.setItems(reactor.activities);
@@ -50,6 +53,8 @@ public class ProcurementView extends VerticalLayout {
       reactor.procure(procureUrl.getValue());
       activityGrid.getDataProvider().refreshAll();
     });
+
+    refreshButton.addClickListener(click -> activityGrid.getDataProvider().refreshAll());
 
     add(actionLayout, new Label("Activities"), activityGrid);
   }

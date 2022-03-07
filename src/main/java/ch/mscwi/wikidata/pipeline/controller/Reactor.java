@@ -5,22 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
 import ch.mscwi.wikidata.pipeline.model.wikidata.IWikidataObject;
 
+@Service
+@Scope("singleton")
 public class Reactor {
 
   public List<Activity> activities = new ArrayList<>();
   public List<IWikidataObject> works = new ArrayList<>();
   public List<URL> openRefineURLs = new ArrayList<>();
 
-  private static final Reactor reactor = new Reactor();
-
   private Reactor() { /* Singleton */ }
 
-  public static Reactor getReactor() {
-    return reactor;
+  @Scheduled(cron = "0 0 23 * * *")
+  private void procure() {
+    System.err.println("Hello");
+    procure("https://www.opernhaus.ch/xmlexport/kzexport.xml");
   }
 
   public void procure(String url) {
@@ -32,8 +38,6 @@ public class Reactor {
             .filter(activity -> !hasBeenProcured(activity.originId))
             .collect(Collectors.toList());
         activities.addAll(newActivities);
-
-        prepare();
       }
 
     } catch (Exception e) {
@@ -46,15 +50,7 @@ public class Reactor {
     return activities.stream().anyMatch(activity -> activity.originId == originId);
   }
 
-  public void prepare() {
-    activities.stream()
-        .filter(activity -> !activity.inPreparationStep)
-        .forEach(activity -> {
-          works.add(DataPreparerX.toWork(activity));
-          activity.inPreparationStep = true;
-        });
-  }
-
+  @Scheduled(cron = "0 15 23 * * SUN")
   public void reconcile() {
     try {
       URL openRefineURL = DataReconciliator.reconcile(activities);

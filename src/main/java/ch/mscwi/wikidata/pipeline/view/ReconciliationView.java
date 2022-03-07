@@ -12,7 +12,7 @@ import ch.mscwi.wikidata.pipeline.controller.Reactor;
 
 public class ReconciliationView extends VerticalLayout {
 
-  private Reactor reactor = Reactor.getReactor();
+  private Reactor reactor = UiUtils.getReactor();
 
   public ReconciliationView() {
     addClassName("reconciliationView");
