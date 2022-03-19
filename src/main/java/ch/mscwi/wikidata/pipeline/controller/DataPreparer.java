@@ -20,8 +20,6 @@ import ch.mscwi.wikidata.pipeline.model.kulturzueri.Genre;
 
 public class DataPreparer {
 
-  private static final String ZURICH_OPERA = "Zurich Opera";
-
   public static File prepare(List<Activity> activities) {
     Path tempFilePath = FileHandler.createTempFile();
 
@@ -56,7 +54,7 @@ public class DataPreparer {
           .withDescription(activity.activityDetail.subTitle)
           .withGenre(getGenre(activity))
           .withLocation(activity.activityDetail.location.name)
-          .withOrganizer(ZURICH_OPERA)
+          .withOrganizer(activity.organizer)
           .build();
       writeLine(writer, activityLine);
 
@@ -99,6 +97,7 @@ public class DataPreparer {
   public static class LineBuilder {
 
     private static final String DELIMITER = ",";
+    private static final String DOUBLE_QUOTE = "\"";
 
     private String title = "";
     private String description = "";
@@ -109,8 +108,9 @@ public class DataPreparer {
     private String castMemberRole = "";
     private String castMemberRoleCategory = "";
 
-    private boolean cleanseDelimiter = true;
+    private boolean escapeDelimiter = true;
     private boolean cleanseLinebreaks = true;
+    private boolean cleanseDoubleQuotes = true;
 
     public LineBuilder() {}
 
@@ -154,8 +154,8 @@ public class DataPreparer {
       return this;
     }
 
-    public LineBuilder cleanseDelimiter(boolean cleanse) {
-      this.cleanseDelimiter = cleanse;
+    public LineBuilder escapeDelimiter(boolean cleanse) {
+      this.escapeDelimiter = cleanse;
       return this;
     }
 
@@ -164,10 +164,21 @@ public class DataPreparer {
       return this;
     }
 
+    public LineBuilder cleanseDoubleQuotes(boolean cleanse) {
+      this.cleanseDoubleQuotes = cleanse;
+      return this;
+    }
+
     private String cleanse(String text) {
       String cleansedText = text;
-      if (cleanseDelimiter) {
-        cleansedText = StringUtils.remove(cleansedText, DELIMITER);
+
+      if (cleanseDoubleQuotes) {
+        cleansedText = StringUtils.remove(cleansedText,  DOUBLE_QUOTE);
+      }
+
+      if (escapeDelimiter) {
+        String quotedDelimiter = DOUBLE_QUOTE + DELIMITER + DOUBLE_QUOTE;
+        cleansedText = StringUtils.replace(cleansedText, DELIMITER, quotedDelimiter);
       }
 
       if(cleanseLinebreaks) {

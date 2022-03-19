@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class FileHandler {
 
-  private static final String PROCURER_NAME = "Opernhaus_Zürich";
+  private static final String PROCURER_NAME = "Kulturzüri";
 
   public static Path createTempFile() {
     String fileName = PROCURER_NAME + " " + new Date();

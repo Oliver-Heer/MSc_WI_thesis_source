@@ -35,4 +35,6 @@ public class Activity implements IKulturZueriObject {
   public ActivitySettings activitySettings = new ActivitySettings();
 
   public boolean inPreparationStep;
+
+  public String organizer;
 }

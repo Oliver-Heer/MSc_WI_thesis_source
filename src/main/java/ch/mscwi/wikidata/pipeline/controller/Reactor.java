@@ -21,13 +21,13 @@ public class Reactor {
 
   private Reactor() { /* Singleton */ }
 
+  //TODO reconcile all
   @Scheduled(cron = "0 0 23 * * *")
   private void procure() {
-    System.err.println("Hello");
-    procure("https://www.opernhaus.ch/xmlexport/kzexport.xml");
+    procure("https://www.opernhaus.ch/xmlexport/kzexport.xml", "Zurich Opera");
   }
 
-  public void procure(String url) {
+  public void procure(String url, String organizer) {
     try {
       ImportActivities procurement = XmlProcurer.procure(url);
 
@@ -35,6 +35,9 @@ public class Reactor {
         List<Activity> newActivities = procurement.activities.stream()
             .filter(activity -> !hasBeenProcured(activity.originId))
             .collect(Collectors.toList());
+
+        newActivities.forEach(activity -> activity.organizer = organizer);
+
         activities.addAll(newActivities);
       }
 
