@@ -27,13 +27,16 @@ public class DataPreparer {
 
       String headerLine = new LineBuilder()
           .withTitle("Title")
-          .withDescription("SubTitle")
+          .withEnglishTitle("Title English")
+          .withSubTitle("SubTitle")
+          .withEnglishSubTitle("SubTitle English")
           .withGenre("Genre")
           .withLocation("Location")
           .withOrganizer("Organizer")
           .withCastMember("Cast_Member")
           .withCastMemberRole("Cast_Member_Role")
           .withCastMemberRoleCategory("Cast_Member_Role_Category")
+          .withMaintainedBy("Maintained By")
           .build();
       writeLine(writer, headerLine);
 
@@ -51,10 +54,13 @@ public class DataPreparer {
     for (Activity activity : activities) {
       String activityLine = new LineBuilder()
           .withTitle(activity.activityDetail.title)
-          .withDescription(activity.activityDetail.subTitle)
+          .withEnglishTitle(activity.activityDetailEnglish.title)
+          .withSubTitle(activity.activityDetail.subTitle)
+          .withEnglishSubTitle(activity.activityDetailEnglish.subTitle)
           .withGenre(getGenre(activity))
           .withLocation(activity.activityDetail.location.name)
           .withOrganizer(activity.organizer)
+          .withMaintainedBy("WikiProject Performing arts")
           .build();
       writeLine(writer, activityLine);
 
@@ -100,17 +106,21 @@ public class DataPreparer {
     private static final String DOUBLE_QUOTE = "\"";
 
     private String title = "";
-    private String description = "";
+    private String englishTitle = "";
+    private String subTitle = "";
+    private String englishSubTitle = "";
     private String genre = "";
     private String location = "";
     private String organizer = "";
     private String castMember = "";
     private String castMemberRole = "";
     private String castMemberRoleCategory = "";
+    private String maintainedBy = "";
 
     private boolean escapeDelimiter = true;
     private boolean cleanseLinebreaks = true;
     private boolean cleanseDoubleQuotes = true;
+    private boolean cleanseNull = true;
 
     public LineBuilder() {}
 
@@ -119,8 +129,18 @@ public class DataPreparer {
       return this;
     }
 
-    public LineBuilder withDescription(String description) {
-      this.description = description;
+    public LineBuilder withEnglishTitle(String englishTitle) {
+      this.englishTitle = englishTitle;
+      return this;
+    }
+
+    public LineBuilder withSubTitle(String subTitle) {
+      this.subTitle = subTitle;
+      return this;
+    }
+
+    public LineBuilder withEnglishSubTitle(String englishSubTitle) {
+      this.englishSubTitle = englishSubTitle;
       return this;
     }
 
@@ -154,6 +174,11 @@ public class DataPreparer {
       return this;
     }
 
+    public LineBuilder withMaintainedBy(String maintainedBy) {
+      this.maintainedBy = maintainedBy;
+      return this;
+    }
+
     public LineBuilder escapeDelimiter(boolean cleanse) {
       this.escapeDelimiter = cleanse;
       return this;
@@ -169,6 +194,11 @@ public class DataPreparer {
       return this;
     }
 
+    public LineBuilder cleanseNull(boolean cleanse) {
+      this.cleanseNull = cleanse;
+      return this;
+    }
+
     private String cleanse(String text) {
       String cleansedText = text;
 
@@ -181,20 +211,28 @@ public class DataPreparer {
         cleansedText = StringUtils.replace(cleansedText, DELIMITER, quotedDelimiter);
       }
 
-      if(cleanseLinebreaks) {
+      if (cleanseLinebreaks) {
         cleansedText = StringUtils.remove(cleansedText, "\r\n");
         cleansedText = StringUtils.remove(cleansedText, "\n");
       }
+
+      if (cleanseNull) {
+        cleansedText = StringUtils.defaultIfBlank(cleansedText, "");
+      }
+
       return cleansedText;
     }
 
     public String build() {
       StringJoiner stringJoiner = new StringJoiner(DELIMITER);
       stringJoiner.add(cleanse(title));
-      stringJoiner.add(cleanse(description));
+      stringJoiner.add(cleanse(englishTitle));
+      stringJoiner.add(cleanse(subTitle));
+      stringJoiner.add(cleanse(englishSubTitle));
       stringJoiner.add(cleanse(genre));
       stringJoiner.add(cleanse(location));
       stringJoiner.add(cleanse(organizer));
+      stringJoiner.add(cleanse(maintainedBy));
       stringJoiner.add(cleanse(castMember));
       stringJoiner.add(cleanse(castMemberRole));
       stringJoiner.add(cleanse(castMemberRoleCategory));
