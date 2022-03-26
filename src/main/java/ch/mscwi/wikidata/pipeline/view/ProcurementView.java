@@ -1,16 +1,14 @@
 package ch.mscwi.wikidata.pipeline.view;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
@@ -28,55 +26,30 @@ public class ProcurementView extends VerticalLayout {
 
   private Reactor reactor = UiUtils.getReactor();
 
-  private Map<String, String> targets = Map.ofEntries(
-      Map.entry("Zurich Opera", "https://www.opernhaus.ch/xmlexport/kzexport.xml"),
-      Map.entry("Schauspielhaus Zürich", "https://neu.schauspielhaus.ch/de/api/export/kulturzueri.xml"),
-      Map.entry("Theater Neumarkt", "https://www.theaterneumarkt.ch/xml-export/"),
-      Map.entry("Theaterhaus Gessnerallee", "https://www.gessnerallee.ch/export/xml?access=342598234523x"),
-      Map.entry("Kunsthaus Zürich", "https://www.kunsthaus.ch/feeds/agenda_feed.xml"),
-      Map.entry("Bernhard-Theater", "https://bernhard-theater.ch/xml-export/"),
-      Map.entry("Rote Fabrik", "https://kalender.rotefabrik.ch/api/feed"),
-      Map.entry("Millers", "https://www.millers.ch/spielplan/xml"),
-      Map.entry("Theater Rigiblick", "https://www.theater-rigiblick.ch/rss/kulturzueri.php"),
-      Map.entry("Kammerspiele Zürich", "https://www.kammerspiele.ch/api/kulturzueri/export.php"),
-      Map.entry("Theater Winkelwiese", "https://winkelwiese.ch/kdbz-feed.xml"),
-      Map.entry("Musikkollegium Winterthur", "https://www.musikkollegium.ch/files/kulturzuerich/export/export.xml"),
-      Map.entry("Kulturmarkt", "https://www.kulturmarkt.ch/wp-content/themes/kulturmarkt/app/kulturzueri.php"),
-      Map.entry("Theater Basel", "https://www.theater-basel.ch/de/activities-feed/export.xml")
-  );
-
   public ProcurementView() {
     addClassName("procureView");
     setSizeFull();
-    ComboBox<Entry<String, String>> procureUrl = new ComboBox<Entry<String, String>>("", targets.entrySet());
+
+    TextField procureUrl = new TextField();
     procureUrl.setClearButtonVisible(true);
-    procureUrl.setItemLabelGenerator(Map.Entry::getValue);
-    procureUrl.setWidth("50%");
+    procureUrl.setValue("https://www.opernhaus.ch/xmlexport/kzexport.xml");
+    procureUrl.setWidth("25%");
 
     Button procureButton = new Button("Procure");
     procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
-
-    Button procureAllButton = new Button("Procure all");
-    procureAllButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
 
     Button refreshButton = new Button("Refresh");
 
     HorizontalLayout actionLayout = new HorizontalLayout();
     actionLayout.setWidthFull();
-    actionLayout.add(procureUrl, procureButton, procureAllButton, refreshButton);
+    actionLayout.add(procureUrl, procureButton, refreshButton);
 
     Grid<Activity> activityGrid = activityGrid();
     activityGrid.setItems(reactor.activities);
     activityGrid.setItemDetailsRenderer(new ComponentRenderer<>(activity -> detailView(activity)));
 
     procureButton.addClickListener(click -> {
-      Entry<String, String> selection = procureUrl.getValue();
-      reactor.procure(selection.getValue(), selection.getKey());
-      activityGrid.getDataProvider().refreshAll();
-    });
-
-    procureAllButton.addClickListener(click -> {
-      targets.forEach((key, value) -> reactor.procure(value, key));
+      reactor.procure(procureUrl.getValue());
       activityGrid.getDataProvider().refreshAll();
     });
 
@@ -89,7 +62,7 @@ public class ProcurementView extends VerticalLayout {
     Grid<Activity> grid = new Grid<>();
     grid.setAllRowsVisible(true);
 
-    grid.addColumn(act -> act.organizer).setHeader("Organizer");
+    grid.addColumn(act -> act.originId).setHeader("OriginId");
     grid.addColumn(act -> act.activityDetail.title).setHeader("Title");
     return grid;
   }
