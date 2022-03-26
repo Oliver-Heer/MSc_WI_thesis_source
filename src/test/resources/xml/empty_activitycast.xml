@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kdz:importActivities xmlns:kdz="https://www.opernhaus.ch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ImportFileLastUpdate>2021-12-11</ImportFileLastUpdate>
+  <StartExportDate>2021-12-11</StartExportDate>
+  <EndExportDate>2022-01-31</EndExportDate>
+  <Source Id="2" url="http://www.opernhaus.ch/export/kulturzueri/"/>
+  <Activities>
+    <Activity ownerId="2" originId="90986" originLastUpdatedAt="2021-12-24 22:15:21">
+      <ActivityDetail languageCode="de">
+        <Title><![CDATA[Märchenerzählungen]]></Title>
+        <SubTitle><![CDATA[4. Brunch/Lunchkonzert]]></SubTitle>
+        <ShortDescription><p><![CDATA[4. Brunch/Lunchkonzert]]></p></ShortDescription>
+        <LongDescription><p><span style="background:#FFFFFF;"><span style="font-size:13pt;"><span style="font-family:Helvetica, sans-serif;"><span style="color:#000000;">Filipa Nunes, Klarinette<br /> Maria Clément-Opotskaya, Viola</span></span></span></span></p> <p><span style="background:#FFFFFF;"><span style="font-size:13pt;"><span style="font-family:Helvetica, sans-serif;"><span style="color:#000000;">Kateryna Tereshchenko, Klavier </span></span></span></span></p></LongDescription>
+        <CastInformation></CastInformation>
+        <OriginURL>https://www.opernhaus.ch/spielplan/kalendarium/4_brunch_lunchkonzert/2021-2022/</OriginURL>
+        <Location id="1063" name="Spiegelsaal"/>
+      </ActivityDetail>
+
+      <ActivityDetailEnglish languageCode="en">
+        <Title><![CDATA[Märchenerzählungen]]></Title>
+        <SubTitle><![CDATA[4th Brunch / Lunch Concert]]></SubTitle>
+        <ShortDescription><p><![CDATA[4th Brunch / Lunch Concert]]></p></ShortDescription>
+        <LongDescription><![CDATA[<p><span style="background:#FFFFFF;"><span style="font-size:13pt;"><span style="font-family:Helvetica, sans-serif;"><span style="color:#000000;">Filipa Nunes, Klarinette<br /> Maria Clément-Opotskaya, Viola</span></span></span></span></p> <p><span style="background:#FFFFFF;"><span style="font-size:13pt;"><span style="font-family:Helvetica, sans-serif;"><span style="color:#000000;">Kateryna Tereshchenko, Klavier</span></span></span></span></p>]]></LongDescription>
+        <CastInformation></CastInformation>
+      </ActivityDetailEnglish>
+
+      <ActivityDates>
+        <ActivityDate originId="91174" startDate="2022-01-25" startTime="19:30" endTime="22:45" originLastUpdatedAt="2021-11-25 22:15:33">
+          <Price><![CDATA[Preise H, CHF 15-75]]></Price>
+          <TicketURL><![CDATA[https://www.zurichticket.ch/ohz.webshop/webticket/shop?event=11046&language=de]]></TicketURL>
+          <ActivityCast>
+
+          </ActivityCast>
+        </ActivityDate>
+      </ActivityDates>
+    </Activity>
+  </Activities>
+</kdz:importActivities>

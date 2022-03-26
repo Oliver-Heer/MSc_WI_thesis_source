@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kdz:importActivities xmlns:kdz="https://www.opernhaus.ch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ImportFileLastUpdate>2021-12-11</ImportFileLastUpdate>
+  <StartExportDate>2021-12-11</StartExportDate>
+  <EndExportDate>2022-01-31</EndExportDate>
+  <Source Id="2" url="http://www.opernhaus.ch/export/kulturzueri/"/>
+  <Activities></Activities>
+</kdz:importActivities>
