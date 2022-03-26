@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.controller;
+package ch.mscwi.wikidata.pipeline.controller.procurement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -9,7 +9,6 @@ import java.util.GregorianCalendar;
 import org.junit.jupiter.api.Test;
 
 import ch.mscwi.wikidata.pipeline.TestUtils;
-import ch.mscwi.wikidata.pipeline.controller.procurement.XmlProcurer;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ActivityDate;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ActivityDetail;

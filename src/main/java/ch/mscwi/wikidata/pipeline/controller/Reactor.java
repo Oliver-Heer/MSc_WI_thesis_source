@@ -14,6 +14,9 @@ import ch.mscwi.wikidata.pipeline.controller.procurement.XmlProcurer;
 import ch.mscwi.wikidata.pipeline.controller.reconciliation.DataReconciliator;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
+import ch.mscwi.wikidata.pipeline.persistence.ActivityDTO;
+import ch.mscwi.wikidata.pipeline.persistence.ActivityDTOBuilder;
+import ch.mscwi.wikidata.pipeline.persistence.IActivityRepository;
 
 @Service
 @Scope("singleton")
@@ -22,6 +25,9 @@ public class Reactor {
   @Autowired
   private DataReconciliator reconciliator;
 
+  @Autowired
+  private IActivityRepository activityRepo;
+
   public List<Activity> activities = new ArrayList<>();
   public List<URL> openRefineURLs = new ArrayList<>();
 
@@ -29,22 +35,30 @@ public class Reactor {
 
   @Scheduled(cron = "0 0 23 * * *")
   private void procure() {
-    procure("https://www.opernhaus.ch/xmlexport/kzexport.xml", "Zurich Opera");
+    procure("https://www.opernhaus.ch/xmlexport/kzexport.xml");
   }
 
-  public void procure(String url, String organizer) {
+  public void procure(String url) {
     try {
       ImportActivities procurement = XmlProcurer.procure(url);
-
-      if (procurement != null) {
-        List<Activity> newActivities = procurement.activities.stream()
-            .filter(activity -> !hasBeenProcured(activity.originId))
-            .collect(Collectors.toList());
-
-        newActivities.forEach(activity -> activity.organizer = organizer);
-
-        activities.addAll(newActivities);
+      if (procurement == null) {
+        return;
       }
+
+      List<Activity> newActivities = procurement.activities.stream()
+          .filter(activity -> !hasBeenProcured(activity.originId))
+          .collect(Collectors.toList());
+
+      activities.addAll(newActivities);
+
+      //TODO
+      //handle already persisted entities
+
+      List<ActivityDTO> activityDTOs = newActivities.stream()
+          .map(activity -> ActivityDTOBuilder.toActivityDTO(activity))
+          .collect(Collectors.toList());
+
+      activityRepo.saveAll(activityDTOs);
 
     } catch (Exception e) {
       // TODO

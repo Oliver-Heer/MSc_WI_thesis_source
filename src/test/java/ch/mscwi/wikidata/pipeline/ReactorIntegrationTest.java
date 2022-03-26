@@ -24,7 +24,7 @@ public class ReactorIntegrationTest {
   @Test
   void persistAndLoadActivityTest() {
     String xml = TestUtils.getTestResource(TestUtils.TEST_XML_1);
-    reactor.procure(xml, "Zurich Opera");
+    reactor.procure(xml);
 
     Activity activity = reactor.activities.get(17);
     long originId = activity.originId;
