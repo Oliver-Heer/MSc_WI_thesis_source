@@ -26,24 +26,25 @@ public class ReconciliationView extends VerticalLayout {
     openRefineUrl.setWidth("25%");
     openRefineUrl.setReadOnly(true);
 
-    Button reconcileButton = new Button("Reconcile");
-    reconcileButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
-
-    Button refreshButton = new Button("Refresh");
-
     Grid<URL> urlGrid = urlGrid();
     urlGrid.setItems(reactor.openRefineURLs);
 
-    reconcileButton.addClickListener(click -> {
-      reactor.reconcile();
+    Button reconcileButton = new Button("Reconcile");
+    reconcileButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+    reconcileButton.addClickListener(click -> reactor.reconcile());
+
+    Button toOpenRefineButton = new Button("Send to OpenRefine");
+    toOpenRefineButton.addClickListener(click -> {
+      reactor.sendToOpenRefine(openRefineUrl.getValue());
       urlGrid.getDataProvider().refreshAll();
     });
 
+    Button refreshButton = new Button("Refresh");
     refreshButton.addClickListener(click -> urlGrid.getDataProvider().refreshAll());
 
     HorizontalLayout actionLayout = new HorizontalLayout();
     actionLayout.setWidthFull();
-    actionLayout.add(openRefineUrl, reconcileButton, refreshButton);
+    actionLayout.add(openRefineUrl, toOpenRefineButton, reconcileButton, refreshButton);
 
     add(actionLayout, urlGrid);
   }
