@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import ch.mscwi.wikidata.pipeline.controller.procurement.XmlProcurer;
+import ch.mscwi.wikidata.pipeline.controller.reconciliation.DataReconciliator;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
 

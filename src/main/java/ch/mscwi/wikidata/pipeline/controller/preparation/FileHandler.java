@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.controller;
+package ch.mscwi.wikidata.pipeline.controller.preparation;
 
 import java.io.IOException;
 import java.nio.file.Files;

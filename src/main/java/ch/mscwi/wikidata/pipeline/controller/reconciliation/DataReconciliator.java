@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.controller;
+package ch.mscwi.wikidata.pipeline.controller.reconciliation;
 
 import java.io.File;
 import java.net.URL;
@@ -9,9 +9,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 
+import ch.mscwi.wikidata.pipeline.controller.preparation.DataPreparer;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
-import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationQueryBuilder;
-import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationResponse;
 import gmbh.dtap.refine.client.RefineClient;
 import gmbh.dtap.refine.client.RefineClients;
 import gmbh.dtap.refine.client.command.CreateProjectResponse;

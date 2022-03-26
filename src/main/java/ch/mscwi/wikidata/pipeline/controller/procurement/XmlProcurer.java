@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.controller;
+package ch.mscwi.wikidata.pipeline.controller.procurement;
 
 import java.net.URL;
 

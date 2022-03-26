@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.model.wikidata;
+package ch.mscwi.wikidata.pipeline.controller.reconciliation;
 
 import java.util.Map;
 
