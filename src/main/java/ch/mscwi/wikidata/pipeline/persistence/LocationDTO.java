@@ -10,6 +10,7 @@ public class LocationDTO {
 
   @Id
   private long id;
+  private String wikidataUid;
   private String name;
 
   public long getId() {
@@ -18,6 +19,14 @@ public class LocationDTO {
 
   public void setId(long id) {
     this.id = id;
+  }
+
+  public String getWikidataUid() {
+    return wikidataUid;
+  }
+
+  public void setWikidataUid(String wikidataUid) {
+    this.wikidataUid = wikidataUid;
   }
 
   public String getName() {

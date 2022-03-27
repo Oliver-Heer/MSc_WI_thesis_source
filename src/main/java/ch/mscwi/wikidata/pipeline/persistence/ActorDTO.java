@@ -17,6 +17,7 @@ public class ActorDTO {
 
   @Id
   private long originId;
+  private String wikidataUid;
   private String name;
   private String role;
   private String roleCategory;
@@ -30,6 +31,14 @@ public class ActorDTO {
 
   public void setOriginId(long originId) {
     this.originId = originId;
+  }
+
+  public String getWikidataUid() {
+    return wikidataUid;
+  }
+
+  public void setWikidataUid(String wikidataUid) {
+    this.wikidataUid = wikidataUid;
   }
 
   public String getName() {

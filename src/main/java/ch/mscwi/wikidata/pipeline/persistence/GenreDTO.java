@@ -17,6 +17,7 @@ public class GenreDTO {
 
   @Id
   private long originId;
+  private String wikidataUid;
   private String name;
 
   @ManyToMany(targetEntity = ActivityDTO.class, mappedBy = "genres", cascade = CascadeType.ALL)
@@ -28,6 +29,14 @@ public class GenreDTO {
 
   public void setOriginId(long originId) {
     this.originId = originId;
+  }
+
+  public String getWikidataUid() {
+    return wikidataUid;
+  }
+
+  public void setWikidataUid(String wikidataUid) {
+    this.wikidataUid = wikidataUid;
   }
 
   public String getName() {
