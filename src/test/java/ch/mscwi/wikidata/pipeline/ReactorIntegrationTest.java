@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.persistence.ActivityDTO;
-import ch.mscwi.wikidata.pipeline.persistence.ActivityDTOBuilder;
 import ch.mscwi.wikidata.pipeline.persistence.IActivityRepository;
 
 @SpringBootTest
@@ -26,17 +25,19 @@ public class ReactorIntegrationTest {
     String xml = TestUtils.getTestResource(TestUtils.TEST_XML_1);
     reactor.procure(xml);
 
-    Activity activity = reactor.activities.get(17);
-    long originId = activity.originId;
+    Activity activityToPersist = reactor.activities.get(17);
+    long originId = activityToPersist.originId;
 
-    ActivityDTO dtoToPersist = ActivityDTOBuilder.toActivityDTO(activity);
-    assertEquals(originId, dtoToPersist.getOriginId());
-    assertEquals("Don Giovanni", dtoToPersist.getTitle());
-    assertEquals("Oper von Wolfgang Amadeus Mozart", dtoToPersist.getSubTitle());
-    assertEquals("Don Giovanni", dtoToPersist.getTitleEn());
-    assertEquals("Opera by Wolfgang Amadeus Mozart", dtoToPersist.getSubTitleEn());
+    assertEquals(originId, activityToPersist.originId);
+    assertEquals("Don Giovanni", activityToPersist.activityDetail.title);
+    assertEquals("Oper von Wolfgang Amadeus Mozart", activityToPersist.activityDetail.subTitle);
+    assertEquals("Don Giovanni", activityToPersist.activityDetailEnglish.title);
+    assertEquals("Opera by Wolfgang Amadeus Mozart", activityToPersist.activityDetailEnglish.subTitle);
 
-    activityRepo.save(dtoToPersist);
+    // TODO
+    // Location Name
+    // Genres
+    // Actors
 
     ActivityDTO dtoFromDB = activityRepo.findById(originId).get();
     assertEquals(originId, dtoFromDB.getOriginId());
@@ -44,6 +45,7 @@ public class ReactorIntegrationTest {
     assertEquals("Oper von Wolfgang Amadeus Mozart", dtoFromDB.getSubTitle());
     assertEquals("Don Giovanni", dtoFromDB.getTitleEn());
     assertEquals("Opera by Wolfgang Amadeus Mozart", dtoFromDB.getSubTitleEn());
+    assertEquals("Test-Organizer", dtoFromDB.getOrganizer());
   }
 }
 

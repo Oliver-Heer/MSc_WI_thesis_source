@@ -12,13 +12,35 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ActivityDate;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Cast;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Genre;
+import ch.mscwi.wikidata.pipeline.persistence.ActivityDTO;
+import ch.mscwi.wikidata.pipeline.persistence.ActivityDTOBuilder;
 
+@Service
 public class DataPreparer {
+
+  @Value("${config.organizer}")
+  private String organizer;
+
+  public ActivityDTO toActivityDTO(Activity xmlActivity) {
+    return new ActivityDTOBuilder()
+        .withOriginId(xmlActivity.originId)
+        .withTitle(xmlActivity.activityDetail.title)
+        .withSubTitle(xmlActivity.activityDetail.subTitle)
+        .withTitleEn(xmlActivity.activityDetailEnglish.title)
+        .withSubTitleEn(xmlActivity.activityDetailEnglish.subTitle)
+        .withLocation(xmlActivity.activityDetail.location)
+        .withGenres(xmlActivity.activitySettings.genres)
+        .withActors(consolidateCast(xmlActivity.activityDates))
+        .withOrganizer(organizer)
+        .build();
+  }
 
   public static File prepare(List<Activity> activities) {
     Path tempFilePath = FileHandler.createTempFile();

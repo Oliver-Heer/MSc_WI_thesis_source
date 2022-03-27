@@ -21,7 +21,7 @@ public class XmlProcureUnitTest {
   @Test
   void procureTest() throws Exception {
     String xml = TestUtils.getTestResource(TestUtils.TEST_XML_1);
-    ImportActivities importActivities = XmlProcurer.procure(xml);
+    ImportActivities importActivities = new XmlProcurer().procure(xml);
 
     assertNotNull(importActivities);
     assertNotNull(importActivities.activities);
@@ -69,7 +69,7 @@ public class XmlProcureUnitTest {
   @Test
   void procureTest_emptyActivities() throws Exception {
     String xml = TestUtils.getTestResource(TestUtils.EMPTY_ACTIVITIES);
-    ImportActivities importActivities = XmlProcurer.procure(xml);
+    ImportActivities importActivities = new XmlProcurer().procure(xml);
 
     assertNotNull(importActivities);
     assertNotNull(importActivities.activities);
@@ -79,7 +79,7 @@ public class XmlProcureUnitTest {
   @Test
   void procureTest_emptyActivityDates() throws Exception {
     String xml = TestUtils.getTestResource(TestUtils.EMPTY_ACTIVITY_DATES);
-    ImportActivities importActivities = XmlProcurer.procure(xml);
+    ImportActivities importActivities = new XmlProcurer().procure(xml);
 
     Activity activity = importActivities.activities.get(0);
     assertNotNull(activity.activityDates);
@@ -89,7 +89,7 @@ public class XmlProcureUnitTest {
   @Test
   void procureTest_emptyActivityCast() throws Exception {
     String xml = TestUtils.getTestResource(TestUtils.EMPTY_ACTIVITY_CAST);
-    ImportActivities importActivities = XmlProcurer.procure(xml);
+    ImportActivities importActivities = new XmlProcurer().procure(xml);
 
     Activity activity = importActivities.activities.get(0);
     ActivityDate activityDate = activity.activityDates.get(0);

@@ -7,13 +7,15 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
 
+@Service
 public class XmlProcurer {
 
-    public static ImportActivities procure(String xmlUrl) throws Exception {
+    public ImportActivities procure(String xmlUrl) throws Exception {
       Document xml = fetchXml(xmlUrl);
       return unmarshall(xml);
     }

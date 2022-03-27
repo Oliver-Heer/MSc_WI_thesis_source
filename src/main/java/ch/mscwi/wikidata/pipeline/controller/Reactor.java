@@ -10,17 +10,23 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import ch.mscwi.wikidata.pipeline.controller.preparation.DataPreparer;
 import ch.mscwi.wikidata.pipeline.controller.procurement.XmlProcurer;
 import ch.mscwi.wikidata.pipeline.controller.reconciliation.DataReconciliator;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
 import ch.mscwi.wikidata.pipeline.persistence.ActivityDTO;
-import ch.mscwi.wikidata.pipeline.persistence.ActivityDTOBuilder;
 import ch.mscwi.wikidata.pipeline.persistence.IActivityRepository;
 
 @Service
 @Scope("singleton")
 public class Reactor {
+
+  @Autowired
+  private XmlProcurer procurer;
+
+  @Autowired
+  private DataPreparer preparer;
 
   @Autowired
   private DataReconciliator reconciliator;
@@ -31,8 +37,6 @@ public class Reactor {
   public List<Activity> activities = new ArrayList<>();
   public List<URL> openRefineURLs = new ArrayList<>();
 
-  private Reactor() { /* Singleton */ }
-
   @Scheduled(cron = "0 0 23 * * *")
   private void procure() {
     procure("https://www.opernhaus.ch/xmlexport/kzexport.xml");
@@ -40,7 +44,7 @@ public class Reactor {
 
   public void procure(String url) {
     try {
-      ImportActivities procurement = XmlProcurer.procure(url);
+      ImportActivities procurement = procurer.procure(url);
       if (procurement == null) {
         return;
       }
@@ -55,7 +59,7 @@ public class Reactor {
       //handle already persisted entities
 
       List<ActivityDTO> activityDTOs = newActivities.stream()
-          .map(activity -> ActivityDTOBuilder.toActivityDTO(activity))
+          .map(activity -> preparer.toActivityDTO(activity))
           .collect(Collectors.toList());
 
       activityRepo.saveAll(activityDTOs);
