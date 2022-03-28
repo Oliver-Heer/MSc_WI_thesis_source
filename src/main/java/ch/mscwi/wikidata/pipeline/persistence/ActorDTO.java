@@ -1,7 +1,6 @@
 package ch.mscwi.wikidata.pipeline.persistence;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -23,7 +22,7 @@ public class ActorDTO {
   private String roleCategory;
 
   @ManyToMany(targetEntity = ActivityDTO.class, mappedBy = "actors", cascade = CascadeType.ALL)
-  private Set<Activity> activities = new HashSet<>();
+  private Collection<Activity> activities;
 
   public long getOriginId() {
     return originId;

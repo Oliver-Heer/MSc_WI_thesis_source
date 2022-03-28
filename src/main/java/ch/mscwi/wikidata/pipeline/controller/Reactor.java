@@ -16,7 +16,7 @@ import ch.mscwi.wikidata.pipeline.controller.reconciliation.DataReconciliator;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
 import ch.mscwi.wikidata.pipeline.persistence.ActivityDTO;
-import ch.mscwi.wikidata.pipeline.persistence.IActivityRepository;
+import ch.mscwi.wikidata.pipeline.persistence.DataPersistor;
 
 @Service
 @Scope("singleton")
@@ -32,13 +32,13 @@ public class Reactor {
   private DataReconciliator reconciliator;
 
   @Autowired
-  private IActivityRepository activityRepo;
+  private DataPersistor persistor;
 
   public List<Activity> activities = new ArrayList<>();
   public List<URL> openRefineURLs = new ArrayList<>();
 
   @Scheduled(cron = "0 0 23 * * *")
-  private void procure() {
+  public void procure() {
     procure("https://www.opernhaus.ch/xmlexport/kzexport.xml");
   }
 
@@ -62,7 +62,7 @@ public class Reactor {
           .map(activity -> preparer.toActivityDTO(activity))
           .collect(Collectors.toList());
 
-      activityRepo.saveAll(activityDTOs);
+      persistor.saveAll(activityDTOs);
 
     } catch (Exception e) {
       // TODO

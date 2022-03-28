@@ -1,6 +1,6 @@
 package ch.mscwi.wikidata.pipeline.persistence;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -27,10 +27,10 @@ public class ActivityDTO {
   private LocationDTO location;
 
   @ManyToMany(targetEntity = GenreDTO.class, cascade = CascadeType.ALL)
-  private Set<GenreDTO> genres = new HashSet<>();
+  private Collection<GenreDTO> genres;
 
   @ManyToMany(targetEntity = ActorDTO.class, cascade = CascadeType.ALL)
-  private Set<ActorDTO> actors = new HashSet<>();
+  private Collection<ActorDTO> actors;
 
   public long getOriginId() {
     return originId;
@@ -96,7 +96,7 @@ public class ActivityDTO {
     this.location = location;
   }
 
-  public Set<GenreDTO> getGenres() {
+  public Collection<GenreDTO> getGenres() {
     return genres;
   }
 
@@ -104,7 +104,7 @@ public class ActivityDTO {
     this.genres = genres;
   }
 
-  public Set<ActorDTO> getActors() {
+  public Collection<ActorDTO> getActors() {
     return actors;
   }
 
