@@ -19,8 +19,8 @@ import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ActivityDate;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Cast;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Genre;
-import ch.mscwi.wikidata.pipeline.persistence.ActivityDTO;
-import ch.mscwi.wikidata.pipeline.persistence.ActivityDTOBuilder;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTOBuilder;
 
 @Service
 public class DataPreparer {

@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.persistence;
+package ch.mscwi.wikidata.pipeline.model.wikidata;
 
 import java.util.Collection;
 
@@ -12,11 +12,10 @@ import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 
 @Entity
 @Table(name="Actor")
-public class ActorDTO {
+public class ActorDTO extends AbstractWikidataDTO {
 
   @Id
   private long originId;
-  private String wikidataUid;
   private String name;
   private String role;
   private String roleCategory;
@@ -30,14 +29,6 @@ public class ActorDTO {
 
   public void setOriginId(long originId) {
     this.originId = originId;
-  }
-
-  public String getWikidataUid() {
-    return wikidataUid;
-  }
-
-  public void setWikidataUid(String wikidataUid) {
-    this.wikidataUid = wikidataUid;
   }
 
   public String getName() {

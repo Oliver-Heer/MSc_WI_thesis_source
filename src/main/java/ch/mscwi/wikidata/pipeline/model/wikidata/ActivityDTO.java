@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.persistence;
+package ch.mscwi.wikidata.pipeline.model.wikidata;
 
 import java.util.Collection;
 import java.util.Set;
@@ -12,11 +12,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Activity")
-public class ActivityDTO {
+public class ActivityDTO extends AbstractWikidataDTO {
 
   @Id
   private long originId;
-  private String wikidataUid;
   private String title;
   private String titleEn;
   private String subTitle;
@@ -38,14 +37,6 @@ public class ActivityDTO {
 
   public void setOriginId(long originId) {
     this.originId = originId;
-  }
-
-  public String getWikidataUid() {
-    return wikidataUid;
-  }
-
-  public void setWikidataUid(String wikidataUid) {
-    this.wikidataUid = wikidataUid;
   }
 
   public String getTitle() {

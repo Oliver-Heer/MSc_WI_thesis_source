@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.persistence;
+package ch.mscwi.wikidata.pipeline.model.wikidata;
 
 import java.util.List;
 import java.util.Set;

@@ -15,8 +15,8 @@ import ch.mscwi.wikidata.pipeline.controller.procurement.XmlProcurer;
 import ch.mscwi.wikidata.pipeline.controller.reconciliation.DataReconciliator;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
-import ch.mscwi.wikidata.pipeline.persistence.ActivityDTO;
-import ch.mscwi.wikidata.pipeline.persistence.DataPersistor;
+import ch.mscwi.wikidata.pipeline.model.persistence.DataPersistor;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 
 @Service
 @Scope("singleton")

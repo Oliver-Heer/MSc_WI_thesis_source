@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.persistence;
+package ch.mscwi.wikidata.pipeline.model.wikidata;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -6,11 +6,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Location")
-public class LocationDTO {
+public class LocationDTO extends AbstractWikidataDTO {
 
   @Id
   private long id;
-  private String wikidataUid;
   private String name;
 
   public long getId() {
@@ -19,14 +18,6 @@ public class LocationDTO {
 
   public void setId(long id) {
     this.id = id;
-  }
-
-  public String getWikidataUid() {
-    return wikidataUid;
-  }
-
-  public void setWikidataUid(String wikidataUid) {
-    this.wikidataUid = wikidataUid;
   }
 
   public String getName() {

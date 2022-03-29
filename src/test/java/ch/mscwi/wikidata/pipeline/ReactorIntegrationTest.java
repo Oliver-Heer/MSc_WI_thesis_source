@@ -12,8 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Cast;
-import ch.mscwi.wikidata.pipeline.persistence.ActivityDTO;
-import ch.mscwi.wikidata.pipeline.persistence.IActivityRepository;
+import ch.mscwi.wikidata.pipeline.model.persistence.IActivityRepository;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 
 @SpringBootTest
 public class ReactorIntegrationTest {

@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.persistence;
+package ch.mscwi.wikidata.pipeline.model.wikidata;
 
 import java.util.Collection;
 
@@ -12,11 +12,10 @@ import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 
 @Entity
 @Table(name="Genre")
-public class GenreDTO {
+public class GenreDTO extends AbstractWikidataDTO {
 
   @Id
   private long originId;
-  private String wikidataUid;
   private String name;
 
   @ManyToMany(targetEntity = ActivityDTO.class, mappedBy = "genres", cascade = CascadeType.ALL)
@@ -28,14 +27,6 @@ public class GenreDTO {
 
   public void setOriginId(long originId) {
     this.originId = originId;
-  }
-
-  public String getWikidataUid() {
-    return wikidataUid;
-  }
-
-  public void setWikidataUid(String wikidataUid) {
-    this.wikidataUid = wikidataUid;
   }
 
   public String getName() {
