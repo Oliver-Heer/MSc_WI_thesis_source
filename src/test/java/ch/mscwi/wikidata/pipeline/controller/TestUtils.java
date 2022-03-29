@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline;
+package ch.mscwi.wikidata.pipeline.controller;
 
 import java.io.File;
 

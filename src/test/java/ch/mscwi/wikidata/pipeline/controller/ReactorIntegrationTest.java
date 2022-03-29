@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline;
+package ch.mscwi.wikidata.pipeline.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Cast;
 import ch.mscwi.wikidata.pipeline.model.persistence.IActivityRepository;
