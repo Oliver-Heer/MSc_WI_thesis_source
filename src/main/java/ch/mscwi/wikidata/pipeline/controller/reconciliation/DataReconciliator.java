@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 
-import ch.mscwi.wikidata.pipeline.controller.preparation.DataPreparer;
+import ch.mscwi.wikidata.pipeline.controller.preparation.OpenRefinePreparer;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import gmbh.dtap.refine.client.RefineClient;
 import gmbh.dtap.refine.client.RefineClients;
@@ -41,7 +41,7 @@ public class DataReconciliator {
 
     try (RefineClient client = RefineClients.create("http://localhost:3333")) {
 
-      File csvFile = DataPreparer.prepare(activities);
+      File csvFile = OpenRefinePreparer.prepare(activities);
 
       GetCsrfTokenResponse tokenResponse = RefineCommands.getCsrfToken().build().execute(client);
 

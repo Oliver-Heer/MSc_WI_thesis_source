@@ -1,7 +1,10 @@
 package ch.mscwi.wikidata.pipeline.model.wikidata;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -22,14 +25,14 @@ public class ActivityDTO extends AbstractWikidataDTO {
   private String subTitleEn;
   private String organizer;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.PERSIST)
   private LocationDTO location;
 
-  @ManyToMany(targetEntity = GenreDTO.class, cascade = CascadeType.ALL)
-  private Collection<GenreDTO> genres;
+  @ManyToMany(targetEntity = GenreDTO.class, cascade = CascadeType.PERSIST)
+  private Collection<GenreDTO> genres = new HashSet<>();
 
-  @ManyToMany(targetEntity = ActorDTO.class, cascade = CascadeType.ALL)
-  private Collection<ActorDTO> actors;
+  @ManyToMany(targetEntity = RoleDTO.class, cascade = CascadeType.PERSIST)
+  private Collection<RoleDTO> roles = new HashSet<>();
 
   public long getOriginId() {
     return originId;
@@ -95,12 +98,16 @@ public class ActivityDTO extends AbstractWikidataDTO {
     this.genres = genres;
   }
 
-  public Collection<ActorDTO> getActors() {
-    return actors;
+  public Collection<RoleDTO> getRoles() {
+    return roles;
   }
 
-  public void setActors(Set<ActorDTO> actors) {
-    this.actors = actors;
+  public void setRoles(Set<RoleDTO> roles) {
+    this.roles = roles;
+  }
+
+  public List<ActorDTO> getActors() {
+    return roles.stream().flatMap(role -> role.getActors().stream()).collect(Collectors.toList());
   }
 
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Cast;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Genre;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Location;
@@ -18,9 +20,10 @@ public class ActivityDTOBuilder {
   private String subTitleEn;
   private String organizer;
   private LocationDTO location;
+  private ReconciliationState state;
 
   private Set<GenreDTO> genreDTOs;
-  private Set<ActorDTO> actorDTOs;
+  private Set<RoleDTO> roleDTOs;
 
   public ActivityDTOBuilder withOriginId(long originId) {
     this.originId = originId;
@@ -57,10 +60,16 @@ public class ActivityDTOBuilder {
     return this;
   }
 
+  public ActivityDTOBuilder withState(ReconciliationState state) {
+    this.state = state;
+    return this;
+  }
+
   public ActivityDTOBuilder withLocation(Location location) {
     LocationDTO locationDTO = new LocationDTO();
     locationDTO.setId(location.id);
     locationDTO.setName(location.name);
+    locationDTO.setState(ReconciliationState.NEW);
     this.location = locationDTO;
     return this;
   }
@@ -71,6 +80,7 @@ public class ActivityDTOBuilder {
             GenreDTO genreDTO = new GenreDTO();
             genreDTO.setOriginId(genre.originId);
             genreDTO.setName(genre.name);
+            genreDTO.setState(ReconciliationState.NEW);
             return genreDTO;
         })
         .collect(Collectors.toSet());
@@ -79,19 +89,27 @@ public class ActivityDTOBuilder {
     return this;
   }
 
-  public ActivityDTOBuilder withActors(Set<Cast> cast) {
-    Set<ActorDTO> actorDTOs = cast.stream()
-        .map(actor -> {
+  public ActivityDTOBuilder withRolesAndActors(Set<Cast> cast) {
+    Set<RoleDTO> roleDTOs = cast.stream()
+        .map(role -> {
+          RoleDTO roleDTO = new RoleDTO();
+          roleDTO.setOriginId(role.originId);
+          roleDTO.setRole(role.role);
+          roleDTO.setRoleCategory(role.roleCategory);
+          roleDTO.setState(ReconciliationState.NEW);
+
+          if (!StringUtils.isBlank(role.role)) {
             ActorDTO actorDTO = new ActorDTO();
-            actorDTO.setOriginId(actor.originId);
-            actorDTO.setName(actor.name);
-            actorDTO.setRole(actor.role);
-            actorDTO.setRoleCategory(actor.roleCategory);
-            return actorDTO;
+            actorDTO.setName(role.name);
+            actorDTO.setState(ReconciliationState.NEW);
+            roleDTO.addActor(actorDTO);
+          }
+
+          return roleDTO;
         })
         .collect(Collectors.toSet());
 
-    this.actorDTOs = actorDTOs;
+    this.roleDTOs = roleDTOs;
     return this;
   }
 
@@ -105,8 +123,9 @@ public class ActivityDTOBuilder {
     activityDTO.setSubTitleEn(subTitleEn);
     activityDTO.setOrganizer(organizer);
     activityDTO.setLocation(location);
+    activityDTO.setState(state);
     activityDTO.setGenres(genreDTOs);
-    activityDTO.setActors(actorDTOs);
+    activityDTO.setRoles(roleDTOs);
     return activityDTO;
   }
 

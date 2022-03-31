@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTOBuilder;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
 
 @Service
 public class DataPreparer {
@@ -22,8 +23,9 @@ public class DataPreparer {
         .withSubTitleEn(xmlActivity.activityDetailEnglish.subTitle)
         .withLocation(xmlActivity.activityDetail.location)
         .withGenres(xmlActivity.activitySettings.genres)
-        .withActors(PreparationUtils.consolidateCast(xmlActivity.activityDates))
+        .withRolesAndActors(PreparationUtils.consolidateCast(xmlActivity.activityDates))
         .withOrganizer(organizer)
+        .withState(ReconciliationState.NEW)
         .build();
   }
 
