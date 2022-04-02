@@ -1,19 +1,33 @@
 package ch.mscwi.wikidata.pipeline.controller.reconciliation;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ReconciliationResponse {
 
-  public String queryId;
+  private final Map<String, String> entities = new HashMap<>();
 
   @JsonAnySetter
   public void setQuery(String queryId, Map<String, JsonNode> result) {
-    this.queryId = queryId;
+    JsonNode jsonResult = result.get("result");
 
-    System.err.println(result);
+    if (jsonResult.isEmpty()) {
+      entities.put(queryId, null);
+      return;
+    }
+
+    String uid = String.valueOf(jsonResult.get(0).get("id"));
+    String strippedUid = StringUtils.strip(uid, "\"");
+    entities.put(queryId, strippedUid);
+  }
+
+  public Map<String, String> getEntities() {
+    return entities;
   }
 
 }

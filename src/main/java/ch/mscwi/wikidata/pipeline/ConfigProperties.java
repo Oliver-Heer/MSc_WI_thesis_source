@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "config")
 public class ConfigProperties {
 
-  private  String organizer;
+  private String organizer;
 
   public String getOrganizer() {
     return organizer;

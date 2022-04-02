@@ -21,6 +21,9 @@ public enum ReconciliationState {
    * The reconciled entity has vanished on Wikidata
    * or another error has been encountered
    */
-  ERROR
+  ERROR,
+
+  /* This entity is ignored during reconciliation */
+  IGNORE
 
 }

@@ -3,7 +3,9 @@ package ch.mscwi.wikidata.pipeline.controller.reconciliation;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -11,6 +13,8 @@ import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 
 import ch.mscwi.wikidata.pipeline.controller.preparation.OpenRefinePreparer;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
+import ch.mscwi.wikidata.pipeline.model.wikidata.GenreDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
 import gmbh.dtap.refine.client.RefineClient;
 import gmbh.dtap.refine.client.RefineClients;
 import gmbh.dtap.refine.client.command.CreateProjectResponse;
@@ -20,21 +24,50 @@ import gmbh.dtap.refine.client.command.RefineCommands;
 @Service
 public class DataReconciliator {
 
-  public void reconcile() {
-    String query = new ReconciliationQueryBuilder("Query")
-        .withQuery("Donald Trump")
-        .withType("Q5")
-        .withLimit(1)
-        .build();
-    
+  @Autowired
+  private ReconciliationProperties reconProperties;
+
+  public List<GenreDTO> reconcileGenre(List<GenreDTO> genreDTOs) {
+    List<String> queries = genreDTOs.stream()
+        .filter(dto -> ReconciliationState.NEW == dto.getState())
+        .map(dto -> {
+          return new ReconciliationQueryBuilder(String.valueOf(dto.getOriginId()))
+              .withQuery(dto.getName())
+              .withType(reconProperties.getGenreEntity())
+              .build();
+        })
+        .collect(Collectors.toList());
+
+    String batchQuery = ReconciliationQueryBuilder.toBatchQuery(queries);
+    ReconciliationResponse response = sendQuery(batchQuery);
+
+    genreDTOs.stream()
+        .filter(dto -> ReconciliationState.NEW == dto.getState())
+        .forEach(dto -> {
+            String originId = String.valueOf(dto.getOriginId());
+            String uid = response.getEntities().get(originId);
+      
+            // no reconciliation candidate found
+            if (uid == null) {
+              dto.setState(ReconciliationState.NOT_FOUND);
+            }
+            else {
+              dto.setWikidataUid(uid);
+              dto.setState(ReconciliationState.FOUND);
+            }
+        });
+
+    return genreDTOs;
+  }
+
+  private ReconciliationResponse sendQuery(String query) {
     ResponseSpec retrieve = WebClient.create()
         .post()
-        .uri("https://wikidata.reconci.link/de/api")
+        .uri(reconProperties.getService())
         .body(BodyInserters.fromFormData("queries", query))
         .retrieve();
 
-    ReconciliationResponse response = retrieve.bodyToMono(ReconciliationResponse.class).block();
-    System.err.println(response);
+    return retrieve.bodyToMono(ReconciliationResponse.class).block();
   }
 
   public static URL sendToOpenRefine(List<Activity> activities) throws Exception {

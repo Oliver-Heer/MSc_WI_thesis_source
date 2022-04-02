@@ -1,6 +1,11 @@
 package ch.mscwi.wikidata.pipeline.controller.reconciliation;
 
+import java.util.List;
+import java.util.StringJoiner;
+
 import javax.json.Json;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class ReconciliationQueryBuilder {
 
@@ -37,5 +42,16 @@ public class ReconciliationQueryBuilder {
         .build()
         .toString();
   };
+
+  public static String toBatchQuery(List<String> queries) {
+    StringJoiner queryJoiner = new StringJoiner(",", "{", "}");
+
+    queries.stream()
+        .map(query -> StringUtils.removeStart(query, "{"))
+        .map(query -> StringUtils.removeEnd(query, "}"))
+        .forEach(query -> queryJoiner.add(query));
+
+    return queryJoiner.toString();
+  }
 
 }

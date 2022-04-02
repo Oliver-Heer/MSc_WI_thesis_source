@@ -77,7 +77,7 @@ public class Reactor {
   @Scheduled(cron = "0 15 23 * * SUN")
   public void reconcile() {
     // Flag isReconciling?
-    reconciliator.reconcile();
+//    reconciliator.reconcile();
   }
 
   public void sendToOpenRefine(String openRefineUrl) {
