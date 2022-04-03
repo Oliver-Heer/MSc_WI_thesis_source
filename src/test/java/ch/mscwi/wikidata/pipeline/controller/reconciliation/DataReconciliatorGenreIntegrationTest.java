@@ -16,7 +16,7 @@ import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
 
 @SpringBootTest
 @Transactional
-public class DataReconciliatorIntegrationTest {
+public class DataReconciliatorGenreIntegrationTest {
 
   @Autowired
   private DataReconciliator reconciliator;

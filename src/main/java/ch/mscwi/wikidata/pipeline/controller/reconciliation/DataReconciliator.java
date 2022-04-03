@@ -13,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 
 import ch.mscwi.wikidata.pipeline.controller.preparation.OpenRefinePreparer;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
+import ch.mscwi.wikidata.pipeline.model.wikidata.AbstractWikidataDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.GenreDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
 import gmbh.dtap.refine.client.RefineClient;
@@ -46,18 +47,20 @@ public class DataReconciliator {
         .forEach(dto -> {
             String originId = String.valueOf(dto.getOriginId());
             String uid = response.getEntities().get(originId);
-      
-            // no reconciliation candidate found
-            if (uid == null) {
-              dto.setState(ReconciliationState.NOT_FOUND);
-            }
-            else {
-              dto.setWikidataUid(uid);
-              dto.setState(ReconciliationState.FOUND);
-            }
+            setReconciliationState(dto, uid);
         });
 
     return genreDTOs;
+  }
+
+  private void setReconciliationState(AbstractWikidataDTO dto, String uid) {
+    if (uid == null) {
+      dto.setState(ReconciliationState.NOT_FOUND);
+    }
+    else {
+      dto.setWikidataUid(uid);
+      dto.setState(ReconciliationState.FOUND);
+    }
   }
 
   private ReconciliationResponse sendQuery(String query) {
