@@ -3,6 +3,7 @@ package ch.mscwi.wikidata.pipeline.controller.reconciliation;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import ch.mscwi.wikidata.pipeline.controller.preparation.OpenRefinePreparer;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.wikidata.AbstractWikidataDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.GenreDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
@@ -47,6 +49,21 @@ public class DataReconciliator {
           .withQuery(((LocationDTO)dto).getName())
           .withType(reconProperties.getLocationEntity())
           .build();
+    });
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<ActorDTO> reconcileActors(List<ActorDTO> dtos) {
+    Map<String, String> properties = reconProperties.getActorProperties();
+
+    return (List<ActorDTO>) reconcileBatch(dtos, dto -> {
+      ReconciliationQueryBuilder queryBuilder = new ReconciliationQueryBuilder(dto.getStringID())
+          .withQuery(((ActorDTO)dto).getName())
+          .withType(reconProperties.getActorEntity());
+
+      properties.forEach((key, value) -> queryBuilder.addProperty(key, value));
+
+      return queryBuilder.build();
     });
   }
 

@@ -2,6 +2,8 @@ package ch.mscwi.wikidata.pipeline.model.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,8 +27,14 @@ public class IActorRepositoryIntegrationTest {
 
     actorRepo.save(actorDTO);
 
-    ActorDTO foundEntity = actorRepo.findByName("Jordan de Souza");
+    ActorDTO foundEntity = actorRepo.findByName("Jordan de Souza").get();
     assertEquals("Jordan de Souza", foundEntity.getName());
     assertEquals(ReconciliationState.NEW, foundEntity.getState());
+  }
+
+  @Test
+  void doesNotFind() {
+    Optional<ActorDTO> entity = actorRepo.findByName("DoesNotExist");
+    assertEquals(Optional.empty(), entity);
   }
 }
