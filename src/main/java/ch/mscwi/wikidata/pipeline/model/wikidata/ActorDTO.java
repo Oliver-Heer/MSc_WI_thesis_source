@@ -18,6 +18,12 @@ public class ActorDTO extends AbstractWikidataDTO {
   @ManyToMany(targetEntity = RoleDTO.class, mappedBy = "actors")
   private Collection<RoleDTO> roles = new HashSet<>();
 
+
+  @Override
+  public String getStringID() {
+    return name;
+  }
+
   public String getName() {
     return name;
   }

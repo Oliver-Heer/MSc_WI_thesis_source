@@ -19,6 +19,11 @@ public class GenreDTO extends AbstractWikidataDTO {
   @ManyToMany(targetEntity = ActivityDTO.class, mappedBy = "genres")
   private Collection<ActivityDTO> activities = new HashSet<>();
 
+  @Override
+  public String getStringID() {
+    return String.valueOf(this.originId);
+  }
+
   public long getOriginId() {
     return originId;
   }

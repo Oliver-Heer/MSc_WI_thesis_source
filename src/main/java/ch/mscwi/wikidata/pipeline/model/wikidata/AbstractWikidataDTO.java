@@ -12,6 +12,8 @@ public abstract class AbstractWikidataDTO {
   @Enumerated(EnumType.STRING)
   private ReconciliationState state;
 
+  public abstract String getStringID();
+
   public String getWikidataUid() {
     return wikidataUid;
   }

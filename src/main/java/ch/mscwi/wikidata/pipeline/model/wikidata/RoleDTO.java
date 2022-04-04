@@ -24,6 +24,11 @@ public class RoleDTO extends AbstractWikidataDTO {
   @ManyToMany(targetEntity = ActorDTO.class, cascade = CascadeType.PERSIST)
   private Collection<ActorDTO> actors = new HashSet<>();
 
+  @Override
+  public String getStringID() {
+    return String.valueOf(this.originId);
+  }
+
   public long getOriginId() {
     return originId;
   }

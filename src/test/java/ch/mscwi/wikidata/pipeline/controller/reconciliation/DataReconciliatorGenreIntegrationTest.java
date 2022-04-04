@@ -29,7 +29,7 @@ public class DataReconciliatorGenreIntegrationTest {
     GenreDTO oper = createGenreDTO(1L, "Oper", ReconciliationState.NEW);
     GenreDTO ballett = createGenreDTO(2L, "Ballett", ReconciliationState.NEW);
 
-    List<GenreDTO> reconciledDTOs = reconciliator.reconcileGenre(List.of(oper, ballett));
+    List<GenreDTO> reconciledDTOs = reconciliator.reconcileGenres(List.of(oper, ballett));
     GenreDTO reconciledOper = reconciledDTOs.get(0);
     assertEquals(ReconciliationState.FOUND, reconciledOper.getState());
 
@@ -48,7 +48,7 @@ public class DataReconciliatorGenreIntegrationTest {
   void reconcileGenre_NOT_FOUND() {
     GenreDTO shouldNotExistDTO = createGenreDTO(1L, "ThisGenreShouldNotExist", ReconciliationState.NEW);
 
-    List<GenreDTO> reconciledDTOs = reconciliator.reconcileGenre(List.of(shouldNotExistDTO));
+    List<GenreDTO> reconciledDTOs = reconciliator.reconcileGenres(List.of(shouldNotExistDTO));
     GenreDTO notFoundDTO = reconciledDTOs.get(0);
     assertEquals(ReconciliationState.NOT_FOUND, notFoundDTO.getState());
 
@@ -65,7 +65,7 @@ public class DataReconciliatorGenreIntegrationTest {
     GenreDTO oper = createGenreDTO(1L, "Oper", ReconciliationState.NEW);
     GenreDTO shouldNotExistDTO = createGenreDTO(2L, "ThisGenreShouldNotExist", ReconciliationState.NEW);
 
-    List<GenreDTO> reconciledDTOs = reconciliator.reconcileGenre(List.of(oper, shouldNotExistDTO));
+    List<GenreDTO> reconciledDTOs = reconciliator.reconcileGenres(List.of(oper, shouldNotExistDTO));
     GenreDTO reconciledOper = reconciledDTOs.get(0);
     assertEquals(ReconciliationState.FOUND, reconciledOper.getState());
 
@@ -95,7 +95,7 @@ public class DataReconciliatorGenreIntegrationTest {
     ballett.setName("Ballett");
     ballett.setState(ReconciliationState.IGNORE);
 
-    List<GenreDTO> reconciledDTOs = reconciliator.reconcileGenre(List.of(oper, ballett));
+    List<GenreDTO> reconciledDTOs = reconciliator.reconcileGenres(List.of(oper, ballett));
     GenreDTO reconciledOper = reconciledDTOs.get(0);
     assertEquals(ReconciliationState.FOUND, reconciledOper.getState());
 

@@ -12,6 +12,11 @@ public class LocationDTO extends AbstractWikidataDTO {
   private long id;
   private String name;
 
+  @Override
+  public String getStringID() {
+    return String.valueOf(this.id);
+  }
+
   public long getId() {
     return id;
   }

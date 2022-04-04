@@ -25,6 +25,11 @@ public class ActivityDTO extends AbstractWikidataDTO {
   private String subTitleEn;
   private String organizer;
 
+  @Override
+  public String getStringID() {
+    return String.valueOf(this.originId);
+  }
+
   @ManyToOne(cascade = CascadeType.PERSIST)
   private LocationDTO location;
 
