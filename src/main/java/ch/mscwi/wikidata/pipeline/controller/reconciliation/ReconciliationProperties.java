@@ -10,9 +10,11 @@ import org.springframework.context.annotation.Configuration;
 public class ReconciliationProperties {
 
   private String service;
+  private String activityEntity;
   private String genreEntity;
   private String locationEntity;
   private String actorEntity;
+  private Map<String, String> activityProperties;
   private Map<String, String> actorProperties;
 
   public String getService() {
@@ -21,6 +23,14 @@ public class ReconciliationProperties {
 
   public void setService(String service) {
     this.service = service;
+  }
+
+  public String getActivityEntity() {
+    return activityEntity;
+  }
+
+  public void setActivityEntity(String activityEntity) {
+    this.activityEntity = activityEntity;
   }
 
   public String getGenreEntity() {
@@ -45,6 +55,14 @@ public class ReconciliationProperties {
 
   public void setActorEntity(String actorEntity) {
     this.actorEntity = actorEntity;
+  }
+
+  public Map<String, String> getActivityProperties() {
+    return activityProperties;
+  }
+
+  public void setActivityProperties(Map<String, String> activityProperties) {
+    this.activityProperties = activityProperties;
   }
 
   public Map<String, String> getActorProperties() {

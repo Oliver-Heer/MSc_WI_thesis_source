@@ -85,15 +85,8 @@ public class DataReconciliatorGenreIntegrationTest {
 
   @Test
   void reconcileGenre_only_reconcile_NEW() {
-    GenreDTO oper = new GenreDTO();
-    oper.setOriginId(1L);
-    oper.setName("Oper");
-    oper.setState(ReconciliationState.NEW);
-
-    GenreDTO ballett = new GenreDTO();
-    ballett.setOriginId(2L);
-    ballett.setName("Ballett");
-    ballett.setState(ReconciliationState.IGNORE);
+    GenreDTO oper = createGenreDTO(1L, "Oper", ReconciliationState.NEW);
+    GenreDTO ballett = createGenreDTO(2L, "Ballett", ReconciliationState.IGNORE);
 
     List<GenreDTO> reconciledDTOs = reconciliator.reconcileGenres(List.of(oper, ballett));
     GenreDTO reconciledOper = reconciledDTOs.get(0);

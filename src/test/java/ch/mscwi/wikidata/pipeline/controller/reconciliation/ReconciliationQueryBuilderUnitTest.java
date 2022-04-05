@@ -13,7 +13,7 @@ public class ReconciliationQueryBuilderUnitTest {
     String query = new ReconciliationQueryBuilder("ID")
         .build();
 
-    assertEquals("{\"ID\":{\"query\":\"\",\"type\":\"Q35120\",\"limit\":1,\"properties\":[]}}", query);
+    assertEquals("{\"ID\":{\"query\":\"\",\"type\":\"Q35120\",\"limit\":10,\"properties\":[]}}", query);
   }
 
   @Test
@@ -22,7 +22,7 @@ public class ReconciliationQueryBuilderUnitTest {
         .withType("Q5")
         .build();
 
-    assertEquals("{\"ID\":{\"query\":\"\",\"type\":\"Q5\",\"limit\":1,\"properties\":[]}}", query);
+    assertEquals("{\"ID\":{\"query\":\"\",\"type\":\"Q5\",\"limit\":10,\"properties\":[]}}", query);
   }
 
   @Test
@@ -40,7 +40,7 @@ public class ReconciliationQueryBuilderUnitTest {
         .withQuery("Some Query String")
         .build();
 
-    assertEquals("{\"ID\":{\"query\":\"Some Query String\",\"type\":\"Q35120\",\"limit\":1,\"properties\":[]}}", query);
+    assertEquals("{\"ID\":{\"query\":\"Some Query String\",\"type\":\"Q35120\",\"limit\":10,\"properties\":[]}}", query);
   }
 
   @Test
@@ -49,7 +49,7 @@ public class ReconciliationQueryBuilderUnitTest {
         .addProperty("p1", "v1")
         .build();
 
-    assertEquals("{\"ID\":{\"query\":\"\",\"type\":\"Q35120\",\"limit\":1,\"properties\":[{\"pid\":\"p1\",\"v\":\"v1\"}]}}", query);
+    assertEquals("{\"ID\":{\"query\":\"\",\"type\":\"Q35120\",\"limit\":10,\"properties\":[{\"pid\":\"p1\",\"v\":\"v1\"}]}}", query);
   }
 
   @Test
@@ -59,7 +59,7 @@ public class ReconciliationQueryBuilderUnitTest {
         .addProperty("p2", "v2")
         .build();
 
-    assertEquals("{\"ID\":{\"query\":\"\",\"type\":\"Q35120\",\"limit\":1,\"properties\":[{\"pid\":\"p1\",\"v\":\"v1\"},{\"pid\":\"p2\",\"v\":\"v2\"}]}}", query);
+    assertEquals("{\"ID\":{\"query\":\"\",\"type\":\"Q35120\",\"limit\":10,\"properties\":[{\"pid\":\"p1\",\"v\":\"v1\"},{\"pid\":\"p2\",\"v\":\"v2\"}]}}", query);
   }
 
   @Test
@@ -81,7 +81,7 @@ public class ReconciliationQueryBuilderUnitTest {
     String q2 = new ReconciliationQueryBuilder("2").withQuery("query2").build();
 
     String batchQuery = ReconciliationQueryBuilder.toBatchQuery(List.of(q1, q2));
-    assertEquals("{\"1\":{\"query\":\"query1\",\"type\":\"Q35120\",\"limit\":1,\"properties\":[]},\"2\":{\"query\":\"query2\",\"type\":\"Q35120\",\"limit\":1,\"properties\":[]}}", batchQuery);
+    assertEquals("{\"1\":{\"query\":\"query1\",\"type\":\"Q35120\",\"limit\":10,\"properties\":[]},\"2\":{\"query\":\"query2\",\"type\":\"Q35120\",\"limit\":10,\"properties\":[]}}", batchQuery);
   }
 
 }

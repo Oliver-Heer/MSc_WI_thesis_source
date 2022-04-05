@@ -85,15 +85,8 @@ public class DataReconciliatorLocationIntegrationTest {
 
   @Test
   void reconcileLocation_only_reconcile_NEW() {
-    LocationDTO bernhard = new LocationDTO();
-    bernhard.setId(1L);
-    bernhard.setName("Bernhard Theater");
-    bernhard.setState(ReconciliationState.NEW);
-
-    LocationDTO winterthur = new LocationDTO();
-    winterthur.setId(2L);
-    winterthur.setName("Winterthur");
-    winterthur.setState(ReconciliationState.IGNORE);
+    LocationDTO bernhard = createLocationDTO(1L, "Bernhard Theater", ReconciliationState.NEW);
+    LocationDTO winterthur = createLocationDTO(2L, "Theater Winterthur", ReconciliationState.IGNORE);
 
     List<LocationDTO> reconciledDTOs = reconciliator.reconcileLocations(List.of(bernhard, winterthur));
     LocationDTO reconciledOper = reconciledDTOs.get(0);

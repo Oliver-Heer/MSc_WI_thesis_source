@@ -15,7 +15,7 @@ public class ReconciliationQueryBuilder {
   private String identifier = "";
   private String query = "";
   private String type = "Q35120";
-  private int limit = 1;
+  private int limit = 10;
   private Map<String, String> properties = new HashMap<>();
 
   public ReconciliationQueryBuilder(String identifier) {

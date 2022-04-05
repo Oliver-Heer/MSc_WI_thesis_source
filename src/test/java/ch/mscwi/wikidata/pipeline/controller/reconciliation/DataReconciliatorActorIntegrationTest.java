@@ -85,13 +85,8 @@ public class DataReconciliatorActorIntegrationTest {
 
   @Test
   void reconcileActor_only_reconcile_NEW() {
-    ActorDTO patrice = new ActorDTO();
-    patrice.setName("Patrice Caurier");
-    patrice.setState(ReconciliationState.NEW);
-
-    ActorDTO christian = new ActorDTO();
-    christian.setName("Christian Arseni");
-    christian.setState(ReconciliationState.IGNORE);
+    ActorDTO patrice = createActorDTO("Patrice Caurier", ReconciliationState.NEW);
+    ActorDTO christian = createActorDTO("Christian Arseni", ReconciliationState.IGNORE);
 
     List<ActorDTO> reconciledDTOs = reconciliator.reconcileActors(List.of(patrice, christian));
     ActorDTO reconciledOper = reconciledDTOs.get(0);

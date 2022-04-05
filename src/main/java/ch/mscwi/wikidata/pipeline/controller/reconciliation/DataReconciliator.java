@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import ch.mscwi.wikidata.pipeline.controller.preparation.OpenRefinePreparer;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.wikidata.AbstractWikidataDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.GenreDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
@@ -31,6 +32,27 @@ public class DataReconciliator {
 
   @Autowired
   private RequestHandler requestHandler;
+
+  @SuppressWarnings("unchecked")
+  public List<ActivityDTO> reconcileActivities(List<ActivityDTO> dtos) {
+    Map<String, String> properties = reconProperties.getActivityProperties();
+
+    return (List<ActivityDTO>) reconcileBatch(dtos, dto -> {
+      ReconciliationQueryBuilder queryBuilder = new ReconciliationQueryBuilder(dto.getStringID())
+          .withQuery(((ActivityDTO)dto).getTitle())
+          .withType(reconProperties.getActivityEntity())
+          .addProperty("P57", ((ActivityDTO)dto).getSubTitle());
+
+      properties.forEach((key, value) -> queryBuilder.addProperty(key, value));
+
+      ((ActivityDTO)dto).getGenres().stream()
+          .forEach(genre -> {
+              queryBuilder.addProperty("P136", genre.getName());
+          });
+
+      return queryBuilder.build();
+    });
+  }
 
   @SuppressWarnings("unchecked")
   public List<GenreDTO> reconcileGenres(List<GenreDTO> dtos) {
