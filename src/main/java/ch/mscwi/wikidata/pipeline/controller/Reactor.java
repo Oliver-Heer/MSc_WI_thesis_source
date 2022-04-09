@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,6 +24,8 @@ import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 @Scope("singleton")
 public class Reactor {
 
+  Logger logger = LoggerFactory.getLogger(Reactor.class);
+
   @Autowired
   private XmlProcurer procurer;
 
@@ -37,12 +41,25 @@ public class Reactor {
   public List<Activity> activities = new ArrayList<>();
   public List<URL> openRefineURLs = new ArrayList<>();
 
+  @Scheduled(cron = "0 45 22 * * *")
+  public void clearActivities() {
+    logger.info("Activities cleared");
+    activities = new ArrayList<>();
+  }
+
   @Scheduled(cron = "0 0 23 * * *")
   public void procure() {
     procure("https://www.opernhaus.ch/xmlexport/kzexport.xml");
   }
 
+  @Scheduled(cron = "0 15 23 * * *")
+  public void reconcile() {
+    // Flag isReconciling?
+//    reconciliator.reconcile();
+  }
+
   public void procure(String url) {
+    logger.info("Start procurement: " + url);
     try {
       ImportActivities procurement = procurer.procure(url);
       if (procurement == null) {
@@ -51,12 +68,10 @@ public class Reactor {
 
       List<Activity> newActivities = procurement.activities.stream()
           .filter(activity -> !hasBeenProcured(activity.originId))
+          .peek(activity -> logger.info("Procured new activity: " + activity.originId + " " + activity.activityDetail.title))
           .collect(Collectors.toList());
 
       activities.addAll(newActivities);
-
-      //TODO
-      //handle already persisted entities
 
       List<ActivityDTO> activityDTOs = newActivities.stream()
           .map(activity -> preparer.toActivityDTO(activity))
@@ -71,16 +86,23 @@ public class Reactor {
   }
 
   private boolean hasBeenProcured(final long originId){
-    return activities.stream().anyMatch(activity -> activity.originId == originId);
-  }
+    boolean inCurrentActivityList = activities.stream().anyMatch(activity -> activity.originId == originId);
+    if (inCurrentActivityList) {
+      return true;
+    }
 
-  @Scheduled(cron = "0 15 23 * * SUN")
-  public void reconcile() {
-    // Flag isReconciling?
-//    reconciliator.reconcile();
+    // TODO should check date as well
+    boolean inDB = persistor.getActivityRepo().existsById(originId);
+    if (inDB) {
+      logger.info("Encountered already persisted Entity, did not procure " + originId);
+      return true;
+    }
+
+    return false;
   }
 
   public void sendToOpenRefine(String openRefineUrl) {
+    logger.info("Send to OpenRefine " + openRefineUrl);
     try {
       URL openRefineURL = DataReconciliator.sendToOpenRefine(activities);
       this.openRefineURLs.add(openRefineURL);

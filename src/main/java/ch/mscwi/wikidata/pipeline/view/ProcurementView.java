@@ -39,10 +39,8 @@ public class ProcurementView extends VerticalLayout {
     procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
 
     Button refreshButton = new Button("Refresh");
-
-    HorizontalLayout actionLayout = new HorizontalLayout();
-    actionLayout.setWidthFull();
-    actionLayout.add(procureUrl, procureButton, refreshButton);
+    Button clearButton = new Button("Clear");
+    clearButton.addClickListener(click -> reactor.clearActivities());
 
     Grid<Activity> activityGrid = activityGrid();
     activityGrid.setItems(reactor.activities);
@@ -54,6 +52,10 @@ public class ProcurementView extends VerticalLayout {
     });
 
     refreshButton.addClickListener(click -> activityGrid.getDataProvider().refreshAll());
+
+    HorizontalLayout actionLayout = new HorizontalLayout();
+    actionLayout.setWidthFull();
+    actionLayout.add(procureUrl, procureButton, refreshButton, clearButton);
 
     add(actionLayout, new Label("Activities"), activityGrid);
   }

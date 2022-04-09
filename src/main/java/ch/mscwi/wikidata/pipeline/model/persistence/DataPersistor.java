@@ -17,7 +17,7 @@ import ch.mscwi.wikidata.pipeline.model.wikidata.RoleDTO;
 public class DataPersistor {
 
   @PersistenceContext
-  EntityManager entityManager;
+  private EntityManager entityManager;
 
   @Autowired
   private IActivityRepository activityRepo;
@@ -53,6 +53,10 @@ public class DataPersistor {
         .map(role -> role.getActors())
         .forEach(actors -> actorRepo.saveAll(actors));
     roleRepo.saveAll(roles);
+  }
+
+  public IActivityRepository getActivityRepo() {
+    return activityRepo;
   }
 
 }
