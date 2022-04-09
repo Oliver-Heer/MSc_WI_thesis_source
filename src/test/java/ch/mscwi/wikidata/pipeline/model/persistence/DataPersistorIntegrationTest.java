@@ -41,6 +41,21 @@ public class DataPersistorIntegrationTest {
     assertActivityDTO(activityDTO, findAll.get(0));
   }
 
+  @Test
+  void persistEntityTwice() {
+    ActivityDTO activityDTO = createActivityDTO(1L);
+    persistor.saveAll(List.of(activityDTO));
+
+    ActivityDTO dtoFromDB = activityRepo.findById(1L).get();
+    assertActivityDTO(activityDTO, dtoFromDB);
+
+    activityDTO.setTitle("Different Title");
+    persistor.saveAll(List.of(activityDTO));
+
+    ActivityDTO secondDtoFromDB = activityRepo.findById(1L).get();
+    assertActivityDTO(dtoFromDB, secondDtoFromDB);
+  }
+
   private void assertActivityDTO(ActivityDTO beforePersistence, ActivityDTO afterPersistence) {
     assertEquals(beforePersistence.getTitle(), afterPersistence.getTitle());
     assertEquals(beforePersistence.getSubTitle(), afterPersistence.getSubTitle());
