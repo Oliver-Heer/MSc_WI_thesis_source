@@ -1,5 +1,7 @@
 package ch.mscwi.wikidata.pipeline.view;
 
+import java.util.Optional;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -18,6 +20,12 @@ public class ReconciliationView extends VerticalLayout {
 
     Grid<ActivityDTO> activityGrid = activityGrid();
     activityGrid.setItems(reactor.getActivitiesForReconciliation());
+    activityGrid.addSelectionListener(event -> {
+      Optional<ActivityDTO> selection = event.getFirstSelectedItem();
+      if (selection.isPresent()) {
+        new ReconciliationDialog(selection.get()).open();
+      }
+    });
 
     Button refreshButton = new Button("Refresh");
     refreshButton.addClickListener(click -> activityGrid.setItems(reactor.getActivitiesForReconciliation()));

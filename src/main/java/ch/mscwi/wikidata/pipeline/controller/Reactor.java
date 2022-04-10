@@ -151,4 +151,8 @@ public class Reactor {
     return persistor.getActivityRepo().findAllByStateIn(states);
   }
 
+  public void saveActivity(ActivityDTO activityDTO) {
+    persistor.saveAllActivities(List.of(activityDTO));
+  }
+
 }
