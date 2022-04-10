@@ -3,6 +3,7 @@ package ch.mscwi.wikidata.pipeline.controller;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -19,12 +20,16 @@ import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
 import ch.mscwi.wikidata.pipeline.model.persistence.DataPersistor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.GenreDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
 
 @Service
 @Scope("singleton")
 public class Reactor {
 
-  Logger logger = LoggerFactory.getLogger(Reactor.class);
+  private Logger logger = LoggerFactory.getLogger(Reactor.class);
 
   @Autowired
   private XmlProcurer procurer;
@@ -54,8 +59,27 @@ public class Reactor {
 
   @Scheduled(cron = "0 15 23 * * *")
   public void reconcile() {
-    // Flag isReconciling?
-//    reconciliator.reconcile();
+    Set<ReconciliationState> state = Set.of(ReconciliationState.NEW);
+
+    // Genres
+    List<GenreDTO> newGenres = persistor.getGenreRepo().findAllByStateIn(state);
+    List<GenreDTO> reconciledGenres = reconciliator.reconcileGenres(newGenres);
+    persistor.saveAllGenres(reconciledGenres);
+
+    // Locations
+    List<LocationDTO> newLocations = persistor.getLocationRepo().findAllByStateIn(state);
+    List<LocationDTO> reconciledLocations = reconciliator.reconcileLocations(newLocations);
+    persistor.saveAllLocations(reconciledLocations);
+
+    // Actors
+    List<ActorDTO> newActors = persistor.getActorRepo().findAllByStateIn(state);
+    List<ActorDTO> reconciledActors = reconciliator.reconcileActors(newActors);
+    persistor.saveAllActors(reconciledActors);
+
+    // Activities
+    List<ActivityDTO> newActivities = persistor.getActivityRepo().findAllByStateIn(state);
+    List<ActivityDTO> reconciledActivities = reconciliator.reconcileActivities(newActivities);
+    persistor.saveAllActivities(reconciledActivities);
   }
 
   public void procure(String url) {
@@ -77,11 +101,10 @@ public class Reactor {
           .map(activity -> preparer.toActivityDTO(activity))
           .collect(Collectors.toList());
 
-      persistor.saveAll(activityDTOs);
+      persistor.saveAllActivities(activityDTOs);
 
     } catch (Exception e) {
-      // TODO
-      e.printStackTrace();
+      logger.info(e.getMessage());
     }
   }
 
@@ -107,9 +130,25 @@ public class Reactor {
       URL openRefineURL = DataReconciliator.sendToOpenRefine(activities);
       this.openRefineURLs.add(openRefineURL);
     } catch (Exception e) {
-      // TODO
-      e.printStackTrace();
+      logger.info(e.getMessage());
     }
+  }
+
+  public List<ActivityDTO> getActivitiesForPreparation() {
+    Set<ReconciliationState> states = Set.of(
+        ReconciliationState.NEW
+    );
+    return persistor.getActivityRepo().findAllByStateIn(states);
+  }
+
+  public List<ActivityDTO> getActivitiesForReconciliation() {
+    Set<ReconciliationState> states = Set.of(
+        ReconciliationState.NOT_FOUND,
+        ReconciliationState.FOUND,
+        ReconciliationState.CREATE,
+        ReconciliationState.ERROR
+    );
+    return persistor.getActivityRepo().findAllByStateIn(states);
   }
 
 }

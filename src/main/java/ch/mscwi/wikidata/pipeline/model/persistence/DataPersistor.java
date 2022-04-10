@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.GenreDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.RoleDTO;
 
 @Service
@@ -39,7 +42,19 @@ public class DataPersistor {
     entityManager.persist(activityDTO);
   }
 
-  public void saveAll(List<ActivityDTO> activityDTOs) {
+  public void saveAllGenres(List<GenreDTO> genreDTOs) {
+    genreRepo.saveAllAndFlush(genreDTOs);
+  }
+
+  public void saveAllLocations(List<LocationDTO> locationDTOs) {
+    locationRepo.saveAllAndFlush(locationDTOs);
+  }
+
+  public void saveAllActors(List<ActorDTO> actorDTOs) {
+    actorRepo.saveAllAndFlush(actorDTOs);
+  }
+
+  public void saveAllActivities(List<ActivityDTO> activityDTOs) {
     activityDTOs.stream().forEach(activity -> {
       genreRepo.saveAll(activity.getGenres());
       locationRepo.save(activity.getLocation());
@@ -57,6 +72,22 @@ public class DataPersistor {
 
   public IActivityRepository getActivityRepo() {
     return activityRepo;
+  }
+
+  public IGenreRepository getGenreRepo() {
+    return genreRepo;
+  }
+
+  public ILocationRepository getLocationRepo() {
+    return locationRepo;
+  }
+
+  public IRoleRepository getRoleRepo() {
+    return roleRepo;
+  }
+
+  public IActorRepository getActorRepo() {
+    return actorRepo;
   }
 
 }

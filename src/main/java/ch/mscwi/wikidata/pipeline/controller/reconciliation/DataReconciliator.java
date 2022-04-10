@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ import gmbh.dtap.refine.client.command.RefineCommands;
 @Service
 public class DataReconciliator {
 
+  private Logger logger = LoggerFactory.getLogger(DataReconciliator.class);
+
   @Autowired
   private ReconciliationProperties reconProperties;
 
@@ -35,6 +39,8 @@ public class DataReconciliator {
 
   @SuppressWarnings("unchecked")
   public List<ActivityDTO> reconcileActivities(List<ActivityDTO> dtos) {
+    logger.info("Reconciling " + dtos.size() + " new activities");
+
     Map<String, String> properties = reconProperties.getActivityProperties();
 
     return (List<ActivityDTO>) reconcileBatch(dtos, dto -> {
@@ -56,6 +62,8 @@ public class DataReconciliator {
 
   @SuppressWarnings("unchecked")
   public List<GenreDTO> reconcileGenres(List<GenreDTO> dtos) {
+    logger.info("Reconciling " + dtos.size() + " new genres");
+
     return (List<GenreDTO>) reconcileBatch(dtos, dto -> {
       return new ReconciliationQueryBuilder(dto.getStringID())
           .withQuery(((GenreDTO)dto).getName())
@@ -66,6 +74,8 @@ public class DataReconciliator {
 
   @SuppressWarnings("unchecked")
   public List<LocationDTO> reconcileLocations(List<LocationDTO> dtos) {
+    logger.info("Reconciling " + dtos.size() + " new locations");
+
     return (List<LocationDTO>) reconcileBatch(dtos, dto -> {
       return new ReconciliationQueryBuilder(dto.getStringID())
           .withQuery(((LocationDTO)dto).getName())
@@ -76,6 +86,8 @@ public class DataReconciliator {
 
   @SuppressWarnings("unchecked")
   public List<ActorDTO> reconcileActors(List<ActorDTO> dtos) {
+    logger.info("Reconciling " + dtos.size() + " new actors");
+
     Map<String, String> properties = reconProperties.getActorProperties();
 
     return (List<ActorDTO>) reconcileBatch(dtos, dto -> {
@@ -116,7 +128,6 @@ public class DataReconciliator {
   }
 
   public static URL sendToOpenRefine(List<Activity> activities) throws Exception {
-
     try (RefineClient client = RefineClients.create("http://localhost:3333")) {
 
       File csvFile = OpenRefinePreparer.prepare(activities);

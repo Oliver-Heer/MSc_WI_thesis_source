@@ -1,10 +1,12 @@
 package ch.mscwi.wikidata.pipeline.view;
 
+import java.net.URL;
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -38,7 +40,6 @@ public class ProcurementView extends VerticalLayout {
     Button procureButton = new Button("Procure");
     procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
 
-    Button refreshButton = new Button("Refresh");
     Button clearButton = new Button("Clear");
     clearButton.addClickListener(click -> reactor.clearActivities());
 
@@ -51,6 +52,7 @@ public class ProcurementView extends VerticalLayout {
       activityGrid.getDataProvider().refreshAll();
     });
 
+    Button refreshButton = new Button("Refresh");
     refreshButton.addClickListener(click -> activityGrid.getDataProvider().refreshAll());
 
     HorizontalLayout actionLayout = new HorizontalLayout();
@@ -58,6 +60,8 @@ public class ProcurementView extends VerticalLayout {
     actionLayout.add(procureUrl, procureButton, refreshButton, clearButton);
 
     add(actionLayout, new Label("Activities"), activityGrid);
+
+    addOpenRefineComponents();
   }
 
   private Grid<Activity> activityGrid() {
@@ -197,5 +201,39 @@ public class ProcurementView extends VerticalLayout {
 
     UiUtils.streamlineColumns(grid.getColumns());
     return grid;
+  }
+
+  private void addOpenRefineComponents() {
+    TextField openRefineUrl = new TextField();
+    openRefineUrl.setClearButtonVisible(true);
+    openRefineUrl.setValue("http://localhost:3333");
+    openRefineUrl.setWidth("25%");
+    openRefineUrl.setReadOnly(true);
+
+    Grid<URL> urlGrid = new Grid<>();
+    urlGrid.setAllRowsVisible(true);
+
+    urlGrid.addComponentColumn(url -> {
+      String urlString = url.toString();
+      Anchor anchor = new Anchor();
+      anchor.setText(urlString);
+      anchor.setHref(urlString);
+      anchor.setTarget("_blank");
+      return anchor;
+    });
+
+    urlGrid.setItems(reactor.openRefineURLs);
+
+    Button toOpenRefineButton = new Button("Send to OpenRefine");
+    toOpenRefineButton.addClickListener(click -> {
+      reactor.sendToOpenRefine(openRefineUrl.getValue());
+      urlGrid.getDataProvider().refreshAll();
+    });
+
+    HorizontalLayout actionLayout = new HorizontalLayout();
+    actionLayout.setWidthFull();
+    actionLayout.add(openRefineUrl, toOpenRefineButton);
+
+    add(actionLayout, urlGrid);
   }
 }

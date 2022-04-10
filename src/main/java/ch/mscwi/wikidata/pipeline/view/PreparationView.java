@@ -1,32 +1,41 @@
 package ch.mscwi.wikidata.pipeline.view;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 
-public class ReconciliationView extends VerticalLayout {
+public class PreparationView extends VerticalLayout {
 
   private Reactor reactor = UiUtils.getReactor();
 
-  public ReconciliationView() {
-    addClassName("reconciliationView");
+  public PreparationView() {
+    addClassName("preparationView");
     setSizeFull();
 
     Grid<ActivityDTO> activityGrid = activityGrid();
-    activityGrid.setItems(reactor.getActivitiesForReconciliation());
+    activityGrid.setItems(reactor.getActivitiesForPreparation());
+
+    Button reconcileButton = new Button("Reconcile");
+    reconcileButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+    reconcileButton.addClickListener(click -> {
+      reactor.reconcile();
+      activityGrid.setItems(reactor.getActivitiesForPreparation());
+    });
 
     Button refreshButton = new Button("Refresh");
-    refreshButton.addClickListener(click -> activityGrid.setItems(reactor.getActivitiesForReconciliation()));
+    refreshButton.addClickListener(click -> activityGrid.setItems(reactor.getActivitiesForPreparation()));
 
     HorizontalLayout actionLayout = new HorizontalLayout();
     actionLayout.setWidthFull();
-    actionLayout.add(refreshButton);
+    actionLayout.add(reconcileButton, refreshButton);
 
-    add(actionLayout, activityGrid);
+    add(actionLayout, new Label("Activities"), activityGrid);
   }
 
   private Grid<ActivityDTO> activityGrid() {
@@ -39,7 +48,6 @@ public class ReconciliationView extends VerticalLayout {
     grid.addColumn(act -> act.getSubTitle()).setHeader("Subtitle");
     grid.addColumn(act -> act.getSubTitleEn()).setHeader("Subtitle En");
     grid.addColumn(act -> act.getState()).setHeader("State");
-    grid.addColumn(act -> act.getWikidataUid()).setHeader("Wikidata UID");
 
     return grid;
   }
