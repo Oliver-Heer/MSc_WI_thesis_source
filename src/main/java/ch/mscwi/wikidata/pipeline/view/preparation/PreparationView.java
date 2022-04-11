@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.view;
+package ch.mscwi.wikidata.pipeline.view.preparation;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
-import ch.mscwi.wikidata.pipeline.view.preparation.PreparationGenreGrid;
+import ch.mscwi.wikidata.pipeline.view.UiUtils;
 
 public class PreparationView extends VerticalLayout {
 
