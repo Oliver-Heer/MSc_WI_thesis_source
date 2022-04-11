@@ -37,12 +37,6 @@ public class ProcurementView extends VerticalLayout {
     procureUrl.setValue("https://www.opernhaus.ch/xmlexport/kzexport.xml");
     procureUrl.setWidth("25%");
 
-    Button procureButton = new Button("Procure");
-    procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
-
-    Button clearButton = new Button("Clear");
-    clearButton.addClickListener(click -> reactor.clearActivities());
-
     Button reconcileButton = new Button("Reconcile");
     reconcileButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
     reconcileButton.addClickListener(click -> reactor.reconcile());
@@ -51,9 +45,17 @@ public class ProcurementView extends VerticalLayout {
     activityGrid.setItems(reactor.activities);
     activityGrid.setItemDetailsRenderer(new ComponentRenderer<>(activity -> detailView(activity)));
 
+    Button clearButton = new Button("Clear");
+    clearButton.addClickListener(click -> {
+      reactor.clearActivities();
+      activityGrid.setItems(reactor.activities);
+    });
+
+    Button procureButton = new Button("Procure");
+    procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
     procureButton.addClickListener(click -> {
       reactor.procure(procureUrl.getValue());
-      activityGrid.getDataProvider().refreshAll();
+      activityGrid.setItems(reactor.activities);
     });
 
     Button refreshButton = new Button("Refresh");
@@ -63,9 +65,9 @@ public class ProcurementView extends VerticalLayout {
     actionLayout.setWidthFull();
     actionLayout.add(procureUrl, procureButton, reconcileButton, refreshButton, clearButton);
 
-    add(actionLayout, new Label("Activities"), activityGrid);
-
+    add(actionLayout);
     addOpenRefineComponents();
+    add(new Label("Activities"), activityGrid);
   }
 
   private Grid<Activity> activityGrid() {

@@ -53,7 +53,7 @@ public class PreparationGenreGrid extends Grid<GenreDTO> {
       return editButton;
     });
 
-    Button saveButton = new Button("Save", e -> {
+    Button saveButton = new Button("Approve", e -> {
       GenreDTO editedGenre = editor.getItem();
       editor.save();
       reactor.approveAndSaveGenre(editedGenre);

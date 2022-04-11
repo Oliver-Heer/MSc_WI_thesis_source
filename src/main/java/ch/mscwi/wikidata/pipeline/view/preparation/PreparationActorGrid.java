@@ -53,7 +53,7 @@ public class PreparationActorGrid extends Grid<ActorDTO> {
       return editButton;
     });
 
-    Button saveButton = new Button("Save", e -> {
+    Button saveButton = new Button("Approve", e -> {
       ActorDTO editedActor = editor.getItem();
       editor.save();
       reactor.approveAndSaveActor(editedActor);

@@ -53,7 +53,7 @@ public class PreparationLocationGrid extends Grid<LocationDTO> {
       return editButton;
     });
 
-    Button saveButton = new Button("Save", e -> {
+    Button saveButton = new Button("Approve", e -> {
       LocationDTO editedLocation = editor.getItem();
       editor.save();
       reactor.approveAndSaveLocation(editedLocation);

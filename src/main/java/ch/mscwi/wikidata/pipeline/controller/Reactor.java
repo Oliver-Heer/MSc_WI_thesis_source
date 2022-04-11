@@ -105,12 +105,13 @@ public class Reactor {
         return;
       }
 
+      activities = new ArrayList<>();
+      activities.addAll(procurement.activities);
+
       List<Activity> newActivities = procurement.activities.stream()
           .filter(activity -> !hasBeenProcured(activity.originId))
           .peek(activity -> logger.info("Procured new activity: " + activity.originId + " " + activity.activityDetail.title))
           .collect(Collectors.toList());
-
-      activities.addAll(newActivities);
 
       List<ActivityDTO> activityDTOs = newActivities.stream()
           .map(activity -> preparer.toActivityDTO(activity))
@@ -124,11 +125,6 @@ public class Reactor {
   }
 
   private boolean hasBeenProcured(final long originId){
-    boolean inCurrentActivityList = activities.stream().anyMatch(activity -> activity.originId == originId);
-    if (inCurrentActivityList) {
-      return true;
-    }
-
     // TODO should check date as well
     boolean inDB = persistor.getActivityRepo().existsById(originId);
     if (inDB) {
