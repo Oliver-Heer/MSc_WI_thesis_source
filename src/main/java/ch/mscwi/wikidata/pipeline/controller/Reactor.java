@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import ch.mscwi.wikidata.pipeline.controller.reconciliation.DataReconciliator;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
 import ch.mscwi.wikidata.pipeline.model.persistence.DataPersistor;
+import ch.mscwi.wikidata.pipeline.model.wikidata.AbstractWikidataDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.GenreDTO;
@@ -134,6 +136,15 @@ public class Reactor {
     }
   }
 
+  public List<GenreDTO> getGenresForPreparation() {
+    Set<ReconciliationState> states = Set.of(
+        ReconciliationState.FOUND,
+        ReconciliationState.NOT_FOUND,
+        ReconciliationState.ERROR
+    );
+    return persistor.getGenreRepo().findAllByStateIn(states);
+  }
+
   public List<ActivityDTO> getActivitiesForPreparation() {
     Set<ReconciliationState> states = Set.of(
         ReconciliationState.NEW
@@ -153,6 +164,28 @@ public class Reactor {
 
   public void saveActivity(ActivityDTO activityDTO) {
     persistor.saveAllActivities(List.of(activityDTO));
+  }
+
+  public void approveAndSaveGenre(GenreDTO genreDTO) {
+    if (!isApprovable(genreDTO)) {
+      logger.info("Could not approve Genre " + genreDTO.getOriginId() + " " + genreDTO.getName() + " Wikidata UID is missing or invalid");
+    }
+
+    logger.info("Approved Genre " + genreDTO.getOriginId() + " " + genreDTO.getName() + " with Wikidata UID " + genreDTO.getWikidataUid());
+    genreDTO.setState(ReconciliationState.APPROVED);
+    persistor.saveAllGenres(List.of(genreDTO));
+  }
+
+  public void ignoreAndSaveGenre(GenreDTO genreDTO) {
+    logger.info("Ignore Genre " + genreDTO.getOriginId() + " " + genreDTO.getName());
+    genreDTO.setState(ReconciliationState.IGNORE);
+    persistor.saveAllGenres(List.of(genreDTO));
+  }
+
+  private boolean isApprovable(AbstractWikidataDTO dto) {
+    boolean wikidataUidPresent = StringUtils.isNotBlank(dto.getWikidataUid());
+    boolean startsWithQ = StringUtils.startsWith(dto.getWikidataUid(), "Q");
+    return wikidataUidPresent && startsWithQ;
   }
 
 }

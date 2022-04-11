@@ -43,6 +43,10 @@ public class ProcurementView extends VerticalLayout {
     Button clearButton = new Button("Clear");
     clearButton.addClickListener(click -> reactor.clearActivities());
 
+    Button reconcileButton = new Button("Reconcile");
+    reconcileButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+    reconcileButton.addClickListener(click -> reactor.reconcile());
+
     Grid<Activity> activityGrid = activityGrid();
     activityGrid.setItems(reactor.activities);
     activityGrid.setItemDetailsRenderer(new ComponentRenderer<>(activity -> detailView(activity)));
@@ -57,7 +61,7 @@ public class ProcurementView extends VerticalLayout {
 
     HorizontalLayout actionLayout = new HorizontalLayout();
     actionLayout.setWidthFull();
-    actionLayout.add(procureUrl, procureButton, refreshButton, clearButton);
+    actionLayout.add(procureUrl, procureButton, reconcileButton, refreshButton, clearButton);
 
     add(actionLayout, new Label("Activities"), activityGrid);
 

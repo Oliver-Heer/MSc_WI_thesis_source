@@ -1,56 +1,44 @@
 package ch.mscwi.wikidata.pipeline.view;
 
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
-import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
+import ch.mscwi.wikidata.pipeline.view.preparation.PreparationGenreGrid;
 
 public class PreparationView extends VerticalLayout {
 
   private Reactor reactor = UiUtils.getReactor();
+  private Map<Tab, Component> tabComponentMap = new LinkedHashMap<>();
 
   public PreparationView() {
     addClassName("preparationView");
     setSizeFull();
 
-    Grid<ActivityDTO> activityGrid = activityGrid();
-    activityGrid.setItems(reactor.getActivitiesForPreparation());
+    Tabs tabs = createTabs();
+    tabs.setWidthFull();
 
-    Button reconcileButton = new Button("Reconcile");
-    reconcileButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
-    reconcileButton.addClickListener(click -> {
-      reactor.reconcile();
-      activityGrid.setItems(reactor.getActivitiesForPreparation());
+    Div content = new Div();
+    content.setWidthFull();
+
+    tabs.addSelectedChangeListener(event -> {
+      content.removeAll();
+      content.add(tabComponentMap.get(event.getSelectedTab()));
     });
+    content.add(tabComponentMap.get(tabs.getSelectedTab()));
 
-    Button refreshButton = new Button("Refresh");
-    refreshButton.addClickListener(click -> activityGrid.setItems(reactor.getActivitiesForPreparation()));
-
-    HorizontalLayout actionLayout = new HorizontalLayout();
-    actionLayout.setWidthFull();
-    actionLayout.add(reconcileButton, refreshButton);
-
-    add(actionLayout, new Label("Activities"), activityGrid);
+    add(tabs, content);
   }
 
-  private Grid<ActivityDTO> activityGrid() {
-    Grid<ActivityDTO> grid = new Grid<>();
-    grid.setAllRowsVisible(true);
-
-    grid.addColumn(act -> act.getStringID()).setHeader("ID");
-    grid.addColumn(act -> act.getTitle()).setHeader("Title");
-    grid.addColumn(act -> act.getTitleEn()).setHeader("Title En");
-    grid.addColumn(act -> act.getSubTitle()).setHeader("Subtitle");
-    grid.addColumn(act -> act.getSubTitleEn()).setHeader("Subtitle En");
-    grid.addColumn(act -> act.getState()).setHeader("State");
-
-    UiUtils.streamlineColumns(grid.getColumns());
-    return grid;
+  private Tabs createTabs() {
+    tabComponentMap.put(new Tab("Genres"), new PreparationGenreGrid(reactor.getGenresForPreparation()));
+    return new Tabs(tabComponentMap.keySet().toArray(new Tab[]{}));
   }
 
 }
