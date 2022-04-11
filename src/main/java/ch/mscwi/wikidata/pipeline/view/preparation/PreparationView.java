@@ -22,7 +22,6 @@ public class PreparationView extends VerticalLayout {
     setSizeFull();
 
     Tabs tabs = createTabs();
-    tabs.setWidthFull();
 
     Div content = new Div();
     content.setWidthFull();
@@ -37,7 +36,9 @@ public class PreparationView extends VerticalLayout {
   }
 
   private Tabs createTabs() {
+    tabComponentMap.put(new Tab("Locations"), new PreparationLocationGrid(reactor.getLocationsForPreparation()));
     tabComponentMap.put(new Tab("Genres"), new PreparationGenreGrid(reactor.getGenresForPreparation()));
+    tabComponentMap.put(new Tab("Actors"), new PreparationActorGrid(reactor.getActorsForPreparation()));
     return new Tabs(tabComponentMap.keySet().toArray(new Tab[]{}));
   }
 
