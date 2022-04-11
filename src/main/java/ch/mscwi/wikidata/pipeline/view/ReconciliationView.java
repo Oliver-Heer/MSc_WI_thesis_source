@@ -49,6 +49,7 @@ public class ReconciliationView extends VerticalLayout {
     grid.addColumn(act -> act.getState()).setHeader("State");
     grid.addColumn(act -> act.getWikidataUid()).setHeader("Wikidata UID");
 
+    UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
 

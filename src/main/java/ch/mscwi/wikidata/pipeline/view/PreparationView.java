@@ -49,6 +49,7 @@ public class PreparationView extends VerticalLayout {
     grid.addColumn(act -> act.getSubTitleEn()).setHeader("Subtitle En");
     grid.addColumn(act -> act.getState()).setHeader("State");
 
+    UiUtils.streamlineColumns(grid.getColumns());
     return grid;
   }
 
