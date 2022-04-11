@@ -12,6 +12,8 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import ch.mscwi.wikidata.pipeline.view.preparation.PreparationView;
+
 @Route(value = "")
 @CssImport("./styles/global.css")
 @CssImport(value = "./styles/vaadin-dialog-overlay.css", themeFor = "vaadin-dialog-overlay")
