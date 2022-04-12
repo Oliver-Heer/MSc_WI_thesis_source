@@ -8,6 +8,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.editor.Editor;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -26,7 +27,7 @@ public class ReconciliationLocationGrid extends Grid<LocationDTO> {
     setItems(locationDTOs);
 
     addColumn(act -> act.getStringID()).setHeader("ID");
-    addColumn(act -> act.getName()).setHeader("ID");
+    addColumn(act -> act.getName()).setHeader("Name");
     addColumn(act -> act.getState()).setHeader("State");
 
     Binder<LocationDTO> binder = new Binder<>(LocationDTO.class);
@@ -36,7 +37,13 @@ public class ReconciliationLocationGrid extends Grid<LocationDTO> {
         .withValidator(uid -> StringUtils.startsWith(uid, "Q"), "Invalid, has to start with Q")
         .bind(LocationDTO::getWikidataUid, LocationDTO::setWikidataUid);
 
-    addColumn(LocationDTO::getWikidataUid).setEditorComponent(wikidataUid).setHeader("Wikidata UID");
+    addComponentColumn(entity -> {
+      Anchor anchor = new Anchor();
+      anchor.setText(entity.getWikidataUid());
+      anchor.setHref(ReconciliationView.WIKIDATA_URL + entity.getWikidataUid());
+      anchor.setTarget("_blank");
+      return anchor;
+    }).setEditorComponent(wikidataUid).setHeader("Wikidata UID");
 
     Editor<LocationDTO> editor = getEditor();
     editor.setBinder(binder);

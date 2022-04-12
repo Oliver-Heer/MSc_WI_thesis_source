@@ -8,6 +8,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.editor.Editor;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -35,7 +36,13 @@ public class ReconciliationActorGrid extends Grid<ActorDTO> {
         .withValidator(uid -> StringUtils.startsWith(uid, "Q"), "Invalid, has to start with Q")
         .bind(ActorDTO::getWikidataUid, ActorDTO::setWikidataUid);
 
-    addColumn(ActorDTO::getWikidataUid).setEditorComponent(wikidataUid).setHeader("Wikidata UID");
+    addComponentColumn(entity -> {
+      Anchor anchor = new Anchor();
+      anchor.setText(entity.getWikidataUid());
+      anchor.setHref(ReconciliationView.WIKIDATA_URL + entity.getWikidataUid());
+      anchor.setTarget("_blank");
+      return anchor;
+    }).setEditorComponent(wikidataUid).setHeader("Wikidata UID");
 
     Editor<ActorDTO> editor = getEditor();
     editor.setBinder(binder);

@@ -17,6 +17,8 @@ public class ReconciliationView extends VerticalLayout {
   private Reactor reactor = UiUtils.getReactor();
   private Map<Tab, Component> tabComponentMap = new LinkedHashMap<>();
 
+  public static String WIKIDATA_URL = "https://www.wikidata.org/wiki/";
+
   public ReconciliationView() {
     addClassName("reconciliationView");
     setSizeFull();
