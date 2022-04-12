@@ -34,7 +34,8 @@
 
     <logger name="ch.mscwi.wikidata.pipeline" level="info" additivity="false">
         <appender-ref ref="RollingFile" />
-        <appender-ref ref="Console" />
     </logger>
 
-</configuration>
+    <root level="info" additivity="false">
+        <appender-ref ref="Console" />
+    </root></configuration>
