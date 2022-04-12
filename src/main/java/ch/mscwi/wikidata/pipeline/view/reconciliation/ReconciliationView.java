@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.view.preparation;
+package ch.mscwi.wikidata.pipeline.view.reconciliation;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,13 +12,13 @@ import com.vaadin.flow.component.tabs.Tabs;
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.view.UiUtils;
 
-public class PreparationView extends VerticalLayout {
+public class ReconciliationView extends VerticalLayout {
 
   private Reactor reactor = UiUtils.getReactor();
   private Map<Tab, Component> tabComponentMap = new LinkedHashMap<>();
 
-  public PreparationView() {
-    addClassName("preparationView");
+  public ReconciliationView() {
+    addClassName("reconciliationView");
     setSizeFull();
 
     Tabs tabs = createTabs();
@@ -36,9 +36,9 @@ public class PreparationView extends VerticalLayout {
   }
 
   private Tabs createTabs() {
-    tabComponentMap.put(new Tab("Locations"), new PreparationLocationGrid(reactor.getLocationsForPreparation()));
-    tabComponentMap.put(new Tab("Genres"), new PreparationGenreGrid(reactor.getGenresForPreparation()));
-    tabComponentMap.put(new Tab("Actors"), new PreparationActorGrid(reactor.getActorsForPreparation()));
+    tabComponentMap.put(new Tab("Locations"), new ReconciliationLocationGrid(reactor.getLocationsForPreparation()));
+    tabComponentMap.put(new Tab("Genres"), new ReconciliationGenreGrid(reactor.getGenresForPreparation()));
+    tabComponentMap.put(new Tab("Actors"), new ReconciliationActorGrid(reactor.getActorsForPreparation()));
     return new Tabs(tabComponentMap.keySet().toArray(new Tab[]{}));
   }
 

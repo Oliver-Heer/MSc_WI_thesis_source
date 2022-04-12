@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.view.preparation;
+package ch.mscwi.wikidata.pipeline.view.reconciliation;
 
 import java.util.List;
 
@@ -16,11 +16,11 @@ import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.GenreDTO;
 import ch.mscwi.wikidata.pipeline.view.UiUtils;
 
-public class PreparationGenreGrid extends Grid<GenreDTO> {
+public class ReconciliationGenreGrid extends Grid<GenreDTO> {
 
   private Reactor reactor = UiUtils.getReactor();
 
-  public PreparationGenreGrid(List<GenreDTO> genreDTOs) {
+  public ReconciliationGenreGrid(List<GenreDTO> genreDTOs) {
     setAllRowsVisible(true);
     setSelectionMode(SelectionMode.NONE);
     setItems(genreDTOs);

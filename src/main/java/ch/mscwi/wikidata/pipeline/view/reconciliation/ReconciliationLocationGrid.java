@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.view.preparation;
+package ch.mscwi.wikidata.pipeline.view.reconciliation;
 
 import java.util.List;
 
@@ -13,57 +13,57 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
-import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
 import ch.mscwi.wikidata.pipeline.view.UiUtils;
 
-public class PreparationActorGrid extends Grid<ActorDTO> {
+public class ReconciliationLocationGrid extends Grid<LocationDTO> {
 
   private Reactor reactor = UiUtils.getReactor();
 
-  public PreparationActorGrid(List<ActorDTO> actorDTOs) {
+  public ReconciliationLocationGrid(List<LocationDTO> locationDTOs) {
     setAllRowsVisible(true);
     setSelectionMode(SelectionMode.NONE);
-    setItems(actorDTOs);
+    setItems(locationDTOs);
 
     addColumn(act -> act.getStringID()).setHeader("ID");
     addColumn(act -> act.getName()).setHeader("ID");
     addColumn(act -> act.getState()).setHeader("State");
 
-    Binder<ActorDTO> binder = new Binder<>(ActorDTO.class);
+    Binder<LocationDTO> binder = new Binder<>(LocationDTO.class);
     TextField wikidataUid = new TextField();
     binder.forField(wikidataUid)
         .asRequired("Wikidata UID")
         .withValidator(uid -> StringUtils.startsWith(uid, "Q"), "Invalid, has to start with Q")
-        .bind(ActorDTO::getWikidataUid, ActorDTO::setWikidataUid);
+        .bind(LocationDTO::getWikidataUid, LocationDTO::setWikidataUid);
 
-    addColumn(ActorDTO::getWikidataUid).setEditorComponent(wikidataUid).setHeader("Wikidata UID");
+    addColumn(LocationDTO::getWikidataUid).setEditorComponent(wikidataUid).setHeader("Wikidata UID");
 
-    Editor<ActorDTO> editor = getEditor();
+    Editor<LocationDTO> editor = getEditor();
     editor.setBinder(binder);
     editor.setBuffered(true);
 
-    Column<ActorDTO> editColumn = addComponentColumn(actor -> {
+    Column<LocationDTO> editColumn = addComponentColumn(location -> {
       Button editButton = new Button("Edit");
       editButton.addClickListener(e -> {
         if (editor.isOpen()) {
           editor.cancel();
         }
-        getEditor().editItem(actor);
+        getEditor().editItem(location);
       });
       return editButton;
     });
 
     Button saveButton = new Button("Approve", e -> {
-      ActorDTO editedActor = editor.getItem();
+      LocationDTO editedLocation = editor.getItem();
       editor.save();
-      reactor.approveAndSaveActor(editedActor);
+      reactor.approveAndSaveLocation(editedLocation);
     });
     saveButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
 
     Button ignoreButton = new Button("Ignore", e -> {
-      ActorDTO ignoredActor = editor.getItem();
+      LocationDTO ignoredLocation = editor.getItem();
       editor.cancel();
-      reactor.ignoreAndSaveActor(ignoredActor);
+      reactor.ignoreAndSaveLocation(ignoredLocation);
     });
 
     Button cancelButton = new Button("Cancel", e -> editor.cancel());

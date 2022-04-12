@@ -17,15 +17,15 @@ import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
 
-public class ReconciliationDialog extends Dialog {
+public class PublicationDialog extends Dialog {
 
-  private Logger logger = LoggerFactory.getLogger(ReconciliationDialog.class);
+  private Logger logger = LoggerFactory.getLogger(PublicationDialog.class);
 
   private Reactor reactor = UiUtils.getReactor();
 
   private Binder<ActivityDTO> binder = new Binder<>(ActivityDTO.class);
 
-  public ReconciliationDialog(ActivityDTO activityDTO) {
+  public PublicationDialog(ActivityDTO activityDTO) {
     binder.setBean(activityDTO);
 
     H5 title = new H5(activityDTO.getTitle());

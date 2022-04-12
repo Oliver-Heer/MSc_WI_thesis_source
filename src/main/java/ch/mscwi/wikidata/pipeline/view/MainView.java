@@ -12,7 +12,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import ch.mscwi.wikidata.pipeline.view.preparation.PreparationView;
+import ch.mscwi.wikidata.pipeline.view.reconciliation.ReconciliationView;
 
 @Route(value = "")
 @CssImport("./styles/global.css")
@@ -42,8 +42,8 @@ public class MainView extends VerticalLayout {
 
   private Tabs createTabs() {
     tabComponentMap.put(new Tab("Procurement"), new ProcurementView());
-    tabComponentMap.put(new Tab("Preparation"), new PreparationView());
     tabComponentMap.put(new Tab("Reconciliation"), new ReconciliationView());
+    tabComponentMap.put(new Tab("Publication"), new PublicationView());
     return new Tabs(tabComponentMap.keySet().toArray(new Tab[]{}));
   }
 

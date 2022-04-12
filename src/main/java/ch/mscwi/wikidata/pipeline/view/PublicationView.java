@@ -10,12 +10,12 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 
-public class ReconciliationView extends VerticalLayout {
+public class PublicationView extends VerticalLayout {
 
   private Reactor reactor = UiUtils.getReactor();
 
-  public ReconciliationView() {
-    addClassName("reconciliationView");
+  public PublicationView() {
+    addClassName("publicationView");
     setSizeFull();
 
     Grid<ActivityDTO> activityGrid = activityGrid();
@@ -23,7 +23,7 @@ public class ReconciliationView extends VerticalLayout {
     activityGrid.addSelectionListener(event -> {
       Optional<ActivityDTO> selection = event.getFirstSelectedItem();
       if (selection.isPresent()) {
-        new ReconciliationDialog(selection.get()).open();
+        new PublicationDialog(selection.get()).open();
       }
     });
 
