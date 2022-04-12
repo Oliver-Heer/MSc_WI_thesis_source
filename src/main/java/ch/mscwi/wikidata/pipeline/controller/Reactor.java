@@ -45,17 +45,15 @@ public class Reactor {
   @Autowired
   private DataPersistor persistor;
 
-  private static final Set<ReconciliationState> PREPARATION_STATES = Set.of(
+  private static final Set<ReconciliationState> RECONCILIATION_STATES = Set.of(
       ReconciliationState.FOUND,
       ReconciliationState.NOT_FOUND,
       ReconciliationState.ERROR
   );
 
-  private static final Set<ReconciliationState> RECONCILIATION_STATES = Set.of(
-      ReconciliationState.NOT_FOUND,
-      ReconciliationState.FOUND,
+  private static final Set<ReconciliationState> PUBLICATION_STATES = Set.of(
       ReconciliationState.CREATE,
-      ReconciliationState.ERROR
+      ReconciliationState.APPROVED
   );
 
   public List<Activity> activities = new ArrayList<>();
@@ -145,20 +143,24 @@ public class Reactor {
     }
   }
 
-  public List<GenreDTO> getGenresForPreparation() {
-    return persistor.getGenreRepo().findAllByStateIn(PREPARATION_STATES);
-  }
-
-  public List<LocationDTO> getLocationsForPreparation() {
-    return persistor.getLocationRepo().findAllByStateIn(PREPARATION_STATES);
-  }
-
-  public List<ActorDTO> getActorsForPreparation() {
-    return persistor.getActorRepo().findAllByStateIn(PREPARATION_STATES);
-  }
-
   public List<ActivityDTO> getActivitiesForReconciliation() {
     return persistor.getActivityRepo().findAllByStateIn(RECONCILIATION_STATES);
+  }
+
+  public List<GenreDTO> getGenresForReconciliation() {
+    return persistor.getGenreRepo().findAllByStateIn(RECONCILIATION_STATES);
+  }
+
+  public List<LocationDTO> getLocationsForReconciliation() {
+    return persistor.getLocationRepo().findAllByStateIn(RECONCILIATION_STATES);
+  }
+
+  public List<ActorDTO> getActorsForReconciliation() {
+    return persistor.getActorRepo().findAllByStateIn(RECONCILIATION_STATES);
+  }
+
+  public List<ActivityDTO> getActivitiesForPublication() {
+    return persistor.getActivityRepo().findAllByStateIn(PUBLICATION_STATES);
   }
 
   public void saveActivity(ActivityDTO activityDTO) {
@@ -217,6 +219,22 @@ public class Reactor {
     logger.info("Ignore Actor " + actorDTO.getName());
     actorDTO.setState(ReconciliationState.IGNORE);
     persistor.saveAllActors(List.of(actorDTO));
+  }
+
+  public void approveAndSaveActivity(ActivityDTO activityDTO) {
+    if (!isApprovable(activityDTO)) {
+      logger.info("Could not approve Activity " + activityDTO.getTitle() + " Wikidata UID is missing or invalid");
+    }
+
+    logger.info("Approved Activity " + activityDTO.getTitle() + " with Wikidata UID " + activityDTO.getWikidataUid());
+    activityDTO.setState(ReconciliationState.APPROVED);
+    persistor.saveAllActivities(List.of(activityDTO));
+  }
+
+  public void ignoreAndSaveActivity(ActivityDTO activityDTO) {
+    logger.info("Ignore Activity " + activityDTO.getTitle());
+    activityDTO.setState(ReconciliationState.IGNORE);
+    persistor.saveAllActivities(List.of(activityDTO));
   }
 
 }

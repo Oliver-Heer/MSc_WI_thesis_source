@@ -14,27 +14,29 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
-import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 import ch.mscwi.wikidata.pipeline.view.UiUtils;
 
-public class ReconciliationActorGrid extends Grid<ActorDTO> {
+public class ReconciliationActivityGrid extends Grid<ActivityDTO> {
 
   private Reactor reactor = UiUtils.getReactor();
 
-  public ReconciliationActorGrid(List<ActorDTO> actorDTOs) {
+  public ReconciliationActivityGrid(List<ActivityDTO> activityDTOs) {
     setAllRowsVisible(true);
     setSelectionMode(SelectionMode.NONE);
-    setItems(actorDTOs);
+    setItems(activityDTOs);
 
-    addColumn(entity -> entity.getName()).setHeader("Name");
+    addColumn(entity -> entity.getStringID()).setHeader("ID");
+    addColumn(entity -> entity.getTitle()).setHeader("Title");
+    addColumn(entity -> entity.getSubTitle()).setHeader("Subtitle");
     addColumn(entity -> entity.getState()).setHeader("State");
 
-    Binder<ActorDTO> binder = new Binder<>(ActorDTO.class);
+    Binder<ActivityDTO> binder = new Binder<>(ActivityDTO.class);
     TextField wikidataUid = new TextField();
     binder.forField(wikidataUid)
         .asRequired("Wikidata UID")
         .withValidator(uid -> StringUtils.startsWith(uid, "Q"), "Invalid, has to start with Q")
-        .bind(ActorDTO::getWikidataUid, ActorDTO::setWikidataUid);
+        .bind(ActivityDTO::getWikidataUid, ActivityDTO::setWikidataUid);
 
     addComponentColumn(entity -> {
       Anchor anchor = new Anchor();
@@ -44,32 +46,32 @@ public class ReconciliationActorGrid extends Grid<ActorDTO> {
       return anchor;
     }).setEditorComponent(wikidataUid).setHeader("Wikidata UID");
 
-    Editor<ActorDTO> editor = getEditor();
+    Editor<ActivityDTO> editor = getEditor();
     editor.setBinder(binder);
     editor.setBuffered(true);
 
-    Column<ActorDTO> editColumn = addComponentColumn(actor -> {
+    Column<ActivityDTO> editColumn = addComponentColumn(activity -> {
       Button editButton = new Button("Edit");
       editButton.addClickListener(e -> {
         if (editor.isOpen()) {
           editor.cancel();
         }
-        getEditor().editItem(actor);
+        getEditor().editItem(activity);
       });
       return editButton;
     });
 
     Button saveButton = new Button("Approve", e -> {
-      ActorDTO editedActor = editor.getItem();
+      ActivityDTO editedActivity = editor.getItem();
       editor.save();
-      reactor.approveAndSaveActor(editedActor);
+      reactor.approveAndSaveActivity(editedActivity);
     });
     saveButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
 
     Button ignoreButton = new Button("Ignore", e -> {
-      ActorDTO ignoredActor = editor.getItem();
+      ActivityDTO ignoredActivity = editor.getItem();
       editor.cancel();
-      reactor.ignoreAndSaveActor(ignoredActor);
+      reactor.ignoreAndSaveActivity(ignoredActivity);
     });
 
     Button cancelButton = new Button("Cancel", e -> editor.cancel());

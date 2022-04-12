@@ -19,7 +19,7 @@ public class PublicationView extends VerticalLayout {
     setSizeFull();
 
     Grid<ActivityDTO> activityGrid = activityGrid();
-    activityGrid.setItems(reactor.getActivitiesForReconciliation());
+    activityGrid.setItems(reactor.getActivitiesForPublication());
     activityGrid.addSelectionListener(event -> {
       Optional<ActivityDTO> selection = event.getFirstSelectedItem();
       if (selection.isPresent()) {
@@ -28,7 +28,7 @@ public class PublicationView extends VerticalLayout {
     });
 
     Button refreshButton = new Button("Refresh");
-    refreshButton.addClickListener(click -> activityGrid.setItems(reactor.getActivitiesForReconciliation()));
+    refreshButton.addClickListener(click -> activityGrid.setItems(reactor.getActivitiesForPublication()));
 
     HorizontalLayout actionLayout = new HorizontalLayout();
     actionLayout.setWidthFull();

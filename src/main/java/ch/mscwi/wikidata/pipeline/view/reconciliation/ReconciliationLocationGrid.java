@@ -26,9 +26,9 @@ public class ReconciliationLocationGrid extends Grid<LocationDTO> {
     setSelectionMode(SelectionMode.NONE);
     setItems(locationDTOs);
 
-    addColumn(act -> act.getStringID()).setHeader("ID");
-    addColumn(act -> act.getName()).setHeader("Name");
-    addColumn(act -> act.getState()).setHeader("State");
+    addColumn(entity -> entity.getStringID()).setHeader("ID");
+    addColumn(entity -> entity.getName()).setHeader("Name");
+    addColumn(entity -> entity.getState()).setHeader("State");
 
     Binder<LocationDTO> binder = new Binder<>(LocationDTO.class);
     TextField wikidataUid = new TextField();

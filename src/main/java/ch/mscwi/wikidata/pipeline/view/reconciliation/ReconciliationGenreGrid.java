@@ -26,9 +26,9 @@ public class ReconciliationGenreGrid extends Grid<GenreDTO> {
     setSelectionMode(SelectionMode.NONE);
     setItems(genreDTOs);
 
-    addColumn(act -> act.getStringID()).setHeader("ID");
-    addColumn(act -> act.getName()).setHeader("Name");
-    addColumn(act -> act.getState()).setHeader("State");
+    addColumn(entity -> entity.getStringID()).setHeader("ID");
+    addColumn(entity -> entity.getName()).setHeader("Name");
+    addColumn(entity -> entity.getState()).setHeader("State");
 
     Binder<GenreDTO> binder = new Binder<>(GenreDTO.class);
     TextField wikidataUid = new TextField();
