@@ -51,11 +51,6 @@ public class Reactor {
       ReconciliationState.ERROR
   );
 
-  private static final Set<ReconciliationState> PUBLICATION_STATES = Set.of(
-      ReconciliationState.CREATE,
-      ReconciliationState.APPROVED
-  );
-
   public List<Activity> activities = new ArrayList<>();
   public List<URL> openRefineURLs = new ArrayList<>();
 
@@ -160,7 +155,8 @@ public class Reactor {
   }
 
   public List<ActivityDTO> getActivitiesForPublication() {
-    return persistor.getActivityRepo().findAllByStateIn(PUBLICATION_STATES);
+    // TODO
+    return persistor.getActivityRepo().findAllByStateIn(Set.of(ReconciliationState.ERROR));
   }
 
   public void saveActivity(ActivityDTO activityDTO) {

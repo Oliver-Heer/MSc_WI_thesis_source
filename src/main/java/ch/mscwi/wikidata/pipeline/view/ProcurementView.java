@@ -32,15 +32,6 @@ public class ProcurementView extends VerticalLayout {
     addClassName("procureView");
     setSizeFull();
 
-    TextField procureUrl = new TextField();
-    procureUrl.setClearButtonVisible(true);
-    procureUrl.setValue("https://www.opernhaus.ch/xmlexport/kzexport.xml");
-    procureUrl.setWidth("25%");
-
-    Button reconcileButton = new Button("Reconcile");
-    reconcileButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
-    reconcileButton.addClickListener(click -> reactor.reconcile());
-
     Grid<Activity> activityGrid = activityGrid();
     activityGrid.setItems(reactor.activities);
     activityGrid.setItemDetailsRenderer(new ComponentRenderer<>(activity -> detailView(activity)));
@@ -51,12 +42,20 @@ public class ProcurementView extends VerticalLayout {
       activityGrid.setItems(reactor.activities);
     });
 
+    TextField procureUrl = new TextField();
+    procureUrl.setClearButtonVisible(true);
+    procureUrl.setValue("https://www.opernhaus.ch/xmlexport/kzexport.xml");
+    procureUrl.setWidth("25%");
+
     Button procureButton = new Button("Procure");
     procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
     procureButton.addClickListener(click -> {
       reactor.procure(procureUrl.getValue());
       activityGrid.setItems(reactor.activities);
     });
+
+    Button reconcileButton = new Button("Reconcile");
+    reconcileButton.addClickListener(click -> reactor.reconcile());
 
     Button refreshButton = new Button("Refresh");
     refreshButton.addClickListener(click -> activityGrid.getDataProvider().refreshAll());

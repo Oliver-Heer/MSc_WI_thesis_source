@@ -137,11 +137,17 @@
     </dependency>
 
     <!-- JAVAX JSON -->
-    <!-- Required to easily build JSON objects -->
     <dependency>
         <groupId>org.glassfish</groupId>
         <artifactId>javax.json</artifactId>
         <version>1.1.4</version>
+    </dependency>
+
+    <!-- WIKIDATA TOOLKIT -->
+    <dependency>
+        <groupId>org.wikidata.wdtk</groupId>
+        <artifactId>wdtk-wikibaseapi</artifactId>
+        <version>0.13.2</version>
     </dependency>
 
     <!-- TESTING -->
