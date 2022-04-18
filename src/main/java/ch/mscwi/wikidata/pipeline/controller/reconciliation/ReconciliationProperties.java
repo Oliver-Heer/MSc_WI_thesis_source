@@ -1,5 +1,6 @@
 package ch.mscwi.wikidata.pipeline.controller.reconciliation;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,8 +15,8 @@ public class ReconciliationProperties {
   private String genreEntity;
   private String locationEntity;
   private String actorEntity;
-  private Map<String, String> activityProperties;
-  private Map<String, String> actorProperties;
+  private Map<String, String> activityProperties = new HashMap<>();
+  private Map<String, String> actorProperties = new HashMap<>();;
 
   public String getService() {
     return service;
