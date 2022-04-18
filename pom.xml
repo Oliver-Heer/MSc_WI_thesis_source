@@ -19,6 +19,7 @@
     <java.version>11</java.version>
     <vaadin.version>22.0.2</vaadin.version>
     <jaxb.version>3.0.2</jaxb.version>
+    <okhttp3.version>4.9.0</okhttp3.version> <!-- Workaround Wikidata Toolkit Issue: https://github.com/Wikidata/Wikidata-Toolkit/issues/600 -->
   </properties>
 
 
