@@ -19,8 +19,6 @@ import ch.mscwi.wikidata.pipeline.model.wikidata.RoleDTO;
 @Service
 public class DataPersistor {
 
-  @PersistenceContext
-  private EntityManager entityManager;
 
   @Autowired
   private IActivityRepository activityRepo;
@@ -36,11 +34,6 @@ public class DataPersistor {
 
   @Autowired
   private IActorRepository actorRepo;
-
-  @Transactional
-  public void persist(ActivityDTO activityDTO) {
-    entityManager.persist(activityDTO);
-  }
 
   public void saveAllGenres(List<GenreDTO> genreDTOs) {
     genreRepo.saveAllAndFlush(genreDTOs);
