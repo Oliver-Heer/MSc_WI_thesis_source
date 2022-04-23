@@ -16,6 +16,7 @@ import org.wikidata.wdtk.wikibaseapi.WikibaseDataEditor;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
 
 @Service
@@ -25,6 +26,9 @@ public class DataPublicatorBot {
 
   @Autowired
   private LocationStatement locationStatement;
+
+  @Autowired
+  private ActorStatement actorStatement;
 
   private PublicatorProperties publicatorProperties;
 
@@ -75,18 +79,26 @@ public class DataPublicatorBot {
 
   public String publishNewLocation(LocationDTO location) throws MediaWikiApiErrorException, IOException {
     checkLogin();
-    ItemDocument newLocation = locationStatement.prepareLocationStatement(dataFetcher, location);
-
-    if (!publicatorProperties.isPublishingEnabled()) {
-      logger.info("Publishing disabled, new Location preview: " + newLocation);
-      return null;
-    }
+    ItemDocument newLocation = locationStatement.prepareStatement(dataFetcher, location);
 
     logger.info("Creating new Location " + location.getName());
     return publishDocument(newLocation);
   }
 
+  public String publishNewActor(ActorDTO actor) throws MediaWikiApiErrorException, IOException {
+    checkLogin();
+    ItemDocument newActor = actorStatement.prepareStatement(dataFetcher, actor);
+
+    logger.info("Creating new Actor " + actor.getName());
+    return publishDocument(newActor);
+  }
+
   private String publishDocument(ItemDocument newDocument) throws IOException, MediaWikiApiErrorException {
+    if (!publicatorProperties.isPublishingEnabled()) {
+      logger.info("Publishing disabled, new Entity preview: " + newDocument);
+      return null;
+    }
+
     EntityDocument newEntity = dataEditor.createEntityDocument(newDocument, "Creating new entity", null);
     String newEntityIdentifier = String.valueOf(newEntity.getEntityId());
     logger.info("Created new Entity " + newEntityIdentifier);

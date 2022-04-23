@@ -15,15 +15,15 @@ import org.wikidata.wdtk.datamodel.interfaces.Statement;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
-import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
 
 @Service
-public class LocationStatement extends AbstractStatement {
+public class ActorStatement extends AbstractStatement {
 
-  private Logger logger = LoggerFactory.getLogger(LocationStatement.class);
+  private Logger logger = LoggerFactory.getLogger(ActorStatement.class);
 
-  public ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, LocationDTO location) throws MediaWikiApiErrorException, IOException {
-    List<String> wikidataEntityIDs = WikidataEntity.forLocation();
+  public ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, ActorDTO actor) throws MediaWikiApiErrorException, IOException {
+    List<String> wikidataEntityIDs = WikidataEntity.forActor();
     Map<String, EntityDocument> wikidataEntities = dataFetcher.getEntityDocuments(wikidataEntityIDs);
 
     if (wikidataEntityIDs.size() != wikidataEntities.size()) {
@@ -32,14 +32,14 @@ public class LocationStatement extends AbstractStatement {
       throw new RuntimeException(errorMessage);
     }
 
-    Statement instanceOfStatement = createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_INSTANCE_OF, WikidataEntity.ENTITY_VENUE);
-    Statement countryStatement = createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_COUNTRY, WikidataEntity.ENTITY_SWITZERLAND);
+    Statement instanceOfStatement = createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_INSTANCE_OF, WikidataEntity.ENTITY_HUMAN);
+    Statement occupationStatement = createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_OCCUPATION, WikidataEntity.ENTITY_ARTIST);
 
     ItemDocument newDocument = ItemDocumentBuilder.forItemId(ItemIdValue.NULL)
-        .withLabel(location.getName(), "en")
-        .withLabel(location.getName(), "de")
+        .withLabel(actor.getName(), "en")
+        .withLabel(actor.getName(), "de")
         .withStatement(instanceOfStatement)
-        .withStatement(countryStatement)
+        .withStatement(occupationStatement)
         .build();
 
     return newDocument;
