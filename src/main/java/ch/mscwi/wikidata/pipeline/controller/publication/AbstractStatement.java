@@ -2,6 +2,7 @@ package ch.mscwi.wikidata.pipeline.controller.publication;
 
 import java.util.Map;
 
+import org.wikidata.wdtk.datamodel.helpers.Datamodel;
 import org.wikidata.wdtk.datamodel.helpers.StatementBuilder;
 import org.wikidata.wdtk.datamodel.interfaces.EntityDocument;
 import org.wikidata.wdtk.datamodel.interfaces.EntityIdValue;
@@ -17,6 +18,17 @@ public abstract class AbstractStatement {
     EntityIdValue value = wikidataEntities.get(entityKey).getEntityId();
     return StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, property)
         .withValue((Value) value)
+        .build();
+  }
+
+  public Statement createValueStatement(Map<String, EntityDocument> wikidataEntities, String propertyKey, String value) {
+    return createValueStatement(wikidataEntities, propertyKey, value, "de");
+  }
+
+  public Statement createValueStatement(Map<String, EntityDocument> wikidataEntities, String propertyKey, String value, String language) {
+    PropertyIdValue property = (PropertyIdValue) wikidataEntities.get(propertyKey).getEntityId();
+    return StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, property)
+        .withValue(Datamodel.makeMonolingualTextValue(value, language))
         .build();
   }
 

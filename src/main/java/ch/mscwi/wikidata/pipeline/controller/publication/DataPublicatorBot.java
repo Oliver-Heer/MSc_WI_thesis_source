@@ -16,6 +16,7 @@ import org.wikidata.wdtk.wikibaseapi.WikibaseDataEditor;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
 
@@ -29,6 +30,9 @@ public class DataPublicatorBot {
 
   @Autowired
   private ActorStatement actorStatement;
+
+  @Autowired
+  private ActivityStatement activityStatement;
 
   private PublicatorProperties publicatorProperties;
 
@@ -91,6 +95,14 @@ public class DataPublicatorBot {
 
     logger.info("Creating new Actor " + actor.getName());
     return publishDocument(newActor);
+  }
+
+  public String publishNewActivity(ActivityDTO activity) throws MediaWikiApiErrorException, IOException {
+    checkLogin();
+    ItemDocument newActivity = activityStatement.prepareStatement(dataFetcher, activity);
+
+    logger.info("Creating new Activity " + activity.getTitle());
+    return publishDocument(newActivity);
   }
 
   private String publishDocument(ItemDocument newDocument) throws IOException, MediaWikiApiErrorException {
