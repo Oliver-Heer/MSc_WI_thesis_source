@@ -15,6 +15,7 @@ import org.wikidata.wdtk.datamodel.interfaces.Statement;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
+import ch.mscwi.wikidata.pipeline.model.wikidata.AbstractWikidataDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
 
 @Service
@@ -22,7 +23,9 @@ public class LocationStatement extends AbstractStatement {
 
   private Logger logger = LoggerFactory.getLogger(LocationStatement.class);
 
-  public ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, LocationDTO location) throws MediaWikiApiErrorException, IOException {
+  @Override
+  public <T extends AbstractWikidataDTO> ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, T dto) throws MediaWikiApiErrorException, IOException {
+    LocationDTO location = (LocationDTO) dto;
     List<String> wikidataEntityIDs = WikidataEntity.forLocation();
     Map<String, EntityDocument> wikidataEntities = dataFetcher.getEntityDocuments(wikidataEntityIDs);
 

@@ -15,6 +15,7 @@ import org.wikidata.wdtk.datamodel.interfaces.Statement;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
+import ch.mscwi.wikidata.pipeline.model.wikidata.AbstractWikidataDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
 
 @Service
@@ -22,7 +23,9 @@ public class ActorStatement extends AbstractStatement {
 
   private Logger logger = LoggerFactory.getLogger(ActorStatement.class);
 
-  public ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, ActorDTO actor) throws MediaWikiApiErrorException, IOException {
+  @Override
+  public <T extends AbstractWikidataDTO> ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, T dto) throws MediaWikiApiErrorException, IOException {
+    ActorDTO actor = (ActorDTO) dto;
     List<String> wikidataEntityIDs = WikidataEntity.forActor();
     Map<String, EntityDocument> wikidataEntities = dataFetcher.getEntityDocuments(wikidataEntityIDs);
 

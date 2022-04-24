@@ -18,6 +18,7 @@ import org.wikidata.wdtk.datamodel.interfaces.Statement;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
+import ch.mscwi.wikidata.pipeline.model.wikidata.AbstractWikidataDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
@@ -27,7 +28,9 @@ public class ActivityStatement extends AbstractStatement {
 
   private Logger logger = LoggerFactory.getLogger(ActivityStatement.class);
 
-  public ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, ActivityDTO activity) throws MediaWikiApiErrorException, IOException {
+  @Override
+  public <T extends AbstractWikidataDTO> ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, T dto) throws MediaWikiApiErrorException, IOException {
+    ActivityDTO activity = (ActivityDTO) dto;
     ArrayList<String> wikidataEntityIDs = new ArrayList<String>();
     wikidataEntityIDs.addAll(WikidataEntity.forActivity());
     wikidataEntityIDs.addAll(getGenreUids(activity));
