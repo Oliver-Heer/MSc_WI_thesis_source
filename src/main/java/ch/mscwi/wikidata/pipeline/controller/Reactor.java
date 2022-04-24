@@ -1,5 +1,6 @@
 package ch.mscwi.wikidata.pipeline.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
 import ch.mscwi.wikidata.pipeline.controller.preparation.DataPreparer;
 import ch.mscwi.wikidata.pipeline.controller.procurement.XmlProcurer;
+import ch.mscwi.wikidata.pipeline.controller.publication.DataPublicatorBot;
 import ch.mscwi.wikidata.pipeline.controller.reconciliation.DataReconciliator;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.Activity;
 import ch.mscwi.wikidata.pipeline.model.kulturzueri.ImportActivities;
@@ -44,6 +47,9 @@ public class Reactor {
 
   @Autowired
   private DataPersistor persistor;
+
+  @Autowired
+  private DataPublicatorBot publicatorBot;
 
   private static final Set<ReconciliationState> RECONCILIATION_STATES = Set.of(
       ReconciliationState.FOUND,
@@ -231,6 +237,14 @@ public class Reactor {
     logger.info("Ignore Activity " + activityDTO.getTitle());
     activityDTO.setState(ReconciliationState.IGNORE);
     persistor.saveAllActivities(List.of(activityDTO));
+  }
+
+  public String createNewLocation(LocationDTO locationDTO) {
+    try {
+      return publicatorBot.publishNewLocation(locationDTO);
+    } catch (MediaWikiApiErrorException | IOException e) {
+      return null;
+    }
   }
 
 }

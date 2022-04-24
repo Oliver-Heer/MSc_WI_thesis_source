@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wikidata.wdtk.datamodel.interfaces.EntityDocument;
+import org.wikidata.wdtk.datamodel.interfaces.EntityIdValue;
 import org.wikidata.wdtk.datamodel.interfaces.ItemDocument;
 import org.wikidata.wdtk.util.WebResourceFetcherImpl;
 import org.wikidata.wdtk.wikibaseapi.BasicApiConnection;
@@ -112,9 +113,9 @@ public class DataPublicatorBot {
     }
 
     EntityDocument newEntity = dataEditor.createEntityDocument(newDocument, "Creating new entity", null);
-    String newEntityIdentifier = String.valueOf(newEntity.getEntityId());
-    logger.info("Created new Entity " + newEntityIdentifier);
-    return newEntityIdentifier;
+    EntityIdValue newEntityUrl = newEntity.getEntityId();
+    logger.info("Created new Entity " + String.valueOf(newEntityUrl));
+    return newEntityUrl.getId();
   }
 
   private void isPropertyConfigured(String propertyName, String property) {

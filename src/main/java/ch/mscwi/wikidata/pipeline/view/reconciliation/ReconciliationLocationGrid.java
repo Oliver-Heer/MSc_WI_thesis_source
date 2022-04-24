@@ -67,6 +67,19 @@ public class ReconciliationLocationGrid extends Grid<LocationDTO> {
     });
     saveButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
+    Button createButton = new Button("Create", e -> {
+      LocationDTO editedLocation = editor.getItem();
+      String newUid = reactor.createNewLocation(editedLocation);
+      if (newUid == null) {
+        new ErrorNotification();
+        editor.cancel();
+        return;
+      }
+      editedLocation.setWikidataUid(newUid);
+      reactor.approveAndSaveLocation(editedLocation);
+      editor.cancel();
+    });
+
     Button ignoreButton = new Button("Ignore", e -> {
       LocationDTO ignoredLocation = editor.getItem();
       editor.cancel();
@@ -75,7 +88,7 @@ public class ReconciliationLocationGrid extends Grid<LocationDTO> {
 
     Button cancelButton = new Button("Cancel", e -> editor.cancel());
 
-    HorizontalLayout actionLayout = new HorizontalLayout(saveButton, ignoreButton, cancelButton);
+    HorizontalLayout actionLayout = new HorizontalLayout(saveButton, createButton, ignoreButton, cancelButton);
     actionLayout.setPadding(false);
     editColumn.setEditorComponent(actionLayout);
 
