@@ -26,13 +26,13 @@ public class DataPublicatorBot {
   private Logger logger = LoggerFactory.getLogger(DataPublicatorBot.class);
 
   @Autowired
-  private LocationStatement locationStatement;
+  private AbstractStatement locationStatement;
 
   @Autowired
-  private ActorStatement actorStatement;
+  private AbstractStatement actorStatement;
 
   @Autowired
-  private ActivityStatement activityStatement;
+  private AbstractStatement activityStatement;
 
   private PublicatorProperties publicatorProperties;
 
