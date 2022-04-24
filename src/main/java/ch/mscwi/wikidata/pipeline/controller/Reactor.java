@@ -247,4 +247,11 @@ public class Reactor {
     }
   }
 
+  public String createNewActor(ActorDTO actorDTO) {
+    try {
+      return publicatorBot.publishNewActor(actorDTO);
+    } catch (MediaWikiApiErrorException | IOException e) {
+      return null;
+    }
+  }
 }

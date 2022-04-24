@@ -66,6 +66,19 @@ public class ReconciliationActorGrid extends Grid<ActorDTO> {
     });
     saveButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
+    Button createButton = new Button("Create", e -> {
+      ActorDTO editedActor = editor.getItem();
+      String newUid = reactor.createNewActor(editedActor);
+      if (newUid == null) {
+        new ErrorNotification();
+        editor.cancel();
+        return;
+      }
+      editedActor.setWikidataUid(newUid);
+      reactor.approveAndSaveActor(editedActor);
+      editor.cancel();
+    });
+
     Button ignoreButton = new Button("Ignore", e -> {
       ActorDTO ignoredActor = editor.getItem();
       editor.cancel();
@@ -74,7 +87,7 @@ public class ReconciliationActorGrid extends Grid<ActorDTO> {
 
     Button cancelButton = new Button("Cancel", e -> editor.cancel());
 
-    HorizontalLayout actionLayout = new HorizontalLayout(saveButton, ignoreButton, cancelButton);
+    HorizontalLayout actionLayout = new HorizontalLayout(saveButton, createButton, ignoreButton, cancelButton);
     actionLayout.setPadding(false);
     editColumn.setEditorComponent(actionLayout);
 
