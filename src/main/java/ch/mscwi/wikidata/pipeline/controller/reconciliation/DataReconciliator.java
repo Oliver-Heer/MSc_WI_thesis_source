@@ -76,11 +76,16 @@ public class DataReconciliator {
   public List<LocationDTO> reconcileLocations(List<LocationDTO> dtos) {
     logger.info("Reconciling " + dtos.size() + " new locations");
 
+    Map<String, String> properties = reconProperties.getLocationProperties();
+
     return (List<LocationDTO>) reconcileBatch(dtos, dto -> {
-      return new ReconciliationQueryBuilder(dto.getStringID())
+      ReconciliationQueryBuilder queryBuilder = new ReconciliationQueryBuilder(dto.getStringID())
           .withQuery(((LocationDTO)dto).getName())
-          .withType(reconProperties.getLocationEntity())
-          .build();
+          .withType(reconProperties.getLocationEntity());
+
+      properties.forEach((key, value) -> queryBuilder.addProperty(key, value));
+
+      return queryBuilder.build();
     });
   }
 

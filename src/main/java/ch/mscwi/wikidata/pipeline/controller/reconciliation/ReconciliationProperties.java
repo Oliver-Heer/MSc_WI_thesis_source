@@ -16,7 +16,8 @@ public class ReconciliationProperties {
   private String locationEntity;
   private String actorEntity;
   private Map<String, String> activityProperties = new HashMap<>();
-  private Map<String, String> actorProperties = new HashMap<>();;
+  private Map<String, String> actorProperties = new HashMap<>();
+  private Map<String, String> locationProperties = new HashMap<>();
 
   public String getService() {
     return service;
@@ -72,6 +73,14 @@ public class ReconciliationProperties {
 
   public void setActorProperties(Map<String, String> actorProperties) {
     this.actorProperties = actorProperties;
+  }
+
+  public Map<String, String> getLocationProperties() {
+    return locationProperties;
+  }
+
+  public void setLocationProperties(Map<String, String> locationProperties) {
+    this.locationProperties = locationProperties;
   }
 
 }
