@@ -65,7 +65,7 @@ public class ReconciliationLocationGrid extends Grid<LocationDTO> {
       editor.save();
       reactor.approveAndSaveLocation(editedLocation);
     });
-    saveButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+    saveButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
     Button ignoreButton = new Button("Ignore", e -> {
       LocationDTO ignoredLocation = editor.getItem();

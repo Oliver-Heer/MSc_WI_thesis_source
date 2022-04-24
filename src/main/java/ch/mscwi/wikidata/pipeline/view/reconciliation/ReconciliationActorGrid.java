@@ -64,7 +64,7 @@ public class ReconciliationActorGrid extends Grid<ActorDTO> {
       editor.save();
       reactor.approveAndSaveActor(editedActor);
     });
-    saveButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+    saveButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
     Button ignoreButton = new Button("Ignore", e -> {
       ActorDTO ignoredActor = editor.getItem();

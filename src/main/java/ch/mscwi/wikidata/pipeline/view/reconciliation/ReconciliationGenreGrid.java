@@ -65,7 +65,7 @@ public class ReconciliationGenreGrid extends Grid<GenreDTO> {
       editor.save();
       reactor.approveAndSaveGenre(editedGenre);
     });
-    saveButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+    saveButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
     Button ignoreButton = new Button("Ignore", e -> {
       GenreDTO ignoredGenre = editor.getItem();

@@ -48,7 +48,7 @@ public class ProcurementView extends VerticalLayout {
     procureUrl.setWidth("25%");
 
     Button procureButton = new Button("Procure");
-    procureButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+    procureButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
     procureButton.addClickListener(click -> {
       reactor.procure(procureUrl.getValue());
       activityGrid.setItems(reactor.activities);

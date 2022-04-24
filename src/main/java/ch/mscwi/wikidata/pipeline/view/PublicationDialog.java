@@ -40,7 +40,7 @@ public class PublicationDialog extends Dialog {
 
   private HorizontalLayout createActionLayout() {
     Button approveButton = new Button("Approve", click -> this.approve());
-    approveButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+    approveButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
     Button ignoreButton = new Button("Ignore", click -> this.ignore());
 

@@ -66,7 +66,7 @@ public class ReconciliationActivityGrid extends Grid<ActivityDTO> {
       editor.save();
       reactor.approveAndSaveActivity(editedActivity);
     });
-    saveButton.addThemeVariants(ButtonVariant.MATERIAL_CONTAINED);
+    saveButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
     Button ignoreButton = new Button("Ignore", e -> {
       ActivityDTO ignoredActivity = editor.getItem();
