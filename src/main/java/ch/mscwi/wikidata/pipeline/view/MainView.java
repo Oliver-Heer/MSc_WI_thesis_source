@@ -12,6 +12,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import ch.mscwi.wikidata.pipeline.view.publication.PublicationView;
 import ch.mscwi.wikidata.pipeline.view.reconciliation.ReconciliationView;
 
 @Route(value = "")

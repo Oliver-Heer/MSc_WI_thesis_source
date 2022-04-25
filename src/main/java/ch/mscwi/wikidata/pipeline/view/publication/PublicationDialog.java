@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.view;
+package ch.mscwi.wikidata.pipeline.view.publication;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,6 +16,7 @@ import com.vaadin.flow.data.binder.Binder;
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
+import ch.mscwi.wikidata.pipeline.view.UiUtils;
 
 public class PublicationDialog extends Dialog {
 

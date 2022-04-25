@@ -1,4 +1,4 @@
-package ch.mscwi.wikidata.pipeline.view;
+package ch.mscwi.wikidata.pipeline.view.publication;
 
 import java.util.Optional;
 
@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
+import ch.mscwi.wikidata.pipeline.view.UiUtils;
 
 public class PublicationView extends VerticalLayout {
 
