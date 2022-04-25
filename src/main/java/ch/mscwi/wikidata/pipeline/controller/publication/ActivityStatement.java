@@ -98,11 +98,13 @@ public class ActivityStatement extends AbstractStatement {
 
     activity.getGenres().stream()
         .filter(genre -> StringUtils.isNotBlank(genre.getWikidataUid()))
+        .filter(genre -> ReconciliationState.APPROVED == genre.getState())
         .map(genre -> createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_GENRE, genre.getWikidataUid()))
         .forEach(statement -> documentBuilder.withStatement(statement));
 
     activity.getActors().stream()
         .filter(actor -> StringUtils.isNotBlank(actor.getWikidataUid()))
+        .filter(actor -> ReconciliationState.APPROVED == actor.getState())
         .map(actor -> createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_CAST_MEMBER, actor.getWikidataUid()))
         .forEach(statement -> documentBuilder.withStatement(statement));
 
