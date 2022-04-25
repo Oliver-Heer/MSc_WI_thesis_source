@@ -15,6 +15,7 @@ import com.vaadin.flow.data.binder.Binder;
 
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
+import ch.mscwi.wikidata.pipeline.view.ErrorNotification;
 import ch.mscwi.wikidata.pipeline.view.UiUtils;
 
 public class ReconciliationActorGrid extends Grid<ActorDTO> {

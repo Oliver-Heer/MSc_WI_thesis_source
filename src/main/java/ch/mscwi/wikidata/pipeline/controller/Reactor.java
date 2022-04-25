@@ -1,6 +1,5 @@
 package ch.mscwi.wikidata.pipeline.controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
 import ch.mscwi.wikidata.pipeline.controller.preparation.DataPreparer;
 import ch.mscwi.wikidata.pipeline.controller.procurement.XmlProcurer;
@@ -255,7 +253,7 @@ public class Reactor {
   public String createNewActivity(ActivityDTO activityDTO) {
     try {
       return publicatorBot.publishNewActivity(activityDTO);
-    } catch (MediaWikiApiErrorException | IOException e) {
+    } catch (Exception e) {
       return null;
     }
   }
@@ -263,7 +261,7 @@ public class Reactor {
   public String createNewLocation(LocationDTO locationDTO) {
     try {
       return publicatorBot.publishNewLocation(locationDTO);
-    } catch (MediaWikiApiErrorException | IOException e) {
+    } catch (Exception e) {
       return null;
     }
   }
@@ -271,7 +269,7 @@ public class Reactor {
   public String createNewActor(ActorDTO actorDTO) {
     try {
       return publicatorBot.publishNewActor(actorDTO);
-    } catch (MediaWikiApiErrorException | IOException e) {
+    } catch (Exception e) {
       return null;
     }
   }

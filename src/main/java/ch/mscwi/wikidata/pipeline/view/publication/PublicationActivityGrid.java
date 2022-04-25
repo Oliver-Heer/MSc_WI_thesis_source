@@ -3,20 +3,17 @@ package ch.mscwi.wikidata.pipeline.view.publication;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
+import ch.mscwi.wikidata.pipeline.view.ErrorNotification;
 import ch.mscwi.wikidata.pipeline.view.UiUtils;
-import ch.mscwi.wikidata.pipeline.view.reconciliation.ErrorNotification;
 import ch.mscwi.wikidata.pipeline.view.reconciliation.ReconciliationView;
 
 public class PublicationActivityGrid extends Grid<ActivityDTO> {
@@ -37,22 +34,16 @@ public class PublicationActivityGrid extends Grid<ActivityDTO> {
     addColumn(entity -> entity.getSubTitle()).setHeader("Subtitle");
     addColumn(entity -> entity.getState()).setHeader("State");
 
-    Binder<ActivityDTO> binder = new Binder<>(ActivityDTO.class);
-    TextField wikidataUid = new TextField();
-    binder.forField(wikidataUid)
-        .asRequired("Wikidata UID")
-        .withValidator(uid -> StringUtils.startsWith(uid, "Q"), "Invalid, has to start with Q")
-        .bind(ActivityDTO::getWikidataUid, ActivityDTO::setWikidataUid);
-
     addComponentColumn(entity -> {
       Anchor anchor = new Anchor();
       anchor.setText(entity.getWikidataUid());
       anchor.setHref(ReconciliationView.WIKIDATA_URL + entity.getWikidataUid());
       anchor.setTarget("_blank");
       return anchor;
-    }).setEditorComponent(wikidataUid).setHeader("Wikidata UID");
+    }).setHeader("Wikidata UID");
 
     Editor<ActivityDTO> editor = getEditor();
+    Binder<ActivityDTO> binder = new Binder<>(ActivityDTO.class);
     editor.setBinder(binder);
     editor.setBuffered(true);
 
@@ -67,7 +58,7 @@ public class PublicationActivityGrid extends Grid<ActivityDTO> {
       return editButton;
     });
 
-    Button createButton = new Button("Create", e -> {
+    Button createButton = new Button("Create new", e -> {
       ActivityDTO editedActivity = editor.getItem();
       String newUid = reactor.createNewActivity(editedActivity);
       if (newUid == null) {
