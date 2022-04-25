@@ -3,6 +3,7 @@ package ch.mscwi.wikidata.pipeline.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,6 +56,11 @@ public class Reactor {
       ReconciliationState.FOUND,
       ReconciliationState.NOT_FOUND,
       ReconciliationState.ERROR
+  );
+
+  private static final Set<ReconciliationState> REFERENCE_READY_STATES = Set.of(
+      ReconciliationState.APPROVED,
+      ReconciliationState.IGNORE
   );
 
   public List<Activity> activities = new ArrayList<>();
@@ -144,10 +150,6 @@ public class Reactor {
     }
   }
 
-  public List<ActivityDTO> getActivitiesForReconciliation() {
-    return persistor.getActivityRepo().findAllByStateIn(RECONCILIATION_STATES);
-  }
-
   public List<GenreDTO> getGenresForReconciliation() {
     return persistor.getGenreRepo().findAllByStateIn(RECONCILIATION_STATES);
   }
@@ -161,8 +163,19 @@ public class Reactor {
   }
 
   public List<ActivityDTO> getActivitiesForPublication() {
-    // TODO
-    return persistor.getActivityRepo().findAllByStateIn(Set.of(ReconciliationState.ERROR));
+    List<ActivityDTO> activities = persistor.getActivityRepo().findAllByStateIn(RECONCILIATION_STATES); // activity FOUND || NOT_FOUND || ERROR
+    List<ActivityDTO> filteredActivities = activities.stream()
+        .filter(activity -> referencesReadyForPublication(activity.getGenres())) // genres APPROVED || IGNORED
+        .filter(activity -> referencesReadyForPublication(activity.getActors())) // actors APPROVED || IGNORED
+        .filter(activity -> referencesReadyForPublication(List.of(activity.getLocation()))) // location APPROVED || IGNORED
+        .collect(Collectors.toList());
+    
+    return filteredActivities;
+  }
+
+  private boolean referencesReadyForPublication(Collection<? extends AbstractWikidataDTO> dtos) {
+    return dtos.stream()
+        .allMatch(dto -> REFERENCE_READY_STATES.contains(dto.getState()));
   }
 
   public void saveActivity(ActivityDTO activityDTO) {
@@ -237,6 +250,14 @@ public class Reactor {
     logger.info("Ignore Activity " + activityDTO.getTitle());
     activityDTO.setState(ReconciliationState.IGNORE);
     persistor.saveAllActivities(List.of(activityDTO));
+  }
+
+  public String createNewActivity(ActivityDTO activityDTO) {
+    try {
+      return publicatorBot.publishNewActivity(activityDTO);
+    } catch (MediaWikiApiErrorException | IOException e) {
+      return null;
+    }
   }
 
   public String createNewLocation(LocationDTO locationDTO) {

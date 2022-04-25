@@ -17,7 +17,6 @@ import ch.mscwi.wikidata.pipeline.view.reconciliation.ReconciliationView;
 
 @Route(value = "")
 @CssImport("./styles/global.css")
-@CssImport(value = "./styles/vaadin-dialog-overlay.css", themeFor = "vaadin-dialog-overlay")
 @PageTitle("Pipeline | Kulturzüri")
 public class MainView extends VerticalLayout {
 

@@ -1,11 +1,11 @@
-package ch.mscwi.wikidata.pipeline.view.reconciliation;
+package ch.mscwi.wikidata.pipeline.view.publication;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.Anchor;
@@ -16,14 +16,20 @@ import com.vaadin.flow.data.binder.Binder;
 import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
 import ch.mscwi.wikidata.pipeline.view.UiUtils;
+import ch.mscwi.wikidata.pipeline.view.reconciliation.ErrorNotification;
+import ch.mscwi.wikidata.pipeline.view.reconciliation.ReconciliationView;
 
-public class ReconciliationActivityGrid extends Grid<ActivityDTO> {
+public class PublicationActivityGrid extends Grid<ActivityDTO> {
 
   private Reactor reactor = UiUtils.getReactor();
 
-  public ReconciliationActivityGrid(List<ActivityDTO> activityDTOs) {
+  public void updateItems(List<ActivityDTO> activityDTOs) {
+    setItems(activityDTOs);
+  }
+
+  public PublicationActivityGrid(List<ActivityDTO> activityDTOs) {
     setAllRowsVisible(true);
-    setSelectionMode(SelectionMode.NONE);
+    setSelectionMode(SelectionMode.SINGLE);
     setItems(activityDTOs);
 
     addColumn(entity -> entity.getStringID()).setHeader("ID");
@@ -61,12 +67,18 @@ public class ReconciliationActivityGrid extends Grid<ActivityDTO> {
       return editButton;
     });
 
-    Button saveButton = new Button("Approve", e -> {
+    Button createButton = new Button("Create", e -> {
       ActivityDTO editedActivity = editor.getItem();
-      editor.save();
+      String newUid = reactor.createNewActivity(editedActivity);
+      if (newUid == null) {
+        new ErrorNotification();
+        editor.cancel();
+        return;
+      }
+      editedActivity.setWikidataUid(newUid);
       reactor.approveAndSaveActivity(editedActivity);
+      editor.cancel();
     });
-    saveButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
     Button ignoreButton = new Button("Ignore", e -> {
       ActivityDTO ignoredActivity = editor.getItem();
@@ -76,13 +88,20 @@ public class ReconciliationActivityGrid extends Grid<ActivityDTO> {
 
     Button cancelButton = new Button("Cancel", e -> editor.cancel());
 
-    HorizontalLayout actionLayout = new HorizontalLayout(saveButton, ignoreButton, cancelButton);
+    HorizontalLayout actionLayout = new HorizontalLayout(createButton, ignoreButton, cancelButton);
     actionLayout.setPadding(false);
     editColumn.setEditorComponent(actionLayout);
 
     UiUtils.streamlineColumns(getColumns());
     editColumn.setAutoWidth(false);
     editColumn.setWidth("300px");
+
+    addSelectionListener(event -> {
+      Optional<ActivityDTO> selection = event.getFirstSelectedItem();
+      if (selection.isPresent()) {
+        new PublicationDialog(selection.get()).open();
+      }
+    });
   }
 
 }

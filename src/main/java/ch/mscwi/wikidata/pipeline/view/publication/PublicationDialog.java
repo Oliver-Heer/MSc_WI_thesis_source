@@ -1,80 +1,41 @@
 package ch.mscwi.wikidata.pipeline.view.publication;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
 
-import ch.mscwi.wikidata.pipeline.controller.Reactor;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ActivityDTO;
-import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
-import ch.mscwi.wikidata.pipeline.view.UiUtils;
 
 public class PublicationDialog extends Dialog {
 
-  private Logger logger = LoggerFactory.getLogger(PublicationDialog.class);
-
-  private Reactor reactor = UiUtils.getReactor();
-
-  private Binder<ActivityDTO> binder = new Binder<>(ActivityDTO.class);
-
   public PublicationDialog(ActivityDTO activityDTO) {
-    binder.setBean(activityDTO);
+    setWidth("50%");
 
-    H5 title = new H5(activityDTO.getTitle());
-    TextField wikidataUid = new TextField("Wikidata UID");
-    binder.forField(wikidataUid).bind(ActivityDTO::getWikidataUid, ActivityDTO::setWikidataUid);
+    H3 title = new H3(activityDTO.getTitle());
 
     VerticalLayout dialogLayout = new VerticalLayout();
-    dialogLayout.add(title, wikidataUid);
+    dialogLayout.add(title);
 
-    add(dialogLayout, createActionLayout());
+    PublicationGenreGrid genreGrid = new PublicationGenreGrid(activityDTO.getGenres());
+    PublicationActorGrid actorGrid = new PublicationActorGrid(activityDTO.getActors());
+
+    add(dialogLayout,
+        new H5("Genres"), genreGrid, 
+        new HtmlComponent("br"),
+        new H5("Actors"), actorGrid,
+        createActionLayout());
   }
 
   private HorizontalLayout createActionLayout() {
-    Button approveButton = new Button("Approve", click -> this.approve());
-    approveButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-
-    Button ignoreButton = new Button("Ignore", click -> this.ignore());
-
     Button cancelButton = new Button("Cancel", click -> this.close());
 
     HorizontalLayout actionLayout = new HorizontalLayout();
-    actionLayout.add(approveButton, ignoreButton, cancelButton);
+    actionLayout.add(cancelButton);
     return actionLayout;
-  }
-
-  private void approve() {
-    // TODO Check dependent entities first, if any is still FOUND or NOT_FOUND return => check in REACTOR
-    ActivityDTO activityDTO = binder.getBean();
-    if (StringUtils.isBlank(activityDTO.getWikidataUid())) {
-      return;
-    }
-    activityDTO.setState(ReconciliationState.APPROVED);
-    logger.info("Approved entity " + activityDTO.getOriginId() + " " + activityDTO.getTitle() + " with Wikidata UID " + activityDTO.getWikidataUid());
-    this.save();
-  }
-
-  private void ignore() {
-    // TODO Check dependent entities first, if any is still FOUND or NOT_FOUND return
-    ActivityDTO activityDTO = binder.getBean();
-    activityDTO.setState(ReconciliationState.IGNORE);
-    logger.info("Ignoring entity " + activityDTO.getOriginId() + " " + activityDTO.getTitle());
-    this.save();
-  }
-
-  private void save() {
-    ActivityDTO activityDTO = this.binder.getBean();
-    reactor.saveActivity(activityDTO);
-    this.close();
   }
 
 }

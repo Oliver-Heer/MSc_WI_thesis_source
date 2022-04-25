@@ -37,8 +37,15 @@ public class ActivityStatement extends AbstractStatement {
     wikidataEntityIDs.addAll(getActorUids(activity));
 
     LocationDTO location = activity.getLocation();
-    if (location != null) {
+    if (location != null && ReconciliationState.APPROVED == location.getState()) {
       wikidataEntityIDs.add(location.getWikidataUid());
+    }
+
+    boolean anyReferenceNotReconciled = wikidataEntityIDs.stream().anyMatch(StringUtils::isBlank);
+    if (anyReferenceNotReconciled) {
+      String errorMessage = "Aborting publishing, not all dependent references reconciled for activity " + activity.getTitle();
+      logger.warn(errorMessage);
+      throw new RuntimeException(errorMessage);
     }
 
     Map<String, EntityDocument> wikidataEntities = dataFetcher.getEntityDocuments(wikidataEntityIDs);
@@ -56,7 +63,7 @@ public class ActivityStatement extends AbstractStatement {
         .withStatement(instanceOfStatement)
         .withStatement(productionCompanyStatement);
 
-    if (location != null) {
+    if (location != null && StringUtils.isNotBlank(location.getWikidataUid())) {
       Statement locationStatement = createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_LOCATION, location.getWikidataUid());
       documentBuilder.withStatement(locationStatement);
     }
@@ -90,10 +97,12 @@ public class ActivityStatement extends AbstractStatement {
     }
 
     activity.getGenres().stream()
+        .filter(genre -> StringUtils.isNotBlank(genre.getWikidataUid()))
         .map(genre -> createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_GENRE, genre.getWikidataUid()))
         .forEach(statement -> documentBuilder.withStatement(statement));
 
     activity.getActors().stream()
+        .filter(actor -> StringUtils.isNotBlank(actor.getWikidataUid()))
         .map(actor -> createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_CAST_MEMBER, actor.getWikidataUid()))
         .forEach(statement -> documentBuilder.withStatement(statement));
 
