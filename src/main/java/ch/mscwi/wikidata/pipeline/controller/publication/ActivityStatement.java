@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wikidata.wdtk.datamodel.helpers.ItemDocumentBuilder;
 import org.wikidata.wdtk.datamodel.interfaces.EntityDocument;
@@ -27,6 +28,9 @@ import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
 public class ActivityStatement extends AbstractStatement {
 
   private Logger logger = LoggerFactory.getLogger(ActivityStatement.class);
+
+  @Autowired
+  private PublicatorProperties properties;
 
   @Override
   public <T extends AbstractWikidataDTO> ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, T dto) throws MediaWikiApiErrorException, IOException {
@@ -84,17 +88,18 @@ public class ActivityStatement extends AbstractStatement {
 
     String subtitle = activity.getSubTitle();
     if (StringUtils.isNotBlank(subtitle)) {
-      documentBuilder.withDescription(activity.getSubTitle(), "de");
       Statement subtitleStatement = createValueStatement(wikidataEntities, WikidataEntity.PROPERTY_SUBTITLE, subtitle, "de");
       documentBuilder.withStatement(subtitleStatement);
     }
 
     String subtitleEn = activity.getSubTitleEn();
     if (StringUtils.isNotBlank(subtitleEn)) {
-      documentBuilder.withDescription(activity.getSubTitleEn(), "en");
       Statement subtitleEnStatement = createValueStatement(wikidataEntities, WikidataEntity.PROPERTY_SUBTITLE, subtitleEn, "en");
       documentBuilder.withStatement(subtitleEnStatement);
     }
+
+    documentBuilder.withDescription(properties.getDescriptionDe(), "de");
+    documentBuilder.withDescription(properties.getDescriptionEn(), "en");
 
     activity.getGenres().stream()
         .filter(genre -> StringUtils.isNotBlank(genre.getWikidataUid()))

@@ -12,6 +12,8 @@ public class PublicatorProperties {
   private String targetIri;
   private String targetWikidataAPI;
   private String botUserAgent;
+  private String descriptionEn;
+  private String descriptionDe;
   private boolean isBotApproved;
   private boolean publishingEnabled;
 
@@ -53,6 +55,22 @@ public class PublicatorProperties {
 
   public void setBotUserAgent(String botUserAgent) {
     this.botUserAgent = botUserAgent;
+  }
+
+  public String getDescriptionEn() {
+    return descriptionEn;
+  }
+
+  public void setDescriptionEn(String descEn) {
+    this.descriptionEn = descEn;
+  }
+
+  public String getDescriptionDe() {
+    return descriptionDe;
+  }
+
+  public void setDescriptionDe(String descDe) {
+    this.descriptionDe = descDe;
   }
 
   public boolean isBotApproved() {

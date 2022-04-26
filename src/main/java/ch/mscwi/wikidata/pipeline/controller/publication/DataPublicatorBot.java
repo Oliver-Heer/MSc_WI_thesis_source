@@ -50,6 +50,8 @@ public class DataPublicatorBot {
     isPropertyConfigured("publicator.targetWikidataAPI", this.publicatorProperties.getTargetWikidataAPI());
     isPropertyConfigured("publicator.username", this.publicatorProperties.getUsername());
     isPropertyConfigured("publicator.password", this.publicatorProperties.getPassword());
+    isPropertyConfigured("publicator.descriptionDe", this.publicatorProperties.getDescriptionDe());
+    isPropertyConfigured("publicator.descriptionEn", this.publicatorProperties.getDescriptionEn());
 
     WebResourceFetcherImpl.setUserAgent(publicatorProperties.getBotUserAgent());
     connection = new BasicApiConnection(publicatorProperties.getTargetWikidataAPI());
