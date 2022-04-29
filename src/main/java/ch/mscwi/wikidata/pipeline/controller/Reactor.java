@@ -254,6 +254,10 @@ public class Reactor {
     try {
       return publicatorBot.publishNewActivity(activityDTO);
     } catch (Exception e) {
+      logger.error("Could not create Activity: " + activityDTO.getTitle());
+      logger.error(e.getMessage());
+      activityDTO.setState(ReconciliationState.ERROR);
+      persistor.saveAllActivities(List.of(activityDTO));
       return null;
     }
   }
@@ -262,6 +266,10 @@ public class Reactor {
     try {
       return publicatorBot.publishNewLocation(locationDTO);
     } catch (Exception e) {
+      logger.error("Could not create Location: " + locationDTO.getName());
+      logger.error(e.getMessage());
+      locationDTO.setState(ReconciliationState.ERROR);
+      persistor.saveAllLocations(List.of(locationDTO));
       return null;
     }
   }
@@ -270,6 +278,10 @@ public class Reactor {
     try {
       return publicatorBot.publishNewActor(actorDTO);
     } catch (Exception e) {
+      logger.error("Could not create Actor: " + actorDTO.getName());
+      logger.error(e.getMessage());
+      actorDTO.setState(ReconciliationState.ERROR);
+      persistor.saveAllActors(List.of(actorDTO));
       return null;
     }
   }
