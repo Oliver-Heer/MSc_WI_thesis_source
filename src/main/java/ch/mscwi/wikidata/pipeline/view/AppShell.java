@@ -6,7 +6,7 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
 @PWA(name = "Kulturzürich | Pipeline", shortName = "Pipeline")
-@Theme(themeClass = Lumo.class, variant = Lumo.DARK)
+@Theme(themeClass = Lumo.class, variant = Lumo.LIGHT)
 public class AppShell implements AppShellConfigurator {
 
 }
