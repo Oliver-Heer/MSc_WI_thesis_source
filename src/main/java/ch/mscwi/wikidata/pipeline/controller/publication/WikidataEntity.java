@@ -13,6 +13,7 @@ public class WikidataEntity {
   public static final String PROPERTY_SUBTITLE = "P1680";
   public static final String PROPERTY_CAST_MEMBER = "P161";
   public static final String PROPERTY_GENRE = "P136";
+  public static final String PROPERTY_REFERENCE_URL = "P854";
 
   public static final String ENTITY_VENUE = "Q17350442";
   public static final String ENTITY_SWITZERLAND = "Q39";
@@ -25,6 +26,7 @@ public class WikidataEntity {
     return List.of(
         PROPERTY_INSTANCE_OF,
         PROPERTY_COUNTRY,
+        PROPERTY_REFERENCE_URL,
         ENTITY_VENUE,
         ENTITY_SWITZERLAND
     );
@@ -34,6 +36,7 @@ public class WikidataEntity {
     return List.of(
         PROPERTY_INSTANCE_OF,
         PROPERTY_OCCUPATION,
+        PROPERTY_REFERENCE_URL,
         ENTITY_HUMAN,
         ENTITY_ARTIST
     );
@@ -48,6 +51,7 @@ public class WikidataEntity {
         PROPERTY_SUBTITLE,
         PROPERTY_CAST_MEMBER,
         PROPERTY_GENRE,
+        PROPERTY_REFERENCE_URL,
         ENTITY_PERFORMING_ARTS_PRODUCTION,
         ENTITY_ZURICH_OPERA
     );

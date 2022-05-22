@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.wikidata.wdtk.datamodel.helpers.Datamodel;
+import org.wikidata.wdtk.datamodel.helpers.ReferenceBuilder;
 import org.wikidata.wdtk.datamodel.helpers.StatementBuilder;
 import org.wikidata.wdtk.datamodel.interfaces.EntityDocument;
 import org.wikidata.wdtk.datamodel.interfaces.EntityIdValue;
 import org.wikidata.wdtk.datamodel.interfaces.ItemDocument;
 import org.wikidata.wdtk.datamodel.interfaces.ItemIdValue;
 import org.wikidata.wdtk.datamodel.interfaces.PropertyIdValue;
+import org.wikidata.wdtk.datamodel.interfaces.Reference;
 import org.wikidata.wdtk.datamodel.interfaces.Statement;
 import org.wikidata.wdtk.datamodel.interfaces.Value;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
@@ -19,12 +21,13 @@ import ch.mscwi.wikidata.pipeline.model.wikidata.AbstractWikidataDTO;
 
 public abstract class AbstractStatement {
 
-  public abstract <T extends AbstractWikidataDTO> ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher,T dto) throws MediaWikiApiErrorException, IOException;
+  public abstract <T extends AbstractWikidataDTO> ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, T dto) throws MediaWikiApiErrorException, IOException;
 
   public Statement createReferenceStatement(Map<String, EntityDocument> wikidataEntities, String propertyKey, String entityKey) {
     PropertyIdValue property = (PropertyIdValue) wikidataEntities.get(propertyKey).getEntityId();
     EntityIdValue value = wikidataEntities.get(entityKey).getEntityId();
     return StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, property)
+        .withReference(reference(wikidataEntities))
         .withValue((Value) value)
         .build();
   }
@@ -37,6 +40,14 @@ public abstract class AbstractStatement {
     PropertyIdValue property = (PropertyIdValue) wikidataEntities.get(propertyKey).getEntityId();
     return StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, property)
         .withValue(Datamodel.makeMonolingualTextValue(value, language))
+        .withReference(reference(wikidataEntities))
+        .build();
+  }
+
+  private Reference reference(Map<String, EntityDocument> wikidataEntities) {
+    return ReferenceBuilder.newInstance()
+        .withPropertyValue((PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_REFERENCE_URL).getEntityId(),
+            Datamodel.makeStringValue("https://www.opernhaus.ch/xmlexport/kzexport.xml"))
         .build();
   }
 
