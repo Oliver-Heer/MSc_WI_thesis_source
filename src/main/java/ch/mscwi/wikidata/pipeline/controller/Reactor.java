@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import ch.mscwi.wikidata.pipeline.ConfigProperties;
 import ch.mscwi.wikidata.pipeline.controller.preparation.DataPreparer;
 import ch.mscwi.wikidata.pipeline.controller.procurement.XmlProcurer;
 import ch.mscwi.wikidata.pipeline.controller.publication.DataPublicatorBot;
@@ -50,6 +51,9 @@ public class Reactor {
   @Autowired
   private DataPublicatorBot publicatorBot;
 
+  @Autowired
+  private ConfigProperties config;
+
   private static final Set<ReconciliationState> RECONCILIATION_STATES = Set.of(
       ReconciliationState.FOUND,
       ReconciliationState.NOT_FOUND,
@@ -72,7 +76,7 @@ public class Reactor {
 
   @Scheduled(cron = "0 0 23 * * *")
   public void procure() {
-    procure("https://www.opernhaus.ch/xmlexport/kzexport.xml");
+    procure(config.getFeedUrl());
   }
 
   @Scheduled(cron = "0 15 23 * * *")

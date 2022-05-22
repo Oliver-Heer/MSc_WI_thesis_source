@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigProperties {
 
   private String organizer;
+  private String feedUrl;
 
   public String getOrganizer() {
     return organizer;
@@ -15,6 +16,14 @@ public class ConfigProperties {
 
   public void setOrganizer(String organizer) {
     this.organizer = organizer;
+  }
+
+  public String getFeedUrl() {
+    return feedUrl;
+  }
+
+  public void setFeedUrl(String feedUrl) {
+    this.feedUrl = feedUrl;
   }
 
 }

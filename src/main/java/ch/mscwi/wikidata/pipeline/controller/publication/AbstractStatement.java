@@ -3,6 +3,7 @@ package ch.mscwi.wikidata.pipeline.controller.publication;
 import java.io.IOException;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.wikidata.wdtk.datamodel.helpers.Datamodel;
 import org.wikidata.wdtk.datamodel.helpers.ReferenceBuilder;
 import org.wikidata.wdtk.datamodel.helpers.StatementBuilder;
@@ -17,9 +18,13 @@ import org.wikidata.wdtk.datamodel.interfaces.Value;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
+import ch.mscwi.wikidata.pipeline.ConfigProperties;
 import ch.mscwi.wikidata.pipeline.model.wikidata.AbstractWikidataDTO;
 
 public abstract class AbstractStatement {
+
+  @Autowired
+  private ConfigProperties config;
 
   public abstract <T extends AbstractWikidataDTO> ItemDocument prepareStatement(WikibaseDataFetcher dataFetcher, T dto) throws MediaWikiApiErrorException, IOException;
 
@@ -46,8 +51,7 @@ public abstract class AbstractStatement {
 
   private Reference reference(Map<String, EntityDocument> wikidataEntities) {
     return ReferenceBuilder.newInstance()
-        .withPropertyValue((PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_REFERENCE_URL).getEntityId(),
-            Datamodel.makeStringValue("https://www.opernhaus.ch/xmlexport/kzexport.xml"))
+        .withPropertyValue((PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_REFERENCE_URL).getEntityId(), Datamodel.makeStringValue(config.getFeedUrl()))
         .build();
   }
 
