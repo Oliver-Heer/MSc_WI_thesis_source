@@ -3,6 +3,7 @@ package ch.mscwi.wikidata.pipeline.controller.publication;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wikidata.wdtk.datamodel.helpers.Datamodel;
 import org.wikidata.wdtk.datamodel.helpers.ReferenceBuilder;
@@ -20,6 +21,8 @@ import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
 import ch.mscwi.wikidata.pipeline.ConfigProperties;
 import ch.mscwi.wikidata.pipeline.model.wikidata.AbstractWikidataDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
+import ch.mscwi.wikidata.pipeline.model.wikidata.RoleDTO;
 
 public abstract class AbstractStatement {
 
@@ -35,6 +38,37 @@ public abstract class AbstractStatement {
         .withReference(reference(wikidataEntities))
         .withValue((Value) value)
         .build();
+  }
+
+  public Statement createActorReferenceStatement(Map<String, EntityDocument> wikidataEntities, ActorDTO actor) {
+    PropertyIdValue castMemberProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_CAST_MEMBER).getEntityId();
+    EntityIdValue castMemberValue = wikidataEntities.get(actor.getWikidataUid()).getEntityId();
+
+    StatementBuilder builder = StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, castMemberProperty)
+        .withReference(reference(wikidataEntities))
+        .withValue((Value) castMemberValue);
+
+    String roleId = getRoleId(actor);
+    if (roleId != null) {
+      PropertyIdValue roleProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_HAS_ROLE).getEntityId();
+      EntityIdValue roleValue = wikidataEntities.get(roleId).getEntityId();
+      builder.withQualifierValue(roleProperty, roleValue);
+    }
+
+    return builder.build();
+  }
+
+  public Statement createOccupationStatement(Map<String, EntityDocument> wikidataEntities, ActorDTO actor) {
+    String roleId = getRoleId(actor);
+    if (roleId != null) {
+      PropertyIdValue occupationProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_OCCUPATION).getEntityId();
+      EntityIdValue occupationValue = wikidataEntities.get(roleId).getEntityId();
+      return StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, occupationProperty)
+          .withReference(reference(wikidataEntities))
+          .withValue(occupationValue)
+          .build();
+    }
+    return null;
   }
 
   public Statement createValueStatement(Map<String, EntityDocument> wikidataEntities, String propertyKey, String value) {
@@ -53,6 +87,48 @@ public abstract class AbstractStatement {
     return ReferenceBuilder.newInstance()
         .withPropertyValue((PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_REFERENCE_URL).getEntityId(), Datamodel.makeStringValue(config.getFeedUrl()))
         .build();
+  }
+
+  private String getRoleId(ActorDTO actor) {
+    RoleDTO roleDTO = actor.getRoles().stream().findFirst().orElseGet(() -> null);
+    if (roleDTO == null) {
+      return null;
+    }
+
+    String role = roleDTO.getRole();
+    if (StringUtils.isBlank(role)) {
+      return null;
+    }
+
+    if (StringUtils.contains(role, "Inszenierung")) {
+      return WikidataEntity.ENTITY_STAGING;
+    }
+    else if (StringUtils.containsAny(role, "Musikalische Leitung", "Dirigent")) {
+      return WikidataEntity.ENTITY_CONDUCTOR;
+    }
+    else if (StringUtils.containsAny(role, "Bühnenbild", "Bühnenbildmitarbeit", "Szenische Einrichtung", "Künstlerische Mitarbeit Bühnenbild")) {
+      return WikidataEntity.ENTITY_SCENOGRAPHER;
+    }
+    else if (StringUtils.containsAny(role, "Kostüme", "Kostümmitarbeit")) {
+      return WikidataEntity.ENTITY_COSTUME_DESIGNER;
+    }
+    else if (StringUtils.contains(role, "Lichtgestaltung")) {
+      return WikidataEntity.ENTITY_LIGHTING_DESIGNER;
+    }
+    else if (StringUtils.contains(role, "Dramaturgie")) {
+      return WikidataEntity.ENTITY_DRAMATURGE;
+    }
+    else if (StringUtils.contains(role, "Choreografie")) {
+      return WikidataEntity.ENTITY_CHOREOGRAPHER;
+    }
+    else if (StringUtils.contains(role, "Musik")) {
+      return WikidataEntity.ENTITY_MUSICIAN;
+    }
+    else if (StringUtils.contains(role, "Sopran")) {
+      return WikidataEntity.ENTITY_SOPRANO_SINGER;
+    };
+
+    return null;
   }
 
 }

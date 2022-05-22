@@ -31,4 +31,8 @@ public class ActorDTO extends AbstractWikidataDTO {
     this.name = name;
   }
 
+  public Collection<RoleDTO> getRoles() {
+    return roles;
+  }
+
 }

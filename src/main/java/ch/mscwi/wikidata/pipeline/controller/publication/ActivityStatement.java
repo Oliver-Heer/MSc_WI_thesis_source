@@ -110,7 +110,7 @@ public class ActivityStatement extends AbstractStatement {
     activity.getActors().stream()
         .filter(actor -> StringUtils.isNotBlank(actor.getWikidataUid()))
         .filter(actor -> ReconciliationState.APPROVED == actor.getState())
-        .map(actor -> createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_CAST_MEMBER, actor.getWikidataUid()))
+        .map(actor -> createActorReferenceStatement(wikidataEntities, actor))
         .forEach(statement -> documentBuilder.withStatement(statement));
 
     return documentBuilder.build();
