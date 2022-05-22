@@ -41,6 +41,7 @@ public class ReconciliationView extends VerticalLayout {
     tabComponentMap.put(new Tab("Locations"), new ReconciliationLocationGrid(reactor.getLocationsForReconciliation()));
     tabComponentMap.put(new Tab("Genres"), new ReconciliationGenreGrid(reactor.getGenresForReconciliation()));
     tabComponentMap.put(new Tab("Actors"), new ReconciliationActorGrid(reactor.getActorsForReconciliation()));
+    tabComponentMap.put(new Tab("Roles"), new ReconciliationRoleGrid(reactor.getRolesForReconciliation()));
     return new Tabs(tabComponentMap.keySet().toArray(new Tab[]{}));
   }
 

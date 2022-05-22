@@ -42,6 +42,10 @@ public class DataPersistor {
     actorRepo.saveAllAndFlush(actorDTOs);
   }
 
+  public void saveAllRoles(List<RoleDTO> roleDTOs) {
+    roleRepo.saveAllAndFlush(roleDTOs);
+  }
+
   public void saveAllActivities(List<ActivityDTO> activityDTOs) {
     activityDTOs.stream().forEach(activity -> {
       genreRepo.saveAll(activity.getGenres());

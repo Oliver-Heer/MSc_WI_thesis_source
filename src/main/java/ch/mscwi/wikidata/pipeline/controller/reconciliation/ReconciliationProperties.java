@@ -15,6 +15,7 @@ public class ReconciliationProperties {
   private String genreEntity;
   private String locationEntity;
   private String actorEntity;
+  private String roleEntity;
   private Map<String, String> activityProperties = new HashMap<>();
   private Map<String, String> actorProperties = new HashMap<>();
   private Map<String, String> locationProperties = new HashMap<>();
@@ -57,6 +58,14 @@ public class ReconciliationProperties {
 
   public void setActorEntity(String actorEntity) {
     this.actorEntity = actorEntity;
+  }
+
+  public String getRoleEntity() {
+    return roleEntity;
+  }
+
+  public void setRoleEntity(String roleEntity) {
+    this.roleEntity = roleEntity;
   }
 
   public Map<String, String> getActivityProperties() {

@@ -29,6 +29,7 @@ import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.GenreDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
+import ch.mscwi.wikidata.pipeline.model.wikidata.RoleDTO;
 
 @Service
 @Scope("singleton")
@@ -98,6 +99,11 @@ public class Reactor {
     List<ActorDTO> reconciledActors = reconciliator.reconcileActors(newActors);
     persistor.saveAllActors(reconciledActors);
 
+    // Roles
+    List<RoleDTO> newRoles = persistor.getRoleRepo().findAllByStateIn(state);
+    List<RoleDTO> reconciledRoles = reconciliator.reconcileRoles(newRoles);
+    persistor.saveAllRoles(reconciledRoles);
+
     // Activities
     List<ActivityDTO> newActivities = persistor.getActivityRepo().findAllByStateIn(state);
     List<ActivityDTO> reconciledActivities = reconciliator.reconcileActivities(newActivities);
@@ -164,11 +170,22 @@ public class Reactor {
     return persistor.getActorRepo().findAllByStateIn(RECONCILIATION_STATES);
   }
 
+  public List<RoleDTO> getRolesForReconciliation() {
+    List<RoleDTO> allRoles = persistor.getRoleRepo().findAllByStateIn(RECONCILIATION_STATES);
+    return allRoles.stream()
+        .filter(role -> StringUtils.isNotBlank(role.getRole()))
+        .collect(Collectors.toList());
+  }
+
   public List<ActivityDTO> getActivitiesForPublication() {
     List<ActivityDTO> activities = persistor.getActivityRepo().findAllByStateIn(RECONCILIATION_STATES); // activity FOUND || NOT_FOUND || ERROR
     List<ActivityDTO> filteredActivities = activities.stream()
         .filter(activity -> referencesReadyForPublication(activity.getGenres())) // genres APPROVED || IGNORED
         .filter(activity -> referencesReadyForPublication(activity.getActors())) // actors APPROVED || IGNORED
+        .filter(activity -> referencesReadyForPublication(activity.getRoles() // roles APPROVED || IGNORED
+            .stream()
+            .filter(role -> StringUtils.isBlank(role.getRoleCategory()))
+            .collect(Collectors.toList()))) 
         .filter(activity -> referencesReadyForPublication(List.of(activity.getLocation()))) // location APPROVED || IGNORED
         .collect(Collectors.toList());
     
@@ -232,10 +249,26 @@ public class Reactor {
     persistor.saveAllActors(List.of(actorDTO));
   }
 
+  public void approveAndSaveRole(RoleDTO roleDTO) {
+    if (!isApprovable(roleDTO)) {
+      logger.info("Could not approve Role " + roleDTO.getRole() + " Wikidata UID is missing or invalid");
+    }
+
+    logger.info("Approved Role " + roleDTO.getRole() + " with Wikidata UID " + roleDTO.getWikidataUid());
+    roleDTO.setState(ReconciliationState.APPROVED);
+    persistor.saveAllRoles(List.of(roleDTO));
+  }
+
   public void ignoreAndSaveActor(ActorDTO actorDTO) {
     logger.info("Ignore Actor " + actorDTO.getName());
     actorDTO.setState(ReconciliationState.IGNORE);
     persistor.saveAllActors(List.of(actorDTO));
+  }
+
+  public void ignoreAndSaveRole(RoleDTO roleDTO) {
+    logger.info("Ignore Role " + roleDTO.getRole());
+    roleDTO.setState(ReconciliationState.IGNORE);
+    persistor.saveAllRoles(List.of(roleDTO));
   }
 
   public void approveAndSaveActivity(ActivityDTO activityDTO) {

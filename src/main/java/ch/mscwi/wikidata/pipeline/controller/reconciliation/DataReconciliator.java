@@ -20,6 +20,7 @@ import ch.mscwi.wikidata.pipeline.model.wikidata.ActorDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.GenreDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.LocationDTO;
 import ch.mscwi.wikidata.pipeline.model.wikidata.ReconciliationState;
+import ch.mscwi.wikidata.pipeline.model.wikidata.RoleDTO;
 import gmbh.dtap.refine.client.RefineClient;
 import gmbh.dtap.refine.client.RefineClients;
 import gmbh.dtap.refine.client.command.CreateProjectResponse;
@@ -101,6 +102,19 @@ public class DataReconciliator {
           .withType(reconProperties.getActorEntity());
 
       properties.forEach((key, value) -> queryBuilder.addProperty(key, value));
+
+      return queryBuilder.build();
+    });
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<RoleDTO> reconcileRoles(List<RoleDTO> dtos) {
+    logger.info("Reconciling " + dtos.size() + " new roles");
+
+    return (List<RoleDTO>) reconcileBatch(dtos, dto -> {
+      ReconciliationQueryBuilder queryBuilder = new ReconciliationQueryBuilder(dto.getStringID())
+          .withQuery(((RoleDTO)dto).getRole())
+          .withType(reconProperties.getRoleEntity());
 
       return queryBuilder.build();
     });
