@@ -113,7 +113,7 @@ public abstract class AbstractStatement {
     else if (StringUtils.containsAny(role, "Bühnenbild", "Bühnenbildmitarbeit", "Szenische Einrichtung", "Künstlerische Mitarbeit Bühnenbild")) {
       return WikidataEntity.ENTITY_SCENOGRAPHER;
     }
-    else if (StringUtils.containsAny(role, "Kostüme", "Kostümmitarbeit")) {
+    else if (StringUtils.containsAny(role, "Kostüme", "Kostümmitarbeit", "Ausstattung")) {
       return WikidataEntity.ENTITY_COSTUME_DESIGNER;
     }
     else if (StringUtils.contains(role, "Lichtgestaltung")) {
@@ -132,7 +132,7 @@ public abstract class AbstractStatement {
       return WikidataEntity.ENTITY_SOPRANO_SINGER;
     };
 
-    return null;
+    return WikidataEntity.ENTITY_ARTIST;
   }
 
 }
