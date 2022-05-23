@@ -42,7 +42,12 @@ public abstract class AbstractStatement {
   }
 
   public Statement createActorReferenceStatement(Map<String, EntityDocument> wikidataEntities, ActorDTO actor) {
-    PropertyIdValue castMemberProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_CAST_MEMBER).getEntityId();
+    String prop = WikidataEntity.PROPERTY_CAST_MEMBER;
+    if (isContributor(actor)) {
+      prop = WikidataEntity.PROPERTY_CONTRIBUTOR;
+    }
+
+    PropertyIdValue castMemberProperty = (PropertyIdValue) wikidataEntities.get(prop).getEntityId();
     EntityIdValue castMemberValue = wikidataEntities.get(actor.getWikidataUid()).getEntityId();
 
     StatementBuilder builder = StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, castMemberProperty)
@@ -91,6 +96,14 @@ public abstract class AbstractStatement {
     return ReferenceBuilder.newInstance()
         .withPropertyValue((PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_REFERENCE_URL).getEntityId(), Datamodel.makeStringValue(config.getFeedUrl()))
         .build();
+  }
+
+  private boolean isContributor(ActorDTO actor) {
+    Optional<RoleDTO> role = actor.getRoles().stream().findFirst();
+    if (role.isPresent()) {
+      return StringUtils.isNotBlank(role.get().getRoleCategory());
+    }
+    return true;
   }
 
   private String getRoleId(ActorDTO actor) {

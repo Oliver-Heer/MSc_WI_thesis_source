@@ -14,6 +14,7 @@ public class WikidataEntity {
   public static final String PROPERTY_CAST_MEMBER = "P161";
   public static final String PROPERTY_GENRE = "P136";
   public static final String PROPERTY_REFERENCE_URL = "P854";
+  public static final String PROPERTY_CONTRIBUTOR = "P767";
 
   public static final String ENTITY_VENUE = "Q17350442";
   public static final String ENTITY_SWITZERLAND = "Q39";
@@ -48,6 +49,7 @@ public class WikidataEntity {
         PROPERTY_INSTANCE_OF,
         PROPERTY_OCCUPATION,
         PROPERTY_REFERENCE_URL,
+        PROPERTY_CONTRIBUTOR,
         ENTITY_HUMAN,
         ENTITY_ARTIST,
         ENTITY_STAGING,
@@ -73,6 +75,7 @@ public class WikidataEntity {
         PROPERTY_GENRE,
         PROPERTY_REFERENCE_URL,
         PROPERTY_HAS_ROLE,
+        PROPERTY_CONTRIBUTOR,
         ENTITY_PERFORMING_ARTS_PRODUCTION,
         ENTITY_ZURICH_OPERA
     );
