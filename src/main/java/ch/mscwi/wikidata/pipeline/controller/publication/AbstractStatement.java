@@ -2,6 +2,7 @@ package ch.mscwi.wikidata.pipeline.controller.publication;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +49,14 @@ public abstract class AbstractStatement {
         .withReference(reference(wikidataEntities))
         .withValue((Value) castMemberValue);
 
-    String roleId = getRoleId(actor);
-    if (roleId != null) {
-      PropertyIdValue roleProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_HAS_ROLE).getEntityId();
-      EntityIdValue roleValue = wikidataEntities.get(roleId).getEntityId();
-      builder.withQualifierValue(roleProperty, roleValue);
+    Optional<RoleDTO> roleOptional = actor.getRoles().stream().findFirst();
+    if (roleOptional.isPresent()) {
+      String wikidataUid = roleOptional.get().getWikidataUid();
+      if (StringUtils.isNotBlank(wikidataUid)) {
+        PropertyIdValue roleProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_HAS_ROLE).getEntityId();
+        EntityIdValue roleValue = wikidataEntities.get(wikidataUid).getEntityId();
+        builder.withQualifierValue(roleProperty, roleValue);
+      }
     }
 
     return builder.build();
