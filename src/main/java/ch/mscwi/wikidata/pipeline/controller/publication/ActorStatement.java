@@ -36,16 +36,18 @@ public class ActorStatement extends AbstractStatement {
     }
 
     Statement instanceOfStatement = createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_INSTANCE_OF, WikidataEntity.ENTITY_HUMAN);
-    Statement occupationStatement = createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_OCCUPATION, WikidataEntity.ENTITY_ARTIST);
+    Statement occupationStatement = createOccupationStatement(wikidataEntities, actor);
 
-    ItemDocument newDocument = ItemDocumentBuilder.forItemId(ItemIdValue.NULL)
+    ItemDocumentBuilder builder = ItemDocumentBuilder.forItemId(ItemIdValue.NULL)
         .withLabel(actor.getName(), "en")
         .withLabel(actor.getName(), "de")
-        .withStatement(instanceOfStatement)
-        .withStatement(occupationStatement)
-        .build();
+        .withStatement(instanceOfStatement);
 
-    return newDocument;
+    if (occupationStatement != null) {
+        builder.withStatement(occupationStatement);
+    }
+
+    return builder.build();
   }
 
 }

@@ -2,8 +2,8 @@ package ch.mscwi.wikidata.pipeline.controller.publication;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +39,7 @@ public class ActivityStatement extends AbstractStatement {
     wikidataEntityIDs.addAll(WikidataEntity.forActivity());
     wikidataEntityIDs.addAll(getGenreUids(activity));
     wikidataEntityIDs.addAll(getActorUids(activity));
+    wikidataEntityIDs.addAll(getRoleUids(activity));
 
     LocationDTO location = activity.getLocation();
     if (location != null && ReconciliationState.APPROVED == location.getState()) {
@@ -110,26 +111,34 @@ public class ActivityStatement extends AbstractStatement {
     activity.getActors().stream()
         .filter(actor -> StringUtils.isNotBlank(actor.getWikidataUid()))
         .filter(actor -> ReconciliationState.APPROVED == actor.getState())
-        .map(actor -> createReferenceStatement(wikidataEntities, WikidataEntity.PROPERTY_CAST_MEMBER, actor.getWikidataUid()))
+        .map(actor -> createActorReferenceStatement(wikidataEntities, actor))
         .forEach(statement -> documentBuilder.withStatement(statement));
 
     return documentBuilder.build();
   }
 
-  private List<String> getActorUids(ActivityDTO activity) {
+  private Set<String> getActorUids(ActivityDTO activity) {
     return activity.getActors().stream()
-        .filter(genre -> genre.getState() == ReconciliationState.APPROVED)
-        .map(genre -> genre.getWikidataUid())
+        .filter(actor -> actor.getState() == ReconciliationState.APPROVED)
+        .map(actor -> actor.getWikidataUid())
         .filter(uid -> StringUtils.isNotBlank(uid))
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
   }
 
-  private List<String> getGenreUids(ActivityDTO activity) {
+  private Set<String> getRoleUids(ActivityDTO activity) {
+    return activity.getRoles().stream()
+        .filter(roles -> roles.getState() == ReconciliationState.APPROVED)
+        .map(role -> role.getWikidataUid())
+        .filter(uid -> StringUtils.isNotBlank(uid))
+        .collect(Collectors.toSet());
+  }
+
+  private Set<String> getGenreUids(ActivityDTO activity) {
     return activity.getGenres().stream()
         .filter(genre -> genre.getState() == ReconciliationState.APPROVED)
         .map(genre -> genre.getWikidataUid())
         .filter(uid -> StringUtils.isNotBlank(uid))
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
   }
 
 }
