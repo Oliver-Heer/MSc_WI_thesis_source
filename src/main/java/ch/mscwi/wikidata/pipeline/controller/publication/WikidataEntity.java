@@ -14,6 +14,7 @@ public class WikidataEntity {
   public static final String PROPERTY_CAST_MEMBER = "P161";
   public static final String PROPERTY_GENRE = "P136";
   public static final String PROPERTY_REFERENCE_URL = "P854";
+  public static final String PROPERTY_RETRIEVED = "P813";
   public static final String PROPERTY_CONTRIBUTOR = "P767";
 
   public static final String ENTITY_VENUE = "Q17350442";
@@ -23,10 +24,10 @@ public class WikidataEntity {
   public static final String ENTITY_PERFORMING_ARTS_PRODUCTION = "Q43099500";
   public static final String ENTITY_ZURICH_OPERA = "Q15278528";
 
-  public static final String PROPERTY_HAS_ROLE = "P3831";
+  public static final String PROPERTY_CHARACTER_ROLE = "P453";
   public static final String ENTITY_STAGING = "Q3508687"; // Inszenierung
   public static final String ENTITY_CONDUCTOR = "Q158852"; // Musikalische Leitung, Dirigent
-  public static final String ENTITY_SCENOGRAPHER = "Q2707485"; // Bühnenbild, Bühnenbildmitarbeit, Szenische Einrichtung, "Künstlerische Mitarbeit Bühnenbild"
+  public static final String ENTITY_SCENOGRAPHER = "Q2707485"; // Bühnenbild, Bühnenbildmitarbeit, Szenische Einrichtung, Künstlerische Mitarbeit Bühnenbild
   public static final String ENTITY_COSTUME_DESIGNER = "Q1323191"; // Kostüme, Kostümmitarbeit
   public static final String ENTITY_LIGHTING_DESIGNER = "Q1823479"; // Lichtgestaltung
   public static final String ENTITY_DRAMATURGE = "Q487596"; // Dramaturgie
@@ -37,6 +38,7 @@ public class WikidataEntity {
   public static List<String> forLocation() {
     return List.of(
         PROPERTY_INSTANCE_OF,
+        PROPERTY_RETRIEVED,
         PROPERTY_COUNTRY,
         PROPERTY_REFERENCE_URL,
         ENTITY_VENUE,
@@ -47,6 +49,7 @@ public class WikidataEntity {
   public static List<String> forActor() {
     return List.of(
         PROPERTY_INSTANCE_OF,
+        PROPERTY_RETRIEVED,
         PROPERTY_OCCUPATION,
         PROPERTY_REFERENCE_URL,
         PROPERTY_CONTRIBUTOR,
@@ -67,6 +70,7 @@ public class WikidataEntity {
   public static List<String> forActivity() {
     return List.of(
         PROPERTY_INSTANCE_OF,
+        PROPERTY_RETRIEVED,
         PROPERTY_PRODUCTION_COMPANY,
         PROPERTY_LOCATION,
         PROPERTY_TITLE,
@@ -74,7 +78,7 @@ public class WikidataEntity {
         PROPERTY_CAST_MEMBER,
         PROPERTY_GENRE,
         PROPERTY_REFERENCE_URL,
-        PROPERTY_HAS_ROLE,
+        PROPERTY_CHARACTER_ROLE,
         PROPERTY_CONTRIBUTOR,
         ENTITY_PERFORMING_ARTS_PRODUCTION,
         ENTITY_ZURICH_OPERA

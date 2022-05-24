@@ -1,6 +1,7 @@
 package ch.mscwi.wikidata.pipeline.controller.publication;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import org.wikidata.wdtk.datamodel.interfaces.ItemIdValue;
 import org.wikidata.wdtk.datamodel.interfaces.PropertyIdValue;
 import org.wikidata.wdtk.datamodel.interfaces.Reference;
 import org.wikidata.wdtk.datamodel.interfaces.Statement;
+import org.wikidata.wdtk.datamodel.interfaces.TimeValue;
 import org.wikidata.wdtk.datamodel.interfaces.Value;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
@@ -58,7 +60,7 @@ public abstract class AbstractStatement {
     if (roleOptional.isPresent()) {
       String wikidataUid = roleOptional.get().getWikidataUid();
       if (StringUtils.isNotBlank(wikidataUid)) {
-        PropertyIdValue roleProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_HAS_ROLE).getEntityId();
+        PropertyIdValue roleProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_CHARACTER_ROLE).getEntityId();
         EntityIdValue roleValue = wikidataEntities.get(wikidataUid).getEntityId();
         builder.withQualifierValue(roleProperty, roleValue);
       }
@@ -93,8 +95,15 @@ public abstract class AbstractStatement {
   }
 
   private Reference reference(Map<String, EntityDocument> wikidataEntities) {
+    Calendar cal = Calendar.getInstance();
+    byte day = (byte) cal.get(Calendar.DAY_OF_MONTH);
+    byte month = (byte) (cal.get(Calendar.MONTH) + 1);
+    long year = cal.get(Calendar.YEAR);
+    var timeValue = Datamodel.makeTimeValue(year, month, day, TimeValue.CM_GREGORIAN_PRO);
+
     return ReferenceBuilder.newInstance()
         .withPropertyValue((PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_REFERENCE_URL).getEntityId(), Datamodel.makeStringValue(config.getFeedUrl()))
+        .withPropertyValue((PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_RETRIEVED).getEntityId(), timeValue)
         .build();
   }
 
