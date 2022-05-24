@@ -52,6 +52,13 @@ public abstract class AbstractStatement {
         .withReference(reference(wikidataEntities))
         .withValue((Value) castMemberValue);
 
+    // finctional character role
+    if (StringUtils.equals(WikidataEntity.PROPERTY_CAST_MEMBER, tuple.property)) {
+      PropertyIdValue roleProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_CHARACTER_ROLE).getEntityId();
+      EntityIdValue roleValue = wikidataEntities.get(tuple.entity).getEntityId();
+      builder.withQualifierValue(roleProperty, roleValue);
+    }
+
     return builder.build();
   }
 
@@ -131,6 +138,11 @@ public abstract class AbstractStatement {
     else if (StringUtils.contains(role, "Sopran")) {
       return new Tuple(WikidataEntity.PROPERTY_PERFORMER, WikidataEntity.ENTITY_SOPRANO_SINGER);
     };
+
+    String fictionalCharacterUid = roleDTO.getWikidataUid();
+    if (StringUtils.isNotBlank(fictionalCharacterUid)) {
+      return new Tuple(WikidataEntity.PROPERTY_CAST_MEMBER, fictionalCharacterUid);
+    }
 
     return new Tuple(WikidataEntity.PROPERTY_PERFORMER, WikidataEntity.ENTITY_ARTIST);
   }
