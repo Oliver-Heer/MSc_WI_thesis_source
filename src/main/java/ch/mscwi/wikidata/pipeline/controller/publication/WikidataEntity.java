@@ -16,6 +16,14 @@ public class WikidataEntity {
   public static final String PROPERTY_REFERENCE_URL = "P854";
   public static final String PROPERTY_RETRIEVED = "P813";
   public static final String PROPERTY_CONTRIBUTOR = "P767";
+  public static final String PROPERY_MUSICAL_CONDUCTOR = "P3300";
+  public static final String PROPERTY_DIRECTOR = "P57";
+  public static final String PROPERTY_SCENOGRAPHER = "P4608";
+  public static final String PROPERTY_COSTUME_DESIGNER = "P2515";
+  public static final String PROPERTY_LIGHTING_DESIGNER = "P5026";
+  public static final String PROPERTY_DRAMATURGE = "P6086";
+  public static final String PROPERTY_CHOREOGRAPHER = "P1809";
+  public static final String PROPERTY_PERFORMER = "P175";
 
   public static final String ENTITY_VENUE = "Q17350442";
   public static final String ENTITY_SWITZERLAND = "Q39";
@@ -80,6 +88,14 @@ public class WikidataEntity {
         PROPERTY_REFERENCE_URL,
         PROPERTY_CHARACTER_ROLE,
         PROPERTY_CONTRIBUTOR,
+        PROPERY_MUSICAL_CONDUCTOR,
+        PROPERTY_DIRECTOR,
+        PROPERTY_SCENOGRAPHER,
+        PROPERTY_COSTUME_DESIGNER,
+        PROPERTY_LIGHTING_DESIGNER,
+        PROPERTY_DRAMATURGE,
+        PROPERTY_CHOREOGRAPHER,
+        PROPERTY_PERFORMER,
         ENTITY_PERFORMING_ARTS_PRODUCTION,
         ENTITY_ZURICH_OPERA
     );
