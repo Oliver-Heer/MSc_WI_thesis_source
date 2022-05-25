@@ -2,8 +2,8 @@ package ch.mscwi.wikidata.pipeline.controller.publication;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,42 +44,37 @@ public abstract class AbstractStatement {
   }
 
   public Statement createActorReferenceStatement(Map<String, EntityDocument> wikidataEntities, ActorDTO actor) {
-    String prop = WikidataEntity.PROPERTY_CAST_MEMBER;
-    if (isContributor(actor)) {
-      prop = WikidataEntity.PROPERTY_CONTRIBUTOR;
-    }
+    Tuple tuple = getRole(actor);
 
-    PropertyIdValue castMemberProperty = (PropertyIdValue) wikidataEntities.get(prop).getEntityId();
+    PropertyIdValue castMemberProperty = (PropertyIdValue) wikidataEntities.get(tuple.property).getEntityId();
     EntityIdValue castMemberValue = wikidataEntities.get(actor.getWikidataUid()).getEntityId();
 
     StatementBuilder builder = StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, castMemberProperty)
         .withReference(reference(wikidataEntities))
         .withValue((Value) castMemberValue);
 
-    Optional<RoleDTO> roleOptional = actor.getRoles().stream().findFirst();
-    if (roleOptional.isPresent()) {
-      String wikidataUid = roleOptional.get().getWikidataUid();
-      if (StringUtils.isNotBlank(wikidataUid)) {
-        PropertyIdValue roleProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_CHARACTER_ROLE).getEntityId();
-        EntityIdValue roleValue = wikidataEntities.get(wikidataUid).getEntityId();
-        builder.withQualifierValue(roleProperty, roleValue);
-      }
+    // fictional character role
+    if (StringUtils.equals(WikidataEntity.PROPERTY_CAST_MEMBER, tuple.property)) {
+      PropertyIdValue roleProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_CHARACTER_ROLE).getEntityId();
+      EntityIdValue roleValue = wikidataEntities.get(tuple.entity).getEntityId();
+      builder.withQualifierValue(roleProperty, roleValue);
     }
 
     return builder.build();
   }
 
   public Statement createOccupationStatement(Map<String, EntityDocument> wikidataEntities, ActorDTO actor) {
-    String roleId = getRoleId(actor);
-    if (roleId != null) {
-      PropertyIdValue occupationProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_OCCUPATION).getEntityId();
-      EntityIdValue occupationValue = wikidataEntities.get(roleId).getEntityId();
-      return StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, occupationProperty)
-          .withReference(reference(wikidataEntities))
-          .withValue(occupationValue)
-          .build();
+    Tuple tuple = getRole(actor);
+    if (StringUtils.equals(WikidataEntity.PROPERTY_CAST_MEMBER, tuple.property)) {
+      return null;
     }
-    return null;
+
+    PropertyIdValue occupationProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_OCCUPATION).getEntityId();
+    EntityIdValue occupationValue = wikidataEntities.get(tuple.entity).getEntityId();
+    return StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, occupationProperty)
+        .withReference(reference(wikidataEntities))
+        .withValue(occupationValue)
+        .build();
   }
 
   public Statement createValueStatement(Map<String, EntityDocument> wikidataEntities, String propertyKey, String value) {
@@ -107,54 +102,66 @@ public abstract class AbstractStatement {
         .build();
   }
 
-  private boolean isContributor(ActorDTO actor) {
-    Optional<RoleDTO> role = actor.getRoles().stream().findFirst();
-    if (role.isPresent()) {
-      return StringUtils.isNotBlank(role.get().getRoleCategory());
+  private Tuple getRole(ActorDTO actor) {
+    Collection<RoleDTO> roles = actor.getRoles();
+    if (roles.size() > 1) {
+      return new Tuple(WikidataEntity.PROPERTY_CONTRIBUTOR, WikidataEntity.ENTITY_ARTIST);
     }
-    return true;
-  }
 
-  private String getRoleId(ActorDTO actor) {
-    RoleDTO roleDTO = actor.getRoles().stream().findFirst().orElseGet(() -> null);
+    RoleDTO roleDTO = roles.stream().findFirst().orElseGet(() -> null);
     if (roleDTO == null) {
-      return null;
+      return new Tuple(WikidataEntity.PROPERTY_CONTRIBUTOR, WikidataEntity.ENTITY_ARTIST);
     }
 
     String role = roleDTO.getRole();
     if (StringUtils.isBlank(role)) {
-      return null;
+      return new Tuple(WikidataEntity.PROPERTY_CONTRIBUTOR, WikidataEntity.ENTITY_ARTIST);
     }
 
     if (StringUtils.contains(role, "Inszenierung")) {
-      return WikidataEntity.ENTITY_STAGING;
+      return new Tuple(WikidataEntity.PROPERTY_DIRECTOR, WikidataEntity.ENTITY_STAGING);
     }
     else if (StringUtils.containsAny(role, "Musikalische Leitung", "Dirigent")) {
-      return WikidataEntity.ENTITY_CONDUCTOR;
+      return new Tuple(WikidataEntity.PROPERY_MUSICAL_CONDUCTOR, WikidataEntity.ENTITY_CONDUCTOR);
     }
     else if (StringUtils.containsAny(role, "Bühnenbild", "Bühnenbildmitarbeit", "Szenische Einrichtung", "Künstlerische Mitarbeit Bühnenbild")) {
-      return WikidataEntity.ENTITY_SCENOGRAPHER;
+      return new Tuple(WikidataEntity.PROPERTY_SCENOGRAPHER, WikidataEntity.ENTITY_SCENOGRAPHER);
     }
     else if (StringUtils.containsAny(role, "Kostüme", "Kostümmitarbeit", "Ausstattung")) {
-      return WikidataEntity.ENTITY_COSTUME_DESIGNER;
+      return new Tuple(WikidataEntity.PROPERTY_COSTUME_DESIGNER, WikidataEntity.ENTITY_COSTUME_DESIGNER);
     }
     else if (StringUtils.contains(role, "Lichtgestaltung")) {
-      return WikidataEntity.ENTITY_LIGHTING_DESIGNER;
+      return new Tuple(WikidataEntity.PROPERTY_LIGHTING_DESIGNER, WikidataEntity.ENTITY_LIGHTING_DESIGNER);
     }
     else if (StringUtils.contains(role, "Dramaturgie")) {
-      return WikidataEntity.ENTITY_DRAMATURGE;
+      return new Tuple(WikidataEntity.PROPERTY_DRAMATURGE, WikidataEntity.ENTITY_DRAMATURGE);
     }
     else if (StringUtils.contains(role, "Choreografie")) {
-      return WikidataEntity.ENTITY_CHOREOGRAPHER;
+      return new Tuple(WikidataEntity.PROPERTY_CHOREOGRAPHER, WikidataEntity.ENTITY_CHOREOGRAPHER);
     }
     else if (StringUtils.contains(role, "Musik")) {
-      return WikidataEntity.ENTITY_MUSICIAN;
+      return new Tuple(WikidataEntity.PROPERTY_PERFORMER, WikidataEntity.ENTITY_MUSICIAN);
     }
     else if (StringUtils.contains(role, "Sopran")) {
-      return WikidataEntity.ENTITY_SOPRANO_SINGER;
+      return new Tuple(WikidataEntity.PROPERTY_PERFORMER, WikidataEntity.ENTITY_SOPRANO_SINGER);
     };
 
-    return WikidataEntity.ENTITY_ARTIST;
+    String fictionalCharacterUid = roleDTO.getWikidataUid();
+    if (StringUtils.isNotBlank(fictionalCharacterUid)) {
+      return new Tuple(WikidataEntity.PROPERTY_CAST_MEMBER, fictionalCharacterUid);
+    }
+
+    return new Tuple(WikidataEntity.PROPERTY_CONTRIBUTOR, WikidataEntity.ENTITY_ARTIST);
+  }
+
+  private class Tuple {
+    public final String property;
+    public final String entity;
+    
+    public Tuple(String property, String entity) {
+      this.property = property;
+      this.entity = entity;
+    }
   }
 
 }
