@@ -2,6 +2,7 @@ package ch.mscwi.wikidata.pipeline.controller.publication;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +53,7 @@ public abstract class AbstractStatement {
         .withReference(reference(wikidataEntities))
         .withValue((Value) castMemberValue);
 
-    // finctional character role
+    // fictional character role
     if (StringUtils.equals(WikidataEntity.PROPERTY_CAST_MEMBER, tuple.property)) {
       PropertyIdValue roleProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_CHARACTER_ROLE).getEntityId();
       EntityIdValue roleValue = wikidataEntities.get(tuple.entity).getEntityId();
@@ -64,15 +65,16 @@ public abstract class AbstractStatement {
 
   public Statement createOccupationStatement(Map<String, EntityDocument> wikidataEntities, ActorDTO actor) {
     Tuple tuple = getRole(actor);
-    if (tuple != null) {
-      PropertyIdValue occupationProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_OCCUPATION).getEntityId();
-      EntityIdValue occupationValue = wikidataEntities.get(tuple.entity).getEntityId();
-      return StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, occupationProperty)
-          .withReference(reference(wikidataEntities))
-          .withValue(occupationValue)
-          .build();
+    if (StringUtils.equals(WikidataEntity.PROPERTY_CAST_MEMBER, tuple.property)) {
+      return null;
     }
-    return null;
+
+    PropertyIdValue occupationProperty = (PropertyIdValue) wikidataEntities.get(WikidataEntity.PROPERTY_OCCUPATION).getEntityId();
+    EntityIdValue occupationValue = wikidataEntities.get(tuple.entity).getEntityId();
+    return StatementBuilder.forSubjectAndProperty(ItemIdValue.NULL, occupationProperty)
+        .withReference(reference(wikidataEntities))
+        .withValue(occupationValue)
+        .build();
   }
 
   public Statement createValueStatement(Map<String, EntityDocument> wikidataEntities, String propertyKey, String value) {
@@ -101,14 +103,19 @@ public abstract class AbstractStatement {
   }
 
   private Tuple getRole(ActorDTO actor) {
-    RoleDTO roleDTO = actor.getRoles().stream().findFirst().orElseGet(() -> null);
+    Collection<RoleDTO> roles = actor.getRoles();
+    if (roles.size() > 1) {
+      return new Tuple(WikidataEntity.PROPERTY_CONTRIBUTOR, WikidataEntity.ENTITY_ARTIST);
+    }
+
+    RoleDTO roleDTO = roles.stream().findFirst().orElseGet(() -> null);
     if (roleDTO == null) {
-      return null;
+      return new Tuple(WikidataEntity.PROPERTY_CONTRIBUTOR, WikidataEntity.ENTITY_ARTIST);
     }
 
     String role = roleDTO.getRole();
     if (StringUtils.isBlank(role)) {
-      return null;
+      return new Tuple(WikidataEntity.PROPERTY_CONTRIBUTOR, WikidataEntity.ENTITY_ARTIST);
     }
 
     if (StringUtils.contains(role, "Inszenierung")) {
@@ -144,7 +151,7 @@ public abstract class AbstractStatement {
       return new Tuple(WikidataEntity.PROPERTY_CAST_MEMBER, fictionalCharacterUid);
     }
 
-    return new Tuple(WikidataEntity.PROPERTY_PERFORMER, WikidataEntity.ENTITY_ARTIST);
+    return new Tuple(WikidataEntity.PROPERTY_CONTRIBUTOR, WikidataEntity.ENTITY_ARTIST);
   }
 
   private class Tuple {
