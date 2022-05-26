@@ -45,6 +45,7 @@ public class ProcurementView extends VerticalLayout {
     TextField procureUrl = new TextField();
     procureUrl.setClearButtonVisible(true);
     procureUrl.setValue("https://www.opernhaus.ch/xmlexport/kzexport.xml");
+    procureUrl.setReadOnly(true);
     procureUrl.setWidth("25%");
 
     Button procureButton = new Button("Procure");
